@@ -11,4 +11,4 @@ export function useGetBoard(boardId: string) {
     queryKey: ["board", boardId],
     queryFn: () => getBoard(boardId),
   });
-} //by returning the useQuery hook we can access the object properties directly by calling to the hook
+} //by returning the useQuery hook we can access the object properties directly by calling to the hookkk
