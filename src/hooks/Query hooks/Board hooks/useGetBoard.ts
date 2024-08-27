@@ -1,9 +1,10 @@
 import api from "@/lib/api";
+import { IBoard } from "@/types/board.types";
 import { useQuery } from "@tanstack/react-query";
 
-async function getBoard(boardId: string) {
+async function getBoard(boardId: string): Promise<IBoard> {
   const res = await api.get(`/board/${boardId}`);
-  return res;
+  return res.data;
 }
 
 export function useGetBoard(boardId: string) {

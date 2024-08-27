@@ -12,6 +12,7 @@ import VisionPage from "./pages/team-page";
 import { useAuth } from "./providers/auth-provider";
 import { ReactNode } from "react";
 import BoardItem from "./components/boardPage/BoardItem";
+import CardDetailsPage from "./pages/card-details-page";
 
 interface customRouteProps {
   children: ReactNode;
@@ -64,7 +65,9 @@ function App() {
                 <BoardItem />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="c/:cardId" element={<CardDetailsPage />} />
+          </Route>
         </Route>
 
         <Route
