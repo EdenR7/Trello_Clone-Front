@@ -10,7 +10,7 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
-      <div className=" flex justify-between h-14 max-w-screen-2xl items-center px-6">
+      <div className=" flex justify-between h-14 items-center px-6">
         <div className="flex gap-4">
           <Link
             to="/"
@@ -33,9 +33,9 @@ export function MainNav() {
             </Link>
             <Link
               className=" hover:underline decoration-primary"
-              to="/protected"
+              to="/b/66cc72a30956d53913a33623"
             >
-              Protected
+              Board
             </Link>
           </nav>
         </div>

@@ -11,6 +11,7 @@ import VisionPage from "./pages/team-page";
 
 import { useAuth } from "./providers/auth-provider";
 import { ReactNode } from "react";
+import BoardItem from "./components/boardPage/BoardItem";
 
 interface customRouteProps {
   children: ReactNode;
@@ -57,10 +58,10 @@ function App() {
           <Route path="contact" element={<div>Contact</div>} />
           <Route path="services" element={<div>Services</div>} />
           <Route
-            path="protected"
+            path="b/:boardId"
             element={
               <ProtectedRoute>
-                <div>Protected</div>
+                <BoardItem />
               </ProtectedRoute>
             }
           />
