@@ -81,7 +81,10 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
             </div>
           </div>
         ) : card.description && card.description.length > 0 ? (
-          <div onClick={handleEditDesc}> {card.description}</div>
+          <div className=" cursor-pointer" onClick={handleEditDesc}>
+            {" "}
+            {card.description}
+          </div>
         ) : (
           <div
             className=" bg-btn_bg_primary py-2 px-3 rounded-sm font-semibold min-h-14 hover:bg-btn_bg_primary_hover hover:cursor-pointer"
