@@ -60,7 +60,7 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
         {card.description && card.description.length > 0 ? (
           <div className=" flex justify-between w-full items-center">
             <h2 className=" font-semibold text-[16px]">Description</h2>
-            <Button variant={"ghost"} onClick={handleEditDesc}>
+            <Button variant={"secondary"} onClick={handleEditDesc}>
               Edit
             </Button>
           </div>
