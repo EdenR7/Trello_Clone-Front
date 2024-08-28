@@ -21,6 +21,7 @@ module.exports = {
         btn_bg_primary: "#091e420f",
         btn_bg_primary_hover: "hsl(218, 13%, 84%)",
         text_dark_blue: "#172b4d",
+        btn_primary_hover: "#0055cc",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
