@@ -2,14 +2,10 @@ import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import { Outlet, useParams } from "react-router-dom";
 import ListsRender from "./ListsRender";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { IList } from "@/types/list.types";
 import api from "@/lib/api";
-
-export function reorderListPositions(lists: IList[]) {
-  const sortedLists = lists.sort((a, b) => a.position - b.position);
-  return sortedLists.map((list, index) => ({ ...list, position: index + 1 }));
-}
+import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdatePosition";
 
 export function countDecimalPlaces(number: number) {
   const numStr = number.toString();
@@ -34,48 +30,7 @@ function BoardItem() {
   const { boardId } = useParams();
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
   const qClient = useQueryClient();
-  const updateListPosition = useMutation({
-    mutationFn: ({
-      listId,
-      newPos,
-    }: {
-      listId: string;
-      newPos: number;
-      draggedList: IList;
-      newLoc: number;
-    }) => updateListPos(listId, newPos),
-    onMutate: async ({ listId, newPos, draggedList, newLoc }) => {
-      const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
-
-      if (previousLists) {
-        const newLists = previousLists.filter((list) => list._id !== listId);
-
-        newLists.splice(newLoc, 0, { ...draggedList, position: newPos }!);
-
-        // console.log("newLists", newLists);
-        if (countDecimalPlaces(newPos) > 10) {
-          qClient.setQueryData(
-            ["lists", boardId],
-            reorderListPositions(newLists)
-          );
-        } else {
-          qClient.setQueryData(["lists", boardId], newLists);
-        }
-      }
-
-      return { previousLists };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousLists) {
-        qClient.setQueryData(["lists", boardId], context.previousLists);
-      }
-      console.error("Error updating list position:", err);
-    },
-
-    // onSettled: () => {
-    //   qClient.invalidateQueries({ queryKey: ["lists", boardId] });
-    // },
-  });
+  const updateListPosition = useListUpdatePosition(boardId!);
 
   if (isPending) return <div>Loadinggg....</div>;
   if (isError) return <div>Error: {error.message}</div>;
@@ -114,26 +69,46 @@ function BoardItem() {
   }
 
   function handleCardDrag(destination: any, source: any, draggableId: string) {
+    const initialData: IList[] | undefined = qClient.getQueryData([
+      "lists",
+      boardId,
+    ]);
+    if (!initialData) return;
+
+    const cardInitialList = initialData.find(
+      (list) => list._id === source.droppableId
+    );
+    const cardFinalList = initialData.find(
+      (list) => list._id === destination.droppableId
+    );
+    const card = cardInitialList?.cards.find(
+      (card) => card._id === draggableId
+    );
+
+    if (!card || !cardInitialList || !cardFinalList) return;
+
     qClient.setQueryData(["lists", boardId], (oldData: IList[]) => {
       if (!oldData) return;
-      const cardInitialList = oldData.find(
-        (list) => list._id === source.droppableId
-      );
-      const card = cardInitialList?.cards.find(
-        (card) => card._id === draggableId
-      );
-      const cardFinalList = oldData.find(
-        (list) => list._id === destination.droppableId
-      );
 
-      if (
-        destination.index === 0 ||
-        destination.index === cardFinalList?.cards.length
-      ) {
+      console.log("cardFinalList", cardFinalList);
+      console.log("destination.index", destination.index);
+
+      let newPos = 0;
+      if (destination.index === 0) {
+        newPos = cardFinalList.cards[0].position / 2;
+      } else if (destination.index === cardFinalList?.cards.length) {
+        console.log(1);
+
+        newPos = Math.floor(
+          cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
+        );
       } else {
       }
 
+      console.log(newPos);
+
       if (cardInitialList?._id === cardFinalList?._id) {
+        // movement within the same list
         const cards = cardInitialList?.cards;
         cards?.splice(source.index, 1);
         cards?.splice(destination.index, 0, card!);
