@@ -6,6 +6,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IList } from "@/types/list.types";
 import api from "@/lib/api";
 
+export function reorderListPositions(lists: IList[]) {
+  const sortedLists = lists.sort((a, b) => a.position - b.position);
+  return sortedLists.map((list, index) => ({ ...list, position: index + 1 }));
+}
+
+export function countDecimalPlaces(number: number) {
+  const numStr = number.toString();
+  if (numStr.includes(".")) {
+    return numStr.split(".")[1].length;
+  }
+  return 0;
+}
+
 export async function updateListPos(listId: string, newPos: number) {
   try {
     const res = await api.patch(`/list/${listId}/position`, {
@@ -25,22 +38,29 @@ function BoardItem() {
     mutationFn: ({
       listId,
       newPos,
-      draggedList,
     }: {
       listId: string;
       newPos: number;
       draggedList: IList;
+      newLoc: number;
     }) => updateListPos(listId, newPos),
-    onMutate: async ({ listId, newPos, draggedList }) => {
-      await qClient.cancelQueries({ queryKey: ["lists", boardId] });
-
+    onMutate: async ({ listId, newPos, draggedList, newLoc }) => {
       const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
 
       if (previousLists) {
         const newLists = previousLists.filter((list) => list._id !== listId);
-        newLists.splice(newPos, 0, { ...draggedList, position: newPos }!);
 
-        qClient.setQueryData(["lists", boardId], newLists);
+        newLists.splice(newLoc, 0, { ...draggedList, position: newPos }!);
+
+        // console.log("newLists", newLists);
+        if (countDecimalPlaces(newPos) > 10) {
+          qClient.setQueryData(
+            ["lists", boardId],
+            reorderListPositions(newLists)
+          );
+        } else {
+          qClient.setQueryData(["lists", boardId], newLists);
+        }
       }
 
       return { previousLists };
@@ -52,9 +72,9 @@ function BoardItem() {
       console.error("Error updating list position:", err);
     },
 
-    onSettled: () => {
-      qClient.invalidateQueries({ queryKey: ["lists", boardId] });
-    },
+    // onSettled: () => {
+    //   qClient.invalidateQueries({ queryKey: ["lists", boardId] });
+    // },
   });
 
   if (isPending) return <div>Loadinggg....</div>;
@@ -62,9 +82,6 @@ function BoardItem() {
 
   function handleListDrag(destination: any, source: any, draggableId: string) {
     if (destination.index === source.index) return; // there wasnt a change list in position
-    // console.log("destination", destination);
-    // console.log("source", source);
-    // console.log("draggableId", draggableId);
 
     const initialData: IList[] | undefined = qClient.getQueryData([
       "lists",
@@ -91,16 +108,9 @@ function BoardItem() {
         listId: draggableId,
         newPos,
         draggedList,
+        newLoc: destination.index,
       });
     }
-    // const newList = { ...draggedList!, position: newPos };
-
-    // qClient.setQueryData(["lists", boardId], (oldData: IList[]) => {
-    //   if (!oldData) return;
-    //   const lists = oldData.filter((list) => list._id !== draggableId);
-    //   lists.splice(destination.index, 0, newList!);
-    //   return lists;
-    // });
   }
 
   function handleCardDrag(destination: any, source: any, draggableId: string) {
