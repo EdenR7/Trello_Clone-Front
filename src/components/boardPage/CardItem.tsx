@@ -21,10 +21,10 @@ function CardItem(props: CardItemProps) {
           className=" flex flex-col gap-2 bg-gray-400 overflow-hidden "
         >
           <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
-            <span>title: {card.title}</span>
-            {/* <span>admin: {card.admin}</span> */}
-            <span>position: {card.position}</span>
-            <span>id: {card._id}</span>
+            <p>title: {card.title}</p>
+            {/* <p>admin: {card.admin}</p> */}
+            <p>position: {card.position}</p>
+            <p>id: {card._id}</p>
           </Link>
         </div>
       )}
