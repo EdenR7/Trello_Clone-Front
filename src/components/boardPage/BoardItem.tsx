@@ -2,19 +2,63 @@ import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import { Outlet, useParams } from "react-router-dom";
 import ListsRender from "./ListsRender";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IList } from "@/types/list.types";
+import api from "@/lib/api";
+
+export async function updateListPos(listId: string, newPos: number) {
+  try {
+    const res = await api.patch(`/list/${listId}/position`, {
+      newPosition: newPos,
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function BoardItem() {
   const { boardId } = useParams();
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
   const qClient = useQueryClient();
+  const updateListPosition = useMutation({
+    mutationFn: ({
+      listId,
+      newPos,
+      draggedList,
+    }: {
+      listId: string;
+      newPos: number;
+      draggedList: IList;
+    }) => updateListPos(listId, newPos),
+    onMutate: async ({ listId, newPos, draggedList }) => {
+      await qClient.cancelQueries({ queryKey: ["lists", boardId] });
+
+      const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
+
+      if (previousLists) {
+        const newLists = previousLists.filter((list) => list._id !== listId);
+        newLists.splice(newPos, 0, { ...draggedList, position: newPos }!);
+
+        qClient.setQueryData(["lists", boardId], newLists);
+      }
+
+      return { previousLists };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousLists) {
+        qClient.setQueryData(["lists", boardId], context.previousLists);
+      }
+      console.error("Error updating list position:", err);
+    },
+
+    onSettled: () => {
+      qClient.invalidateQueries({ queryKey: ["lists", boardId] });
+    },
+  });
+
   if (isPending) return <div>Loadinggg....</div>;
   if (isError) return <div>Error: {error.message}</div>;
-
-  // function calcNewPosition<T>(data: T[]) {
-
-  // }
 
   function handleListDrag(destination: any, source: any, draggableId: string) {
     if (destination.index === source.index) return; // there wasnt a change list in position
@@ -27,7 +71,6 @@ function BoardItem() {
       boardId,
     ]);
     if (!initialData) return;
-    // console.log("initialData", initialData);
 
     let newPos = 0;
     if (destination.index === 0) {
@@ -35,23 +78,29 @@ function BoardItem() {
     } else if (destination.index === initialData.length - 1) {
       newPos = Math.floor(initialData[initialData.length - 1].position + 1);
     } else {
-      console.log(destination.index);
-
+      const secPositionToCalc = destination.index > source.index ? 1 : -1;
       newPos =
-        (initialData[destination.index].position + destination.index <
-        source.index
-          ? initialData[destination.index + 1].position
-          : initialData[destination.index - 1].position) / 2;
+        (initialData[destination.index].position +
+          initialData[destination.index + secPositionToCalc].position) /
+        2;
     }
-    const draggedList = initialData.find((list) => list._id === draggableId);
-    const newList = { ...draggedList!, position: newPos };
 
-    qClient.setQueryData(["lists", boardId], (oldData: IList[]) => {
-      if (!oldData) return;
-      const lists = oldData.filter((list) => list._id !== draggableId);
-      lists.splice(destination.index, 0, newList!);
-      return lists;
-    });
+    const draggedList = initialData.find((list) => list._id === draggableId);
+    if (draggedList) {
+      updateListPosition.mutate({
+        listId: draggableId,
+        newPos,
+        draggedList,
+      });
+    }
+    // const newList = { ...draggedList!, position: newPos };
+
+    // qClient.setQueryData(["lists", boardId], (oldData: IList[]) => {
+    //   if (!oldData) return;
+    //   const lists = oldData.filter((list) => list._id !== draggableId);
+    //   lists.splice(destination.index, 0, newList!);
+    //   return lists;
+    // });
   }
 
   function handleCardDrag(destination: any, source: any, draggableId: string) {
@@ -90,11 +139,6 @@ function BoardItem() {
 
   function onDragEnd(result: any) {
     const { destination, source, draggableId, type } = result;
-    // console.log("destination", destination);
-    // console.log("source", source);
-    // console.log("draggableId", draggableId);
-    // console.log("type", type);
-
     if (!destination) return;
 
     if (type === "list") {
@@ -112,7 +156,7 @@ function BoardItem() {
             <ol
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className=" list-none flex gap-3 "
+              className=" list-none flex gap-3"
             >
               <ListsRender />
               {provided.placeholder}

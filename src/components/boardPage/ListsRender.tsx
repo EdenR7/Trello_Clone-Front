@@ -1,18 +1,8 @@
 import { useGetLists } from "@/hooks/Query hooks/List hooks/useGetList";
 import { useParams } from "react-router-dom";
 import ListItem from "./ListItem";
-import api from "@/lib/api";
 
-export async function updateListPos(listId: string, newPos: number) {
-  try {
-    const res = await api.patch(`/list/${listId}/position`, {
-      newPosition: newPos,
-    });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+
 
 function ListsRender() {
   const { boardId } = useParams();
