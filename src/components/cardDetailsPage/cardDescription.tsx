@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { useUpdateCardDescription } from "@/hooks/Query hooks/Card hooks/useUpdateCardDescription";
 
 interface cardDescriptionProps {
   card: ICard;
@@ -12,15 +13,29 @@ interface cardDescriptionProps {
 function CardDescriptionComponent(props: cardDescriptionProps) {
   const { card } = props;
   const [isEditing, setIsEditing] = useState(false);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { mutate: updateCardDescription } = useUpdateCardDescription();
 
   useEffect(() => {
-    if (textareaRef.current) {
+    if (isEditing && textareaRef.current) {
       textareaRef.current.focus();
+      textareaRef.current.selectionStart = textareaRef.current.value.length;
+      textareaRef.current.selectionEnd = textareaRef.current.value.length;
     }
   }, [isEditing]);
 
-  function handleSaveDesc() {}
+  function handleSaveDesc() {
+    setIsEditing(false);
+    if (textareaRef.current) {
+      const newDesc = textareaRef.current.value;
+      console.log(newDesc);
+
+      if (newDesc !== card.description) {
+        updateCardDescription({ cardId: card._id, newDesc });
+      }
+    }
+  }
 
   function handlecancelDesc() {
     setIsEditing(false);
@@ -44,15 +59,20 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
         {isEditing ? (
           <div>
             <Textarea
+              defaultValue={card.description}
               ref={textareaRef}
               className={cn(
-                "text-md  w-11/12 resize-none overflow-hidden transition-colors duration-200 border-2 border-btn_bg_primary",
-                " min-h-[220px] p-5 rounded-none border-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500"
+                "text-md w-11/12 resize-none overflow-hidden transition-colors duration-200 ring-1 ring-gray-500",
+                "min-h-[220px] p-5 rounded-sm ring-offset-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               )}
               placeholder="Add a more detailed description..."
             />
             <div className=" mt-2 flex ">
-              <Button onClick={handleSaveDesc} className=" mr-2">
+              <Button
+                variant={"primaryBtn"}
+                onClick={() => handleSaveDesc()}
+                className=" mr-2 hover:bg-btn_primary_hover"
+              >
                 Save
               </Button>
               <Button onClick={handlecancelDesc} variant={"ghost"}>
@@ -61,7 +81,7 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
             </div>
           </div>
         ) : card.description && card.description.length > 0 ? (
-          <div> {card.description}</div>
+          <div onClick={handleEditDesc}> {card.description}</div>
         ) : (
           <div
             className=" bg-btn_bg_primary py-2 px-3 rounded-sm font-semibold min-h-14 hover:bg-btn_bg_primary_hover hover:cursor-pointer"
