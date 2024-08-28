@@ -6,7 +6,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  config => {
+  (config) => {
     let token = localStorage.getItem("jwt-trello_clone") || null;
     // removing the first and last character of the token, which are quotes
 
@@ -17,7 +17,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );
