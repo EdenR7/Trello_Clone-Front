@@ -1,5 +1,4 @@
 import { IList } from "@/types/list.types";
-import { Link } from "react-router-dom";
 import CardItem from "./CardItem";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 
@@ -20,6 +19,7 @@ function ListItem({ list, index }: ListItemProps) {
           <div {...provided.dragHandleProps} className=" w-[272px]">
             <div>{list.name}</div>
             <div>id: {list._id}</div>
+            <p>position : {list.position}</p>
             <Droppable droppableId={list._id} type="card">
               {(provided) => (
                 <ol
