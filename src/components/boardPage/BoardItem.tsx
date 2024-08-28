@@ -87,25 +87,39 @@ function BoardItem() {
 
     if (!card || !cardInitialList || !cardFinalList) return;
 
+    const isSameList = cardInitialList?._id === cardFinalList?._id;
+
+    if (isSameList && source.index === destination.index) return;
+
     qClient.setQueryData(["lists", boardId], (oldData: IList[]) => {
       if (!oldData) return;
 
-      console.log("cardFinalList", cardFinalList);
-      console.log("destination.index", destination.index);
-
       let newPos = 0;
       if (destination.index === 0) {
-        newPos = cardFinalList.cards[0].position / 2;
-      } else if (destination.index === cardFinalList?.cards.length) {
-        console.log(1);
-
+        // console.log("top");
+        if (cardFinalList.cards.length === 0) {
+          newPos = 1;
+        } else {
+          newPos = cardFinalList.cards[0].position / 2;
+        }
+      } else if (
+        (isSameList && destination.index === cardFinalList?.cards.length - 1) ||
+        (!isSameList && destination.index === cardFinalList?.cards.length)
+      ) {
+        // console.log("Bottom");
         newPos = Math.floor(
           cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
         );
       } else {
+        // console.log("middle");
+        newPos =
+          (cardFinalList.cards[destination.index].position +
+            cardFinalList.cards[destination.index - 1].position) /
+          2;
       }
 
       console.log(newPos);
+      card.position = newPos;
 
       if (cardInitialList?._id === cardFinalList?._id) {
         // movement within the same list
