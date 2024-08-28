@@ -82,7 +82,7 @@ function BoardItem() {
             <ol
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className=" list-none flex gap-3"
+              className=" list-none flex gap-3 "
             >
               <ListsRender />
               {provided.placeholder}

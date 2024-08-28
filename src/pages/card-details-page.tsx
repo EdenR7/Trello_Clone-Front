@@ -31,7 +31,7 @@ function CardDetailsPage() {
         <DialogTitle />
         <DialogContent
           aria-describedby={undefined}
-          className="max-w-[768px] bg-gray-200 p-0 rounded-md"
+          className=" text-text_dark_blue max-w-[768px] bg-gray-200 p-0 rounded-md"
         >
           <DialogHeader>
             {card && boardId && (
