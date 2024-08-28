@@ -131,7 +131,7 @@ function CardTitleComponent({ card, boardId }: CardTitleProps) {
             "min-h-[28px] p-1 rounded-sm border-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500"
           )}
         />
-        <p className="text-gray-500">
+        <p className=" text-gray-500">
           in list{" "}
           <span className="border border-b-gray-500 cursor-pointer">
             {card.list.name}

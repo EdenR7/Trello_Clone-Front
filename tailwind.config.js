@@ -19,7 +19,7 @@ module.exports = {
     extend: {
       colors: {
         btn_bg_primary: "#091e420f",
-        btn_bg_primary_hover: "hsl(218, 13%, 84%)",
+        btn_bg_primary_hover: "hsl(218, 13%, 80%)",
         text_dark_blue: "#172b4d",
         btn_primary_hover: "#0055cc",
         border: "hsl(var(--border))",
