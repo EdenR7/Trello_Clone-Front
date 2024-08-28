@@ -30,10 +30,19 @@ export async function updateListPos(listId: string, newPos: number) {
   }
 }
 
+type BoardStyle = {
+  backgroundColor?: string;
+  backgroundImage?: string;
+  backgroundSize?: string;
+  backgroundPosition?: string;
+};
+
 function BoardItem() {
   const { boardId } = useParams();
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
   const qClient = useQueryClient();
+  console.log(board);
+
   const updateListPosition = useMutation({
     mutationFn: ({
       listId,
@@ -76,6 +85,25 @@ function BoardItem() {
     //   qClient.invalidateQueries({ queryKey: ["lists", boardId] });
     // },
   });
+
+  if (!board) return null;
+
+  let boardStyle: BoardStyle;
+  if (board.bg) {
+    boardStyle = {
+      ...(board!.bg.bgType === "color" && {
+        backgroundColor: board!.bg.background,
+      }),
+      ...(board!.bg.bgType === "gradient" && {
+        backgroundImage: board!.bg.background,
+      }),
+      ...(board!.bg.bgType === "image" && {
+        backgroundImage: `url(${board!.bg.background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }),
+    };
+  }
 
   if (isPending) return <div>Loadinggg....</div>;
   if (isError) return <div>Error: {error.message}</div>;
@@ -167,6 +195,7 @@ function BoardItem() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className=" list-none flex gap-3"
+              style={boardStyle}
             >
               <ListsRender />
               {provided.placeholder}

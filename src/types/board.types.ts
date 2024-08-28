@@ -1,6 +1,6 @@
 interface IBoardBackground {
-  type: "color" | "gradient" | "image";
-  value: string; // CSS color, gradient string, or image URL
+  bgType: "color" | "gradient" | "image";
+  background: string; // CSS color, gradient string, or image URL
 }
 
 export interface IBoard {
