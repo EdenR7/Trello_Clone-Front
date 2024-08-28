@@ -13,7 +13,7 @@ function ListItem({ list, index }: ListItemProps) {
         <li
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="  h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden min-w-[272px]"
+          className="  h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden min-w-[272px] bg-white opacity-80"
           key={list._id}
         >
           <div {...provided.dragHandleProps} className=" w-[272px]">
