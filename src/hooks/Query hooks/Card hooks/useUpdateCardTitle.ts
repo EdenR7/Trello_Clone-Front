@@ -8,13 +8,14 @@ async function updateCardTitle(cardId: string, newTitle: string) {
   return res.data;
 }
 
-export function useUpdateCardTitle() {
+export function useUpdateCardTitle(boardId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ cardId, newTitle }: { cardId: string; newTitle: string }) =>
       updateCardTitle(cardId, newTitle),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["card"] });
+    onSuccess: (_, { cardId }) => {
+      queryClient.invalidateQueries({ queryKey: ["lists", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["card", cardId] });
     },
   });
 }
