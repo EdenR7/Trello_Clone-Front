@@ -52,8 +52,21 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
   return (
     <div className="  relative py-2 px-4">
       <div className=" mb-1 py-3 ml-10 relative flex items-center">
-        <List className=" absolute top-3 -left-9" />
-        <h2 className=" font-semibold text-[16px]">Description</h2>
+        <List
+          className={`absolute top-3 -left-9 ${
+            card.description && card.description.length > 0 && "top-4"
+          }`}
+        />
+        {card.description && card.description.length > 0 ? (
+          <div className=" flex justify-between w-full items-center">
+            <h2 className=" font-semibold text-[16px]">Description</h2>
+            <Button variant={"ghost"} onClick={handleEditDesc}>
+              Edit
+            </Button>
+          </div>
+        ) : (
+          <h2 className=" font-semibold text-[16px]">Description</h2>
+        )}
       </div>
       <div className=" ml-10">
         {isEditing ? (
@@ -93,16 +106,6 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
             Add a more detailed description...
           </div>
         )}
-        {/* {card.description && card.description.length > 0 ? (
-          <div> {card.description}</div>
-        ) : (
-          <div
-            className=" bg-btn_bg_primary py-2 px-3 rounded-sm font-semibold min-h-14 hover:bg-btn_bg_primary_hover hover:cursor-pointer"
-            onClick={() => setIsEditing((prev) => !prev)}
-          >
-            Add a more detailed description...
-          </div>
-        )} */}
       </div>
     </div>
   );
