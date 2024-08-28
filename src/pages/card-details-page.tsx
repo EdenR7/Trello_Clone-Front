@@ -4,14 +4,13 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { usegetCard } from "@/hooks/Query hooks/Card hooks/useGetCard";
+import CardTitleComponent from "@/components/cardDetailsPage/cardTitle";
 
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
-  const { data: card, isPending, isError, error } = usegetCard(cardId!);
+  const { data: card, isPending } = usegetCard(cardId!);
   const navigate = useNavigate();
 
   function handleCloseModal() {
@@ -20,29 +19,21 @@ function CardDetailsPage() {
 
   if (isPending)
     return (
-      <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      <>
+        <div>loading.......</div>
+      </>
     );
+
   return (
     <Dialog onOpenChange={handleCloseModal} open={true}>
-      <DialogContent>
+      <DialogContent className="w-[768px]">
         <DialogHeader>
-          <DialogTitle>{card?.title}</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription>
+          {card && <CardTitleComponent card={card} />}
         </DialogHeader>
+        <DialogDescription>
+          This action cannot be undone. This will permanently delete your
+          account and remove your data from our servers.
+        </DialogDescription>
       </DialogContent>
     </Dialog>
   );
