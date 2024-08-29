@@ -9,8 +9,8 @@ export function MainNav() {
   const { loggedInUser } = useAuth();
 
   return (
-    <header className="sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
-      <div className=" flex justify-between h-14 items-center px-6">
+    <header className=" sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
+      <div className=" max-h-8 flex justify-between items-center px-6">
         <div className="flex gap-4">
           <Link
             to="/"
@@ -18,7 +18,7 @@ export function MainNav() {
           >
             Logo
           </Link>
-          <nav className="hidden w-full sm:flex items-center gap-4 text-sm lg:gap-6">
+          <nav className="  hidden w-full sm:flex items-center gap-4 text-sm lg:gap-6">
             <Link className=" hover:underline decoration-primary" to="/about">
               About
             </Link>

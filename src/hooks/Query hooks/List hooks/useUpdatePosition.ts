@@ -1,7 +1,6 @@
-import { countDecimalPlaces } from "@/components/boardPage/BoardItem";
 import api from "@/lib/api";
 import { IList } from "@/types/list.types";
-import { reorderListPositions } from "@/utils/utilFuncs";
+import { countDecimalPlaces, reorderListPositions } from "@/utils/utilFuncs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export async function updateListPos(listId: string, newPos: number) {

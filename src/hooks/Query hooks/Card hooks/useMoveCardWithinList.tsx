@@ -1,8 +1,7 @@
-import { countDecimalPlaces } from "@/components/boardPage/BoardItem";
 import api from "@/lib/api";
 import { ICard } from "@/types/card.types";
 import { IList } from "@/types/list.types";
-import { reOrderCardPositions } from "@/utils/utilFuncs";
+import { countDecimalPlaces, reOrderCardPositions } from "@/utils/utilFuncs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export async function moveCardWithinListApi(cardId: string, newPos: number) {

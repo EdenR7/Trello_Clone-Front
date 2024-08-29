@@ -18,7 +18,7 @@ function CardItem(props: CardItemProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className=" flex flex-col gap-2 bg-gray-400 overflow-hidden "
+          className=" flex flex-col break-words gap-2 bg-gray-400 "
         >
           <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
             <p>title: {card.title}</p>
