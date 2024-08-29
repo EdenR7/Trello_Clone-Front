@@ -2,18 +2,26 @@ import { Checkbox } from "../ui/checkbox";
 import { ITodo } from "@/types/checklist.types";
 import { Textarea } from "../ui/textarea";
 import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useToggleTodoComplete } from "@/hooks/Query hooks/Todo hooks/useToggleTodoComplete";
 
 interface TodoItemProps {
   todo: ITodo;
   activeTodoTitleId: String | null;
   setActiveTodoTitleId: React.Dispatch<React.SetStateAction<String | null>>;
+  checklistId: string;
 }
 
 export default function TodoItem({
   todo,
   activeTodoTitleId,
   setActiveTodoTitleId,
+  checklistId,
 }: TodoItemProps) {
+  const { cardId, boardId } = useParams();
+
+  const { mutate: toggleTodo } = useToggleTodoComplete(boardId!);
+
   const changeItemTitleRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -26,14 +34,20 @@ export default function TodoItem({
     }
   }, [activeTodoTitleId]);
 
-  function handleToggleTodo() {}
+  function handleToggleTodo(
+    cardId: string,
+    checklistId: string,
+    todoId: string
+  ) {
+    toggleTodo({ cardId, checklistId, todoId });
+  }
 
   return (
     <div className="relative pl-10 rounded-lg transition-colors">
       <div className="cursor-pointer left-[2px] m-[6px] absolute text-center top-1">
         <Checkbox
           checked={todo.isComplete}
-          onClick={handleToggleTodo}
+          onClick={() => handleToggleTodo(cardId!, checklistId, todo._id)}
           className="h-4 w-4 m-0 border-black rounded-none border"
           id={todo._id}
         />

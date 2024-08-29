@@ -157,19 +157,37 @@ export default function CardChecklistComponent({
   card,
 }: CardChecklistComponentProps) {
   const { boardId } = useParams();
-  const [hideCheckedItems, setHideCheckedItems] = useState(false);
+  //   const [hideCheckedItems, setHideCheckedItems] = useState(false);
+  const [hideCheckedItems, setHideCheckedItems] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [activeChecklistId, setActiveChecklistId] = useState<string | null>(
     null
   );
   const { mutate: addTodo } = useAddTodo(boardId!);
 
+  const handleHideCheckedItemsToggle = (checklistId: string) => {
+    setHideCheckedItems((prev) => ({
+      ...prev,
+      [checklistId]: !prev[checklistId],
+    }));
+  };
+
+  //   const checklists = card.checklist.map((checklist) => ({
+  //     ...checklist,
+  //     todos: hideCheckedItems
+  //       ? checklist.todos.filter((todo) => !todo.isComplete)
+  //       : checklist.todos,
+  //   }));
+
   const checklists = card.checklist.map((checklist) => ({
     ...checklist,
-    todos: hideCheckedItems
+    todos: hideCheckedItems[checklist._id]
       ? checklist.todos.filter((todo) => !todo.isComplete)
       : checklist.todos,
   }));
 
+  const progressChecklists = card.checklist;
   if (!card._id || !boardId) return null;
 
   return (
@@ -181,9 +199,11 @@ export default function CardChecklistComponent({
           cardId={card._id}
           addTodo={addTodo}
           hideCheckedItems={hideCheckedItems}
-          setHideCheckedItems={setHideCheckedItems}
+          handleHideCheckedItemsToggle={handleHideCheckedItemsToggle}
+          //   setHideCheckedItems={setHideCheckedItems}
           activeChecklistId={activeChecklistId}
           setActiveChecklistId={setActiveChecklistId}
+          progressChecklists={progressChecklists}
         />
       ))}
     </div>

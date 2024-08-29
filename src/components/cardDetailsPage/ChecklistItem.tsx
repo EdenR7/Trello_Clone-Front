@@ -16,8 +16,11 @@ interface ChecklistItemProps {
   }) => void;
   activeChecklistId: string | null;
   setActiveChecklistId: React.Dispatch<React.SetStateAction<string | null>>;
-  hideCheckedItems: boolean;
-  setHideCheckedItems: React.Dispatch<React.SetStateAction<boolean>>;
+  //   hideCheckedItems: boolean;
+  hideCheckedItems: { [key: string]: boolean };
+  //   setHideCheckedItems: React.Dispatch<React.SetStateAction<boolean>>;
+  handleHideCheckedItemsToggle: (checklistId: string) => void;
+  progressChecklists: IChecklist[];
 }
 
 export default function ChecklistItem({
@@ -25,9 +28,11 @@ export default function ChecklistItem({
   cardId,
   addTodo,
   hideCheckedItems,
-  setHideCheckedItems,
+  //   setHideCheckedItems,
+  handleHideCheckedItemsToggle,
   activeChecklistId,
   setActiveChecklistId,
+  progressChecklists,
 }: ChecklistItemProps) {
   const addItemTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [activeTodoTitleId, setActiveTodoTitleId] = useState<String | null>(
@@ -48,6 +53,10 @@ export default function ChecklistItem({
     addTodo({ cardId, checklistId: checklist._id, todoTitle });
   }
 
+  const progressChecklist = progressChecklists.find(
+    (cl) => cl._id === checklist._id
+  );
+
   return (
     <div className="mb-6">
       <div className="py-2 mb-1 ml-11 relative">
@@ -58,18 +67,29 @@ export default function ChecklistItem({
             <Button
               variant="secondary"
               className="mr-2"
-              onClick={() => setHideCheckedItems(!hideCheckedItems)}
+              onClick={() => {
+                setActiveTodoTitleId(null);
+                // setHideCheckedItems(!hideCheckedItems);
+                handleHideCheckedItemsToggle(checklist._id);
+              }}
             >
-              {hideCheckedItems ? "Show" : "Hide"} checked items
+              {/* {hideCheckedItems ? "Show" : "Hide"} checked items */}
+              {hideCheckedItems[checklist._id]
+                ? `Show checked items (${
+                    progressChecklist!.todos.filter((todo) => todo.isComplete)
+                      .length
+                  })`
+                : "Hide checked items"}
             </Button>
             <Button variant="secondary">Delete</Button>
           </div>
         </div>
       </div>
-      <ChecklistProgress todos={checklist.todos} />
+      <ChecklistProgress checklist={progressChecklist} />
       <div className="min-h-2">
         {checklist.todos.map((todo) => (
           <TodoItem
+            checklistId={checklist._id}
             activeTodoTitleId={activeTodoTitleId}
             setActiveTodoTitleId={setActiveTodoTitleId}
             key={todo._id}
