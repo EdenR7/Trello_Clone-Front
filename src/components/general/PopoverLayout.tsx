@@ -40,7 +40,7 @@ function PopoverLayout({
       <PopoverContent className="w-[304px] p-0 rounded-lg">
         <div className="">
           <div className=" py-1 px-2 text-center relative grid-cols-popover_layout grid items-center">
-            <h4 className="  px-8 font-semibold col-start-2 text-ellipsis block text-gray-600 ">
+            <h4 className="  px-8 font-semibold col-start-2 text-ellipsis overflow-hidden block text-gray-600 whitespace-nowrap ">
               {title}
             </h4>
             <Button
