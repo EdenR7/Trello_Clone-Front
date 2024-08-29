@@ -7,6 +7,7 @@ import { IBoard } from "@/types/board.types";
 import { useState } from "react";
 import RightSideBarNormalMode from "./NormalMode";
 import { Input } from "@/components/ui/input";
+import LabelLayout from "@/components/labels/LabelLayout";
 
 interface BoardSideBarProps {
   boardId: string;
@@ -80,22 +81,7 @@ export function BoardSideBar({
         {/* {sideBarMode === "About" && <div>About</div>} */}
         {/* {sideBarMode === "Archived" && <div>Archived</div>} */}
         {/* {sideBarMode === "Background" && <div>Background</div>} */}
-        {sideBarMode === "Labels" && (
-          <div className=" flex flex-col gap-2">
-            <Input
-              className="border h-9  border-gray-400 py-0 focus-visible:ring-0 focus:border-blue-500 focus:border-2 focus:outline-none"
-              placeholder=" Search labels..."
-            />
-            <h3 className=" text-xs font-semibold">Labels</h3>
-            <ul>
-              {board.labels.map((label) => {
-                return <li key={label._id}>
-                  
-                </li>;
-              })}
-            </ul>
-          </div>
-        )}
+        {sideBarMode === "Labels" && <LabelLayout boardId={boardId} />}
       </div>
     </div>
   );
