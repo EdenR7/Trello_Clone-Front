@@ -5,6 +5,7 @@ import { Ellipsis, ListFilter } from "lucide-react";
 import BoardSideBar from "./BoardSideBar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { IBoardBackground } from "@/types/board.types";
 
 export type BoardStyle = {
   backgroundColor?: string;
@@ -13,28 +14,33 @@ export type BoardStyle = {
   backgroundPosition?: string;
 };
 
-function BoardLayout() {
-  const { boardId } = useParams();
-  const { data: board, isPending, isError, error } = useGetBoard(boardId!);
-  const [openSideBar, setOpenSideBar] = useState(true);
-
-  if (!board) return null;
-  let boardStyle: BoardStyle;
-  if (board.bg) {
+export function getBoardBgStyle(bg: IBoardBackground) {
+  let boardStyle: BoardStyle | undefined;
+  if (bg) {
     boardStyle = {
-      ...(board!.bg.bgType === "color" && {
-        backgroundColor: board!.bg.background,
+      ...(bg.bgType === "color" && {
+        backgroundColor: bg.background,
       }),
-      ...(board!.bg.bgType === "gradient" && {
-        backgroundImage: board!.bg.background,
+      ...(bg.bgType === "gradient" && {
+        backgroundImage: bg.background,
       }),
-      ...(board!.bg.bgType === "image" && {
-        backgroundImage: `url(${board!.bg.background})`,
+      ...(bg.bgType === "image" && {
+        backgroundImage: `url(${bg.background})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }),
     };
   }
+  return boardStyle;
+}
+
+function BoardLayout() {
+  const { boardId } = useParams();
+  const { data: board, isPending, isError, error } = useGetBoard(boardId!);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
+
+  if (!board) return null;
+  let boardStyle = getBoardBgStyle(board.bg);
 
   if (isPending) return <div>Loadinggg....</div>;
   if (isError) return <div>Error: {error.message}</div>;
@@ -56,7 +62,7 @@ function BoardLayout() {
                 <Button
                   className=" py-[6px] px-2"
                   variant="naked"
-                  onClick={() => setOpenSideBar(true)}
+                  onClick={() => setIsSideBarOpen(true)}
                 >
                   <Ellipsis size={18} />
                 </Button>
@@ -65,13 +71,17 @@ function BoardLayout() {
           </div>
         </div>
         <div
-          className={` pt-2 pb-8 px-[6px] h-[calc(100vh-110px)] overflow-x-scroll ${
-            openSideBar && "w-[calc(100%-300px)] md:w-[calc(100%-342px)]"
+          className={` pt-2 pb-8 px-[6px] h-[calc(100vh-110px)] overflow-x-auto ${
+            isSideBarOpen && "w-[calc(100%-300px)] md:w-[calc(100%-342px)]"
           }`}
         >
           <BoardItems />
         </div>
-        {<BoardSideBar />}
+        <BoardSideBar
+          setIsSideBarOpen={setIsSideBarOpen}
+          boardId={boardId!}
+          isSideBarOpen={isSideBarOpen}
+        />
       </div>
       <Outlet />
     </>

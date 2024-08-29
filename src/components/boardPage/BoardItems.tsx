@@ -8,7 +8,6 @@ import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdateP
 import { useMoveCardWithinList } from "@/hooks/Query hooks/Card hooks/useMoveCardWithinList";
 import { useMoveCardToList } from "@/hooks/Query hooks/Card hooks/useMoveCardToList";
 import { useState } from "react";
-import { BoardStyle } from "./BoardLayout/BoardLayout";
 
 function BoardItems() {
   const { boardId } = useParams();
@@ -20,26 +19,6 @@ function BoardItems() {
   const [hoveredItem, setHoveredItem] = useState<null | number>(null);
 
   if (!board) return null;
-
-  // let boardStyle: BoardStyle;
-  // if (board.bg) {
-  //   boardStyle = {
-  //     ...(board!.bg.bgType === "color" && {
-  //       backgroundColor: board!.bg.background,
-  //     }),
-  //     ...(board!.bg.bgType === "gradient" && {
-  //       backgroundImage: board!.bg.background,
-  //     }),
-  //     ...(board!.bg.bgType === "image" && {
-  //       backgroundImage: `url(${board!.bg.background})`,
-  //       backgroundSize: "cover",
-  //       backgroundPosition: "center",
-  //     }),
-  //   };
-  // }
-
-  // if (isPending) return <div>Loadinggg....</div>;
-  // if (isError) return <div>Error: {error.message}</div>;
 
   function handleListDrag(destination: any, source: any, draggableId: string) {
     if (destination.index === source.index) return; // there wasnt a change list in position

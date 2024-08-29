@@ -9,7 +9,7 @@ export function MainNav() {
   const { loggedInUser } = useAuth();
 
   return (
-    <header className=" sticky top-0 py-2 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md dark:border-b dark: border-b-primary">
+    <header className=" sticky top-0 py-2 z-50 w-full border-border/40 bg-foreground/95 backdrop-blur supports-[backdrop-filter]:bg-foreground/60 shadow-md dark:border-b dark: border-b-primary">
       <div className=" max-h-8 flex justify-between items-center px-6">
         <div className="flex gap-4">
           <Link

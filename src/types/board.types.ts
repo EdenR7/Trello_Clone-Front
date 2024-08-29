@@ -1,4 +1,4 @@
-interface IBoardBackground {
+export interface IBoardBackground {
   bgType: "color" | "gradient" | "image";
   background: string; // CSS color, gradient string, or image URL
 }
