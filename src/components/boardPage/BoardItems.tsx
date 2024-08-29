@@ -2,58 +2,44 @@ import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import { Outlet, useParams } from "react-router-dom";
 import ListsRender from "./ListsRender";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { IList } from "@/types/list.types";
 import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdatePosition";
 import { useMoveCardWithinList } from "@/hooks/Query hooks/Card hooks/useMoveCardWithinList";
-import api from "@/lib/api";
-import { ICard } from "@/types/card.types";
-import { reOrderCardPositions } from "@/utils/utilFuncs";
 import { useMoveCardToList } from "@/hooks/Query hooks/Card hooks/useMoveCardToList";
+import { useState } from "react";
+import { BoardStyle } from "./BoardLayout/BoardLayout";
 
-export function countDecimalPlaces(number: number) {
-  const numStr = number.toString();
-  if (numStr.includes(".")) {
-    return numStr.split(".")[1].length;
-  }
-  return 0;
-}
-
-type BoardStyle = {
-  backgroundColor?: string;
-  backgroundImage?: string;
-  backgroundSize?: string;
-  backgroundPosition?: string;
-};
-
-function BoardItem() {
+function BoardItems() {
   const { boardId } = useParams();
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
   const qClient = useQueryClient();
   const updateListPosition = useListUpdatePosition(boardId!);
   const moveCardWithinList = useMoveCardWithinList(boardId!);
   const moveCardToList = useMoveCardToList(boardId!);
+  const [hoveredItem, setHoveredItem] = useState<null | number>(null);
+
   if (!board) return null;
 
-  let boardStyle: BoardStyle;
-  if (board.bg) {
-    boardStyle = {
-      ...(board!.bg.bgType === "color" && {
-        backgroundColor: board!.bg.background,
-      }),
-      ...(board!.bg.bgType === "gradient" && {
-        backgroundImage: board!.bg.background,
-      }),
-      ...(board!.bg.bgType === "image" && {
-        backgroundImage: `url(${board!.bg.background})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }),
-    };
-  }
+  // let boardStyle: BoardStyle;
+  // if (board.bg) {
+  //   boardStyle = {
+  //     ...(board!.bg.bgType === "color" && {
+  //       backgroundColor: board!.bg.background,
+  //     }),
+  //     ...(board!.bg.bgType === "gradient" && {
+  //       backgroundImage: board!.bg.background,
+  //     }),
+  //     ...(board!.bg.bgType === "image" && {
+  //       backgroundImage: `url(${board!.bg.background})`,
+  //       backgroundSize: "cover",
+  //       backgroundPosition: "center",
+  //     }),
+  //   };
+  // }
 
-  if (isPending) return <div>Loadinggg....</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  // if (isPending) return <div>Loadinggg....</div>;
+  // if (isError) return <div>Error: {error.message}</div>;
 
   function handleListDrag(destination: any, source: any, draggableId: string) {
     if (destination.index === source.index) return; // there wasnt a change list in position
@@ -186,19 +172,29 @@ function BoardItem() {
             <ol
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className=" list-none flex gap-3 min-h-[80vh] w-full"
-              style={boardStyle}
+              className=" list-none flex gap-3"
+              // style={boardStyle}
             >
-              <ListsRender />
-              {provided.placeholder}
+              <ListsRender setHoveredItem={setHoveredItem} />
+              <div
+                style={{
+                  backgroundColor:
+                    hoveredItem !== null ? "black" : "transparent",
+                  // minHeight: "100px", // Adjust height based on your needs
+                  // minWidth: "100px", // Adjust width based on your needs
+                  transition: "background-color 0.2s ease",
+                }}
+              >
+                {provided.placeholder}
+              </div>
             </ol>
           )}
         </Droppable>
       </DragDropContext>
 
-      <Outlet />
+      {/* <Outlet /> */}
     </>
   );
 }
 
-export default BoardItem;
+export default BoardItems;

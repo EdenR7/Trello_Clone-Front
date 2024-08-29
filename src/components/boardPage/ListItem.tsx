@@ -5,18 +5,32 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 interface ListItemProps {
   list: IList;
   index: number;
+  setHoveredItem: (index: number | null) => void;
 }
-function ListItem({ list, index }: ListItemProps) {
+function ListItem({ list, index, setHoveredItem }: ListItemProps) {
+  const handleDragOver = (index: number) => {
+    console.log(1);
+
+    setHoveredItem(index);
+  };
+
+  const handleDragLeave = () => {
+    console.log(2);
+
+    setHoveredItem(null);
+  };
   return (
     <Draggable draggableId={list._id} index={index}>
       {(provided) => (
         <li
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="  h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden min-w-[272px] bg-white opacity-80"
+          onDragOver={() => handleDragOver(index)}
+          onDragLeave={handleDragLeave}
+          className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden min-w-[272px] bg-white opacity-80"
           key={list._id}
         >
-          <div {...provided.dragHandleProps} className=" w-[272px]">
+          <div {...provided.dragHandleProps}>
             <div>{list.name}</div>
             <div>id: {list._id}</div>
             <p>position : {list.position}</p>
