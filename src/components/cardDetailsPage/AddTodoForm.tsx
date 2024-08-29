@@ -65,7 +65,7 @@ export default function AddTodoForm({
     <>
       <Textarea
         ref={textareaRef}
-        className="rounded-sm ring-2 ring-primary border-none focus-visible:ring-offset-0 resize-y min-h-8 h-[56px] overflow-y-hidden"
+        className="rounded-sm mt-1 ring-2 ring-primary border-none focus-visible:ring-offset-0 resize-y min-h-8 h-[56px] overflow-y-hidden"
         placeholder="Add an item..."
       />
       <div className="flex justify-between">

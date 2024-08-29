@@ -2,63 +2,69 @@ import api from "@/lib/api";
 import { ICard } from "@/types/card.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-interface toggleTodoParams {
+interface updateTodoTitleParams {
   cardId: string;
   checklistId: string;
   todoId: string;
+  newTodoTitle: string;
 }
 
-async function toggleTodoComplete(
+async function updateTodoTitle(
   cardId: string,
   checklistId: string,
-  todoId: string
+  todoId: string,
+  newTodoTitle: string
 ) {
-  const res = await api.patch(`/card/${cardId}/checklist/toggleComplete`, {
+  const res = await api.patch(`/card/${cardId}/checklist/updateTitle`, {
     checklistId,
     todoId,
+    newTodoTitle,
   });
   return res.data;
 }
 
-export function useToggleTodoComplete(boardId: string) {
+export function useUpdateTodoTitle() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ cardId, checklistId, todoId }: toggleTodoParams) =>
-      toggleTodoComplete(cardId, checklistId, todoId),
-    onMutate: async ({ cardId, checklistId, todoId }) => {
+    mutationFn: ({
+      cardId,
+      checklistId,
+      todoId,
+      newTodoTitle,
+    }: updateTodoTitleParams) =>
+      updateTodoTitle(cardId, checklistId, todoId, newTodoTitle),
+    onMutate: async ({ cardId, checklistId, todoId, newTodoTitle }) => {
       await queryClient.cancelQueries({ queryKey: ["card", cardId] });
 
-      const previousCard = queryClient.getQueryData<ICard>(["card", cardId]);
+      const prevCard = queryClient.getQueryData<ICard>(["card", cardId]);
 
-      if (previousCard) {
+      if (prevCard) {
         const updatedCard = {
-          ...previousCard,
-          checklist: previousCard.checklist.map((checklist) =>
+          ...prevCard,
+          checklist: prevCard.checklist.map((checklist) =>
             checklist._id === checklistId
               ? {
                   ...checklist,
                   todos: checklist.todos.map((todo) =>
                     todo._id === todoId
-                      ? { ...todo, isComplete: !todo.isComplete }
+                      ? { ...todo, title: newTodoTitle }
                       : todo
                   ),
                 }
               : checklist
           ),
         };
-
         queryClient.setQueryData(["card", cardId], updatedCard);
       }
-      return { previousCard };
+      return { prevCard };
     },
     onError: (_, { cardId }, context) => {
-      if (context?.previousCard) {
-        queryClient.setQueryData<ICard>(["card", cardId], context.previousCard);
+      if (context?.prevCard) {
+        queryClient.setQueryData(["card", cardId], context.prevCard);
       }
     },
     onSettled: (_, __, { cardId }) => {
-      queryClient.invalidateQueries({ queryKey: ["card", cardId] });
-      queryClient.invalidateQueries({ queryKey: ["board", boardId] });
+      queryClient.cancelQueries({ queryKey: ["card", cardId] });
     },
   });
 }
