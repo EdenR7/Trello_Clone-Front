@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useToggleTodoComplete } from "@/hooks/Query hooks/Todo hooks/useToggleTodoComplete";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import { useUpdateTodoTitle } from "@/hooks/Query hooks/Todo hooks/useUpdateTodoTitle";
 
 interface TodoItemProps {
   todo: ITodo;
@@ -25,6 +26,7 @@ export default function TodoItem({
   const { cardId, boardId } = useParams();
 
   const { mutate: toggleTodo } = useToggleTodoComplete(boardId!);
+  const { mutate: updateTodoTitle } = useUpdateTodoTitle();
 
   const changeItemTitleRef = useRef<HTMLTextAreaElement>(null);
 
@@ -46,13 +48,26 @@ export default function TodoItem({
     toggleTodo({ cardId, checklistId, todoId });
   }
 
+  function handleUpdateTodoTitle(
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    cardId: string,
+    checklistId: string,
+    todoId: string,
+    newTodoTitle: string
+  ) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    setActiveTodoTitleId(null);
+    updateTodoTitle({ cardId, checklistId, todoId, newTodoTitle });
+  }
+
   return (
     <div className="relative pl-10 rounded-lg transition-colors">
       <div className="cursor-pointer left-[2px] m-[6px] absolute text-center top-1">
         <Checkbox
           checked={todo.isComplete}
           onClick={() => handleToggleTodo(cardId!, checklistId, todo._id)}
-          className="h-4 w-4 m-0 border-black rounded-none border"
+          className="  h-4 w-4 m-0 border-gray-400 rounded-none border"
           id={todo._id}
         />
       </div>
@@ -74,7 +89,19 @@ export default function TodoItem({
               placeholder="Add an item..."
             />
             <div className=" flex items-center gap-2 mt-2">
-              <Button>Add</Button>
+              <Button
+                onClick={(ev) =>
+                  handleUpdateTodoTitle(
+                    ev,
+                    cardId!,
+                    checklistId,
+                    todo._id,
+                    changeItemTitleRef.current?.value!
+                  )
+                }
+              >
+                Save
+              </Button>
 
               <X
                 size={30}
