@@ -1,48 +1,58 @@
 import { countDecimalPlaces } from "@/components/boardPage/BoardItem";
 import api from "@/lib/api";
+import { ICard } from "@/types/card.types";
 import { IList } from "@/types/list.types";
-import { reorderListPositions } from "@/utils/utilFuncs";
+import { reOrderCardPositions } from "@/utils/utilFuncs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export async function updateListPos(listId: string, newPos: number) {
+export async function moveCardWithinListApi(cardId: string, newPos: number) {
   try {
-    const res = await api.patch(`/list/${listId}/position`, {
+    const res = await api.patch(`/card/${cardId}/position`, {
       newPosition: newPos,
     });
     return res.data;
   } catch (error) {
-    console.log(error);
+    console.log("moveCardWithinListApi", error);
   }
 }
 
-export function useListUpdatePosition(boardId: string) {
+export function useMoveCardWithinList(boardId: string) {
   const qClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({
-      listId,
+      cardId,
       newPos,
     }: {
+      cardId: string;
       listId: string;
       newPos: number;
-      draggedList: IList;
-      newLoc: number;
-    }) => updateListPos(listId, newPos),
-    onMutate: async ({ listId, newPos, draggedList, newLoc }) => {
+      lastIndex: number;
+      destinationIndex: number;
+      cardsInitialList: IList["cards"];
+      targetCard: ICard;
+    }) => moveCardWithinListApi(cardId, newPos),
+    onMutate: async ({
+      newPos,
+      listId,
+      lastIndex,
+      destinationIndex,
+      cardsInitialList,
+      targetCard,
+    }) => {
       const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
-
+      targetCard.position = newPos;
       if (previousLists) {
-        const newLists = previousLists.filter((list) => list._id !== listId);
-
-        newLists.splice(newLoc, 0, { ...draggedList, position: newPos }!);
+        const cards = cardsInitialList;
+        cards.splice(lastIndex, 1);
+        cards.splice(destinationIndex, 0, targetCard);
 
         if (countDecimalPlaces(newPos) > 10) {
           qClient.setQueryData(
             ["lists", boardId],
-            reorderListPositions(newLists)
+            reOrderCardPositions(previousLists, listId)
           );
         } else {
-          qClient.setQueryData(["lists", boardId], newLists);
+          qClient.setQueryData(["lists", boardId], previousLists);
         }
       }
 
@@ -54,9 +64,5 @@ export function useListUpdatePosition(boardId: string) {
       }
       console.error("Error updating list position:", err);
     },
-
-    // onSettled: () => {
-    //   qClient.invalidateQueries({ queryKey: ["lists", boardId] });
-    // },
   });
 }

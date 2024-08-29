@@ -4,9 +4,12 @@ import ListsRender from "./ListsRender";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IList } from "@/types/list.types";
-import api from "@/lib/api";
 import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdatePosition";
+import { useMoveCardWithinList } from "@/hooks/Query hooks/Card hooks/useMoveCardWithinList";
+import api from "@/lib/api";
 import { ICard } from "@/types/card.types";
+import { reOrderCardPositions } from "@/utils/utilFuncs";
+import { useMoveCardToList } from "@/hooks/Query hooks/Card hooks/useMoveCardToList";
 
 export function countDecimalPlaces(number: number) {
   const numStr = number.toString();
@@ -14,19 +17,6 @@ export function countDecimalPlaces(number: number) {
     return numStr.split(".")[1].length;
   }
   return 0;
-}
-
-export async function moveCardWithinListApi(cardId: string, newPos: number) {
-  try {
-    console.log(1);
-
-    const res = await api.patch(`/card/${cardId}/position`, {
-      newPosition: newPos,
-    });
-    return res.data;
-  } catch (error) {
-    console.log("moveCardWithinListApi", error);
-  }
 }
 
 type BoardStyle = {
@@ -41,46 +31,8 @@ function BoardItem() {
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
   const qClient = useQueryClient();
   const updateListPosition = useListUpdatePosition(boardId!);
-  const moveCardWithinList = useMutation({
-    mutationFn: ({
-      cardId,
-      newPos,
-    }: {
-      cardId: string;
-      newPos: number;
-      lastIndex: number;
-      destinationIndex: number;
-      cardsInitialList: IList["cards"];
-      targetCard: ICard;
-    }) => moveCardWithinListApi(cardId, newPos),
-    onMutate: async ({
-      // cardId,
-      newPos,
-      lastIndex,
-      destinationIndex,
-      cardsInitialList,
-      targetCard,
-    }) => {
-      const previousLists = qClient.getQueryData(["lists", boardId]);
-      targetCard.position = newPos;
-      if (previousLists) {
-        // update the position of the card in the list
-        const cards = cardsInitialList;
-        cards.splice(lastIndex, 1);
-        cards.splice(destinationIndex, 0, targetCard!);
-        qClient.setQueryData(["lists", boardId], previousLists);
-      }
-
-      return { previousLists };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousLists) {
-        qClient.setQueryData(["lists", boardId], context.previousLists);
-      }
-      console.error("Error updating list position:", err);
-    },
-  });
-
+  const moveCardWithinList = useMoveCardWithinList(boardId!);
+  const moveCardToList = useMoveCardToList(boardId!);
   if (!board) return null;
 
   let boardStyle: BoardStyle;
@@ -106,11 +58,9 @@ function BoardItem() {
   function handleListDrag(destination: any, source: any, draggableId: string) {
     if (destination.index === source.index) return; // there wasnt a change list in position
 
-    const initialData: IList[] | undefined = qClient.getQueryData([
-      "lists",
-      boardId,
-    ]);
-    if (!initialData) return;
+    const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
+    if (!data) return;
+    const initialData = [...data];
 
     let newPos = 0;
     if (destination.index === 0) {
@@ -137,11 +87,9 @@ function BoardItem() {
   }
 
   function handleCardDrag(destination: any, source: any, draggableId: string) {
-    const initialData: IList[] | undefined = qClient.getQueryData([
-      "lists",
-      boardId,
-    ]);
-    if (!initialData) return;
+    const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
+    if (!data) return;
+    const initialData = [...data]; // list of lists of cards within
 
     const cardInitialList = initialData.find(
       (list) => list._id === source.droppableId
@@ -155,65 +103,68 @@ function BoardItem() {
 
     if (!card || !cardInitialList || !cardFinalList) return;
 
-    const isSameList = cardInitialList?._id === cardFinalList?._id;
+    const isSameList = cardInitialList._id === cardFinalList._id;
 
-    if (isSameList && source.index === destination.index) return;
-
-    let newPos = 0;
-    if (destination.index === 0) {
-      // console.log("top");
-      if (cardFinalList.cards.length === 0) {
-        newPos = 1;
-      } else {
-        newPos = cardFinalList.cards[0].position / 2;
-      }
-    } else if (
-      (isSameList && destination.index === cardFinalList?.cards.length - 1) ||
-      (!isSameList && destination.index === cardFinalList?.cards.length)
-    ) {
-      // console.log("Bottom");
-      newPos = Math.floor(
-        cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
-      );
-    } else {
-      // console.log("middle");
-      newPos =
-        (cardFinalList.cards[destination.index].position +
-          cardFinalList.cards[destination.index - 1].position) /
-        2;
-      console.log("newPos", newPos);
-    }
-
-    // bug from bottom to top
-
+    let cardNewPos = 0;
     if (isSameList) {
+      if (source.index === destination.index) return;
+      if (destination.index === 0) {
+        cardNewPos =
+          cardFinalList.cards.length === 0
+            ? 1
+            : cardFinalList.cards[0].position / 2;
+      } else if (destination.index === cardFinalList?.cards.length - 1) {
+        cardNewPos = Math.floor(
+          cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
+        );
+      } else {
+        let secPositionToCalc = -1;
+        destination.index > source.index && (secPositionToCalc = 1);
+        cardNewPos =
+          (cardFinalList.cards[destination.index].position +
+            cardFinalList.cards[destination.index + secPositionToCalc]
+              .position) /
+          2;
+      }
       moveCardWithinList.mutate({
         cardId: draggableId,
-        newPos,
+        listId: destination.droppableId,
+        newPos: cardNewPos,
         lastIndex: source.index,
         destinationIndex: destination.index,
         cardsInitialList: cardInitialList.cards,
         targetCard: card,
       });
     } else {
-    }
-
-    qClient.setQueryData(["lists", boardId], (oldData: IList[]) => {
-      if (!oldData) return;
-
-      card.position = newPos;
-
-      if (cardInitialList?._id === cardFinalList?._id) {
-        // movement within the same list
-        // const cards = cardInitialList?.cards;
-        // cards?.splice(source.index, 1);
-        // cards?.splice(destination.index, 0, card!);
+      if (destination.index === 0) {
+        cardNewPos =
+          cardFinalList.cards.length === 0
+            ? 1
+            : cardFinalList.cards[0].position / 2;
+      } else if (destination.index === cardFinalList?.cards.length) {
+        cardNewPos = Math.floor(
+          cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
+        );
       } else {
-        cardInitialList?.cards.splice(source.index, 1);
-        const cardFinalListCards = cardFinalList?.cards;
-        cardFinalListCards?.splice(destination.index, 0, card!);
+        let secPositionToCalc = -1;
+        destination.index > source.index && (secPositionToCalc = 1);
+        cardNewPos =
+          (cardFinalList.cards[destination.index].position +
+            cardFinalList.cards[destination.index - 1].position) /
+          2;
       }
-    });
+      moveCardToList.mutate({
+        cardId: draggableId,
+        listId: destination.droppableId,
+        newPos: cardNewPos,
+        sourceIndex: source.index,
+        targetCard: card,
+        cardInitialList,
+        destinationIndex: destination.index,
+        cardFinalList,
+        previousLists: initialData,
+      });
+    }
   }
 
   function onDragEnd(result: any) {
