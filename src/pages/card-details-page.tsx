@@ -9,6 +9,7 @@ import { usegetCard } from "@/hooks/Query hooks/Card hooks/useGetCard";
 import CardTitleComponent from "@/components/cardDetailsPage/cardTitle";
 
 import CardDescriptionComponent from "@/components/cardDetailsPage/cardDescription";
+import CardChecklistComponent from "@/components/cardDetailsPage/CardChecklistComponent";
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
   const { data: card, isPending } = usegetCard(cardId!);
@@ -38,11 +39,14 @@ function CardDetailsPage() {
               <CardTitleComponent card={card} boardId={boardId} />
             )}
           </DialogHeader>
-          <div>
+          <div className=" pb-2 pr-4 break-card_modal:pr-2 pl-4">
+            {/* main div */}
             <div>
               <CardDescriptionComponent card={card} />
+
+              <CardChecklistComponent card={card} />
             </div>
-            <div></div>
+            <div>{/* sidebar div */}</div>
           </div>
         </DialogContent>
       </Dialog>

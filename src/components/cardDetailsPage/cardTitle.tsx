@@ -75,6 +75,8 @@
 
 // export default CardTitleComponent;
 
+//above commented code is to remember what I tried to do. the problem is that when the textarea fills it doesnt grow, need to fix it later
+
 import { useUpdateCardTitle } from "@/hooks/Query hooks/Card hooks/useUpdateCardTitle";
 import { ICard } from "@/types/card.types";
 import { useRef, useState } from "react";
@@ -87,7 +89,6 @@ interface CardTitleProps {
   boardId: string;
 }
 
-//above commented code is to remember what I tried to do. the problem is that when the textarea fills it doesnt grow, need to fix it later
 function CardTitleComponent({ card, boardId }: CardTitleProps) {
   const { mutate: updateCardTitle } = useUpdateCardTitle(boardId);
   const [isFocused, setIsFocused] = useState(false);
@@ -116,27 +117,32 @@ function CardTitleComponent({ card, boardId }: CardTitleProps) {
 
   return (
     <>
-      <CreditCard className="absolute top-4 left-4" />
-      <div className="py-2 px-12">
+      <div className="py-2 pl-14 pr-[52px] relative">
+        <CreditCard className="absolute top-5 left-4" />
+
         <input type="text" className="sr-only" />
-        <Textarea
-          ref={textareaRef}
-          defaultValue={card.title}
-          onBlur={handleTitleBlur}
-          onFocus={handleTitleFocus}
-          onKeyDown={handleKeyDown}
-          className={cn(
-            "text-lg items-center font-semibold py-[6px] px-[10px] w-11/12 resize-none overflow-hidden transition-colors duration-200",
-            isFocused ? "bg-white shadow-sm border" : "bg-transparent",
-            "min-h-[28px] p-1 rounded-sm border-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500"
-          )}
-        />
-        <p className=" text-gray-500">
-          in list{" "}
-          <span className="border border-b-gray-500 cursor-pointer">
-            {card.list.name}
-          </span>
-        </p>
+        <div className=" pt-3">
+          <Textarea
+            ref={textareaRef}
+            defaultValue={card.title}
+            onBlur={handleTitleBlur}
+            onFocus={handleTitleFocus}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "text-lg items-center font-semibold  w-11/12 resize-none overflow-hidden transition-colors duration-200",
+              isFocused ? "bg-white shadow-sm border" : "bg-transparent",
+              "min-h-[28px] py-[6px] px-[10px] -mx-[10px] -my-[6px] rounded-sm border-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500"
+            )}
+          />
+        </div>
+        <div className=" inline-block ml-[2px] mr-2 mx-2 ">
+          <p className=" text-gray-500 inline-block mb-2">
+            in list{" "}
+            <span className="border border-b-gray-500 cursor-pointer">
+              {card.list.name}
+            </span>
+          </p>
+        </div>
       </div>
     </>
   );

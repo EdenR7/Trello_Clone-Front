@@ -50,7 +50,7 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
   }
 
   return (
-    <div className="  relative py-2 px-4">
+    <div className="  relative py-2 mb-12">
       <div className=" mb-1 py-3 ml-10 relative flex items-center">
         <List
           className={`absolute top-3 -left-9 ${
