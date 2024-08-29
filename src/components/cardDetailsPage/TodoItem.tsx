@@ -5,8 +5,9 @@ import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useToggleTodoComplete } from "@/hooks/Query hooks/Todo hooks/useToggleTodoComplete";
 import { Button } from "../ui/button";
-import { X } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import { useUpdateTodoTitle } from "@/hooks/Query hooks/Todo hooks/useUpdateTodoTitle";
+import { useDeleteTodo } from "@/hooks/Query hooks/Todo hooks/useDeleteTodo";
 
 interface TodoItemProps {
   todo: ITodo;
@@ -27,7 +28,7 @@ export default function TodoItem({
 
   const { mutate: toggleTodo } = useToggleTodoComplete(boardId!);
   const { mutate: updateTodoTitle } = useUpdateTodoTitle();
-
+  const { mutate: deleteTodo } = useDeleteTodo(boardId!);
   const changeItemTitleRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -59,6 +60,17 @@ export default function TodoItem({
     ev.stopPropagation();
     setActiveTodoTitleId(null);
     updateTodoTitle({ cardId, checklistId, todoId, newTodoTitle });
+  }
+
+  function handleDeleteTodo(
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    cardId: string,
+    checklistId: string,
+    todoId: string
+  ) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    deleteTodo({ cardId, checklistId, todoId });
   }
 
   return (
@@ -119,9 +131,15 @@ export default function TodoItem({
             <span className={todo.isComplete ? "line-through" : ""}>
               {todo.title}
             </span>
-            <span className=" rounded-full cursor-pointer p-[2px] h-6 w-6 ml-1 bg-btn_bg_primary invisible group-hover:visible">
-              Hi
-            </span>
+            <Button
+              onClick={(ev) =>
+                handleDeleteTodo(ev, cardId!, checklistId, todo._id)
+              }
+              variant={"secondary"}
+              className=" rounded-full cursor-pointer p-[2px] h-6 w-6 ml-1 bg-btn_bg_primary invisible group-hover:visible"
+            >
+              <Trash2 size={18} />
+            </Button>
           </div>
         )}
       </div>
