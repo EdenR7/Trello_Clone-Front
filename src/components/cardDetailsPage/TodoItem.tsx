@@ -1,13 +1,13 @@
 import { Checkbox } from "../ui/checkbox";
 import { ITodo } from "@/types/checklist.types";
-import { Textarea } from "../ui/textarea";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useToggleTodoComplete } from "@/hooks/Query hooks/Todo hooks/useToggleTodoComplete";
 import { Button } from "../ui/button";
-import { Trash2, X } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useUpdateTodoTitle } from "@/hooks/Query hooks/Todo hooks/useUpdateTodoTitle";
 import { useDeleteTodo } from "@/hooks/Query hooks/Todo hooks/useDeleteTodo";
+import EditableTextArea from "./EditableTextArea";
 
 interface TodoItemProps {
   todo: ITodo;
@@ -15,6 +15,9 @@ interface TodoItemProps {
   setActiveTodoTitleId: React.Dispatch<React.SetStateAction<String | null>>;
   checklistId: string;
   setActiveChecklistId: React.Dispatch<React.SetStateAction<string | null>>;
+  setActiveChecklistTitleId: React.Dispatch<
+    React.SetStateAction<string | null>
+  >;
 }
 
 export default function TodoItem({
@@ -23,6 +26,7 @@ export default function TodoItem({
   setActiveTodoTitleId,
   checklistId,
   setActiveChecklistId,
+  setActiveChecklistTitleId,
 }: TodoItemProps) {
   const { cardId, boardId } = useParams();
 
@@ -50,14 +54,14 @@ export default function TodoItem({
   }
 
   function handleUpdateTodoTitle(
-    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    // ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     cardId: string,
     checklistId: string,
     todoId: string,
     newTodoTitle: string
   ) {
-    ev.preventDefault();
-    ev.stopPropagation();
+    // ev.preventDefault();
+    // ev.stopPropagation();
     setActiveTodoTitleId(null);
     updateTodoTitle({ cardId, checklistId, todoId, newTodoTitle });
   }
@@ -89,43 +93,19 @@ export default function TodoItem({
         }`}
         onClick={() => {
           setActiveChecklistId(null);
+          setActiveChecklistTitleId(null);
           setActiveTodoTitleId(todo._id);
         }}
       >
         {activeTodoTitleId === todo._id ? (
-          <div className=" -ml-2 p-2">
-            <Textarea
-              ref={changeItemTitleRef}
-              defaultValue={todo.title}
-              className="rounded-sm ring-2 ring-primary border-none focus-visible:ring-offset-0 resize-none min-h-8 h-[56px] overflow-y-hidden px-3 py-2  w-full"
-              placeholder="Add an item..."
-            />
-            <div className=" flex items-center gap-2 mt-2">
-              <Button
-                onClick={(ev) =>
-                  handleUpdateTodoTitle(
-                    ev,
-                    cardId!,
-                    checklistId,
-                    todo._id,
-                    changeItemTitleRef.current?.value!
-                  )
-                }
-              >
-                Save
-              </Button>
-
-              <X
-                size={30}
-                onClick={(ev) => {
-                  console.log("click");
-                  ev.preventDefault();
-                  ev.stopPropagation();
-                  setActiveTodoTitleId(null);
-                }}
-              />
-            </div>
-          </div>
+          <EditableTextArea
+            initialValue={todo.title}
+            onSave={(newTitle) =>
+              handleUpdateTodoTitle(cardId!, checklistId, todo._id, newTitle)
+            }
+            onCancel={() => setActiveTodoTitleId(null)}
+            placeholder="Todo title..."
+          />
         ) : (
           <div className=" flex w-full justify-between">
             <span className={todo.isComplete ? "line-through" : ""}>

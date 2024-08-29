@@ -146,7 +146,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ICard } from "@/types/card.types";
-import { useAddTodo } from "@/hooks/Query hooks/Card hooks/useAddTodo";
+import { useAddTodo } from "@/hooks/Query hooks/Todo hooks/useAddTodo";
 import ChecklistItem from "./ChecklistItem";
 
 interface CardChecklistComponentProps {

@@ -101,6 +101,9 @@ module.exports = {
       gridTemplateRows: {
         layout: "auto 1fr",
       },
+      gridTemplateColumns: {
+        popover_layout: "32px, 1fr, 32px",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
