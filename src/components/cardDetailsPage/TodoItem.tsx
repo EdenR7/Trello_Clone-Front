@@ -4,12 +4,15 @@ import { Textarea } from "../ui/textarea";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useToggleTodoComplete } from "@/hooks/Query hooks/Todo hooks/useToggleTodoComplete";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 interface TodoItemProps {
   todo: ITodo;
   activeTodoTitleId: String | null;
   setActiveTodoTitleId: React.Dispatch<React.SetStateAction<String | null>>;
   checklistId: string;
+  setActiveChecklistId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export default function TodoItem({
@@ -17,6 +20,7 @@ export default function TodoItem({
   activeTodoTitleId,
   setActiveTodoTitleId,
   checklistId,
+  setActiveChecklistId,
 }: TodoItemProps) {
   const { cardId, boardId } = useParams();
 
@@ -56,16 +60,32 @@ export default function TodoItem({
         className={`group rounded-xl -ml-2 py-[6px] px-2 break-words break-all hover:cursor-pointer hover:bg-btn_bg_primary ${
           activeTodoTitleId === todo._id ? "bg-btn_bg_primary" : ""
         }`}
-        onClick={() => setActiveTodoTitleId(todo._id)}
+        onClick={() => {
+          setActiveChecklistId(null);
+          setActiveTodoTitleId(todo._id);
+        }}
       >
         {activeTodoTitleId === todo._id ? (
           <div className=" -ml-2 p-2">
             <Textarea
               ref={changeItemTitleRef}
               defaultValue={todo.title}
-              className="rounded-sm ring-2 ring-primary border-none focus-visible:ring-offset-0 resize-y min-h-8 h-[56px] overflow-y-hidden px-3 py-2  w-full"
+              className="rounded-sm ring-2 ring-primary border-none focus-visible:ring-offset-0 resize-none min-h-8 h-[56px] overflow-y-hidden px-3 py-2  w-full"
               placeholder="Add an item..."
             />
+            <div className=" flex items-center gap-2 mt-2">
+              <Button>Add</Button>
+
+              <X
+                size={30}
+                onClick={(ev) => {
+                  console.log("click");
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  setActiveTodoTitleId(null);
+                }}
+              />
+            </div>
           </div>
         ) : (
           <div className=" flex w-full justify-between">

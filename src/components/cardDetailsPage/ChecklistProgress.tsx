@@ -22,7 +22,7 @@ export default function ChecklistProgress({
   const progress = calculateProgress(todos!);
 
   return (
-    <div className="relative mb-[6px]">
+    <>
       <span className="text-gray-600 text-[11px] absolute text-center -top-[5px] left-0 w-8">
         {progress.toFixed(0)}%
       </span>
@@ -31,6 +31,6 @@ export default function ChecklistProgress({
         indicatorColor={`${progress === 100 ? "green-700" : "primary"}`}
         className="ml-10 relative overflow-hidden h-2 rounded-md bg-btn_bg_primary  "
       />
-    </div>
+    </>
   );
 }

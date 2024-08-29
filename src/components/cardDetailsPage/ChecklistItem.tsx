@@ -85,13 +85,21 @@ export default function ChecklistItem({
           </div>
         </div>
       </div>
-      <ChecklistProgress checklist={progressChecklist} />
+      <div className="relative mb-[6px]">
+        <ChecklistProgress checklist={progressChecklist} />
+        {checklist.todos.length === 0 && (
+          <span className=" block mt-2 ml-10">
+            Everything in this checklist is complete!
+          </span>
+        )}
+      </div>
       <div className="min-h-2">
         {checklist.todos.map((todo) => (
           <TodoItem
             checklistId={checklist._id}
             activeTodoTitleId={activeTodoTitleId}
             setActiveTodoTitleId={setActiveTodoTitleId}
+            setActiveChecklistId={setActiveChecklistId}
             key={todo._id}
             todo={todo}
           />
@@ -107,7 +115,10 @@ export default function ChecklistItem({
         ) : (
           <Button
             className=" mt-2"
-            onClick={() => setActiveChecklistId(checklist._id)}
+            onClick={() => {
+              setActiveTodoTitleId(null);
+              setActiveChecklistId(checklist._id);
+            }}
             variant="secondary"
           >
             Add an item
