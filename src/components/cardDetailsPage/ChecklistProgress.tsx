@@ -1,18 +1,25 @@
 import { Progress } from "../ui/progress";
-import { ITodo } from "@/types/checklist.types";
+import { IChecklist, ITodo } from "@/types/checklist.types";
 
 interface ChecklistProgressProps {
-  todos: ITodo[];
+  checklist: IChecklist | undefined;
 }
 
-export default function ChecklistProgress({ todos }: ChecklistProgressProps) {
+export default function ChecklistProgress({
+  checklist,
+}: ChecklistProgressProps) {
+  let todos;
+  if (checklist?.todos) {
+    todos = checklist.todos;
+  }
+
   const calculateProgress = (todos: ITodo[]) => {
     if (todos.length === 0) return 0;
     const completedTodos = todos.filter((todo) => todo.isComplete).length;
     return (completedTodos / todos.length) * 100;
   };
 
-  const progress = calculateProgress(todos);
+  const progress = calculateProgress(todos!);
 
   return (
     <div className="relative mb-[6px]">
@@ -21,7 +28,8 @@ export default function ChecklistProgress({ todos }: ChecklistProgressProps) {
       </span>
       <Progress
         value={progress}
-        className="ml-10 relative overflow-hidden h-2 rounded-md bg-btn_bg_primary"
+        indicatorColor={`${progress === 100 ? "green-700" : "primary"}`}
+        className="ml-10 relative overflow-hidden h-2 rounded-md bg-btn_bg_primary  "
       />
     </div>
   );
