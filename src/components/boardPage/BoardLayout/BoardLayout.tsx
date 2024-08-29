@@ -2,7 +2,7 @@ import { Outlet, useParams } from "react-router-dom";
 import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import BoardItems from "../BoardItems";
 import { Ellipsis, ListFilter } from "lucide-react";
-import BoardSideBar from "./BoardSideBar";
+import BoardSideBar from "./RightSideBar/BoardSideBar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { IBoardBackground } from "@/types/board.types";

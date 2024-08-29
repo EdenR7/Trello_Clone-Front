@@ -3,12 +3,17 @@ export interface IBoardBackground {
   background: string; // CSS color, gradient string, or image URL
 }
 
+export interface ILabel {
+  _id: string;
+  title: string;
+  color: string;
+}
 export interface IBoard {
   _id: string;
   admin: string;
   bg: IBoardBackground;
   members: string[];
-  labels: string[];
+  labels: ILabel[];
   description?: string;
   name: string;
   listsNumber: number;
