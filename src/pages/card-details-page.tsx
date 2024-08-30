@@ -10,6 +10,7 @@ import CardTitleComponent from "@/components/cardDetailsPage/cardTitle";
 
 import CardDescriptionComponent from "@/components/cardDetailsPage/cardDescription";
 import CardChecklistComponent from "@/components/cardDetailsPage/CardChecklistComponent";
+import CardDataComponent from "@/components/cardDetailsPage/CardDataComponent";
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
   const { data: card, isPending } = usegetCard(cardId!);
@@ -42,6 +43,7 @@ function CardDetailsPage() {
           <div className=" pb-2 pr-4 break-card_modal:pr-2 pl-4">
             {/* main div */}
             <div>
+              <CardDataComponent card={card} />
               <CardDescriptionComponent card={card} />
 
               <CardChecklistComponent card={card} />

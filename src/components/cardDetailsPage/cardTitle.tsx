@@ -136,9 +136,9 @@ function CardTitleComponent({ card, boardId }: CardTitleProps) {
           />
         </div>
         <div className=" inline-block ml-[2px] mr-2 mx-2 ">
-          <p className=" text-gray-500 inline-block mb-2">
+          <p className=" text-gray-500 inline-block mt-1 mb-2">
             in list{" "}
-            <span className="border border-b-gray-500 cursor-pointer">
+            <span className="border-b border-b-gray-500 cursor-pointer">
               {card.list.name}
             </span>
           </p>
