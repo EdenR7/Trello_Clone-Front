@@ -39,17 +39,16 @@ export function BoardSideBar({
   return (
     <div
       className={`absolute right-0 top-0 h-[calc(100vh-48px)] z-50 bg-white transition-width duration-300 ease-in-out overflow-hidden ${
-        isSideBarOpen ? "w-[300px] md:w-[340px] px-3" : "w-0"
+        isSideBarOpen ? "w-[305px] md:w-[340px] px-3" : "w-0"
       }`}
     >
-      <div className=" px-3">
-        <header className=" flex justify-center items-center my-[10px]">
+        <header className=" flex justify-center items-center my-[11px]">
           {sideBarMode !== "Menu" && (
             <Button
               onClick={() => setSideBarMode("Menu")}
               variant={"naked"}
               size={"icon"}
-              className=" mr-auto text-gray-600 h-8 w-8 rounded-lg"
+              className=" mr-auto text-gray-600 h-8 w-8 rounded-lg absolute left-3"
             >
               <ChevronLeft size={24} />
             </Button>
@@ -70,8 +69,7 @@ export function BoardSideBar({
           </Button>
         </header>
         <Separator />
-      </div>
-      <div className=" pt-3 pb-2 px-3 overflow-x-auto h-[calc(100%-68px)]">
+      <div className=" pt-3 pb-2 overflow-x-auto h-[calc(100%-68px)]">
         {sideBarMode === "Menu" && (
           <RightSideBarNormalMode
             setSideBarMode={setSideBarMode}
