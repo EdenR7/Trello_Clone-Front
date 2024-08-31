@@ -173,13 +173,6 @@ export default function CardChecklistComponent({
     }));
   };
 
-  //   const checklists = card.checklist.map((checklist) => ({
-  //     ...checklist,
-  //     todos: hideCheckedItems
-  //       ? checklist.todos.filter((todo) => !todo.isComplete)
-  //       : checklist.todos,
-  //   }));
-
   const checklists = card.checklist.map((checklist) => ({
     ...checklist,
     todos: hideCheckedItems[checklist._id]
@@ -200,7 +193,6 @@ export default function CardChecklistComponent({
           addTodo={addTodo}
           hideCheckedItems={hideCheckedItems}
           handleHideCheckedItemsToggle={handleHideCheckedItemsToggle}
-          //   setHideCheckedItems={setHideCheckedItems}
           activeChecklistId={activeChecklistId}
           setActiveChecklistId={setActiveChecklistId}
           progressChecklists={progressChecklists}
