@@ -1,3 +1,4 @@
+import { ILabel } from "./board.types";
 import { IChecklist } from "./checklist.types";
 import { IList } from "./list.types";
 import { IMember } from "./member.types";
@@ -10,7 +11,7 @@ export interface ICard {
   checklist: IChecklist[];
   startDate?: Date;
   isArchived: boolean;
-  labels: string[];
+  labels: ILabel[];
   list: IList;
   members: IMember[];
   position: number;

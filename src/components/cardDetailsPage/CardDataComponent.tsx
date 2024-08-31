@@ -1,4 +1,12 @@
+import { IBoard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
+
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+
+import CardDetailsLayout from "../general/CardDetailsLayout";
+
+import CardDataLabelsLayout from "./CardDataLabelsLayout";
 
 interface CardDataComponentProps {
   card: ICard;
@@ -6,9 +14,16 @@ interface CardDataComponentProps {
 
 function CardDataComponent(props: CardDataComponentProps) {
   const { card } = props;
+  const qClient = useQueryClient();
+  const { boardId } = useParams();
+
+  const board = qClient.getQueryData<IBoard>(["board", boardId]);
+
   return (
     <div className=" mt-2 ml-10">
-      <div className=" mb-2 ml-2"></div>
+      <CardDetailsLayout>
+        <CardDataLabelsLayout card={card} />
+      </CardDetailsLayout>
     </div>
   );
 }

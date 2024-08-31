@@ -148,6 +148,7 @@ import { useParams } from "react-router-dom";
 import { ICard } from "@/types/card.types";
 import { useAddTodo } from "@/hooks/Query hooks/Todo hooks/useAddTodo";
 import ChecklistItem from "./ChecklistItem";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 interface CardChecklistComponentProps {
   card: ICard;
@@ -157,10 +158,11 @@ export default function CardChecklistComponent({
   card,
 }: CardChecklistComponentProps) {
   const { boardId } = useParams();
-  //   const [hideCheckedItems, setHideCheckedItems] = useState(false);
-  const [hideCheckedItems, setHideCheckedItems] = useState<{
+
+  const [hideCheckedItems, setHideCheckedItems] = useLocalStorage<{
     [key: string]: boolean;
-  }>({});
+  }>("hideCheckedItems", {});
+
   const [activeChecklistId, setActiveChecklistId] = useState<string | null>(
     null
   );
@@ -172,13 +174,6 @@ export default function CardChecklistComponent({
       [checklistId]: !prev[checklistId],
     }));
   };
-
-  //   const checklists = card.checklist.map((checklist) => ({
-  //     ...checklist,
-  //     todos: hideCheckedItems
-  //       ? checklist.todos.filter((todo) => !todo.isComplete)
-  //       : checklist.todos,
-  //   }));
 
   const checklists = card.checklist.map((checklist) => ({
     ...checklist,
@@ -200,7 +195,6 @@ export default function CardChecklistComponent({
           addTodo={addTodo}
           hideCheckedItems={hideCheckedItems}
           handleHideCheckedItemsToggle={handleHideCheckedItemsToggle}
-          //   setHideCheckedItems={setHideCheckedItems}
           activeChecklistId={activeChecklistId}
           setActiveChecklistId={setActiveChecklistId}
           progressChecklists={progressChecklists}

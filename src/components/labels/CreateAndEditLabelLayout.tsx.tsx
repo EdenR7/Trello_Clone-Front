@@ -10,12 +10,15 @@ import { useUpdateLabel } from "@/hooks/Query hooks/Board hooks/useUpdateLabel";
 import api from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IBoard } from "@/types/board.types";
+import { ICard } from "@/types/card.types";
 
 interface CreateAndEditLabelLayoutProps {
   isEditMode: boolean;
   color?: string;
   title?: string;
-  labelId?: string;
+  labelId?: string | null;
+  cardId?: string;
+  setIsLabelPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export async function deleteLbelApi(boardId: string, labelId: string) {
@@ -33,6 +36,8 @@ export function CreateAndEditLabelLayout({
   color,
   title,
   labelId,
+  cardId,
+  setIsLabelPopoverOpen,
 }: CreateAndEditLabelLayoutProps) {
   const { boardId } = useParams();
 
@@ -40,8 +45,9 @@ export function CreateAndEditLabelLayout({
   const [titleInput, setTitleInput] = useState(title || "");
   const [colorInput, setColorInput] = useState(color || "#94c748");
   const inputRef = useRef<null | HTMLInputElement>(null);
-  const createLabel = useCreateLabel(boardId!);
-  const editLabel = useUpdateLabel(boardId!);
+  const createLabel = useCreateLabel(boardId!, cardId!);
+  const editLabel = useUpdateLabel(boardId!, cardId);
+
   const deleteLabel = useMutation({
     mutationFn: ({ labelId }: { labelId: string }) =>
       deleteLbelApi(boardId!, labelId),
@@ -59,12 +65,33 @@ export function CreateAndEditLabelLayout({
           labels: newLabels,
         });
       }
-      return { prevBoard };
+      let prevCard;
+      if (cardId) {
+        prevCard = qClient.getQueryData<ICard>(["card", cardId]);
+
+        const updatedLabels = prevCard?.labels.filter(
+          (label) => label._id !== labelId
+        );
+        qClient.setQueryData(["card", cardId], {
+          ...prevCard,
+          labels: updatedLabels,
+        });
+      }
+      return { prevBoard, prevCard };
     },
     onError: (err, variables, context) => {
       console.log(err, variables);
       if (context?.prevBoard) {
         qClient.setQueryData(["board", boardId], context.prevBoard);
+      }
+      if (context?.prevCard) {
+        qClient.setQueryData(["card", cardId], context.prevCard);
+      }
+    },
+    onSettled: () => {
+      qClient.invalidateQueries({ queryKey: ["lists", boardId] });
+      if (cardId) {
+        qClient.invalidateQueries({ queryKey: ["card", cardId] });
       }
     },
   });
@@ -82,6 +109,7 @@ export function CreateAndEditLabelLayout({
       labelColor: colorInput,
       boardId,
     });
+    if (setIsLabelPopoverOpen) setIsLabelPopoverOpen(false);
   }
   function handleUpdateLabel() {
     if (!boardId || !labelId) return null;
@@ -90,10 +118,12 @@ export function CreateAndEditLabelLayout({
       titleInput,
       colorInput,
     });
+    if (setIsLabelPopoverOpen) setIsLabelPopoverOpen(false);
   }
   function handleDeleteLabel() {
     if (!boardId || !labelId) return null;
     deleteLabel.mutate({ labelId });
+    if (setIsLabelPopoverOpen) setIsLabelPopoverOpen(false);
   }
 
   return (
