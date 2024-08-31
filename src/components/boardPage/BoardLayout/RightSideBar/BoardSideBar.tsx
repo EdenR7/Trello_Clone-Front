@@ -8,6 +8,7 @@ import { useState } from "react";
 import RightSideBarNormalMode from "./NormalMode";
 import LabelLayout from "@/components/labels/LabelLayout";
 import AboutMode from "./AboutMode";
+import ArchiveMode from "./ArchiveMode";
 
 interface BoardSideBarProps {
   boardId: string;
@@ -18,7 +19,7 @@ interface BoardSideBarProps {
 export type SideBarMode =
   | "Menu"
   | "About this board"
-  | "Archived"
+  | "Archive"
   | "Background"
   | "Labels";
 
@@ -75,7 +76,7 @@ export function BoardSideBar({
           />
         )}
         {sideBarMode === "About this board" && <AboutMode boardId={boardId} />}
-        {/* {sideBarMode === "Archived" && <div>Archived</div>} */}
+        {sideBarMode === "Archive" && <ArchiveMode boardId={boardId} />}
         {/* {sideBarMode === "Background" && <div>Background</div>} */}
         {sideBarMode === "Labels" && <LabelLayout boardId={boardId} />}
       </div>

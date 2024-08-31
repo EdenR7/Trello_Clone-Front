@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import api from "@/lib/api";
+import { useUpdateDescription } from "@/hooks/Query hooks/Board hooks/useUpdateDescription";
 import { IBoard } from "@/types/board.types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { List, User, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -11,52 +11,18 @@ export interface AboutModeProps {
   boardId: string;
 }
 
-export async function editDescriptionApi(boardId: string, description: string) {
-  try {
-    const res = await api.patch(`/board/${boardId}/description`, {
-      description,
-    });
-    console.log(res.data);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 function AboutMode({ boardId }: AboutModeProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
-  const boardAdmin = board?.members.find(
-    (member) => member._id === board?.admin
-  );
   const [editDescription, setEditDescription] = useState(false);
   const [descriptionValue, setDescriptionValue] = useState<string | undefined>(
     board?.description
   );
+  const boardAdmin = board?.members.find(
+    (member) => member._id === board?.admin
+  );
   const textareaRef = useRef<null | HTMLTextAreaElement>(null);
-  const descriptionUpdater = useMutation({
-    mutationFn: ({
-      boardId,
-      description,
-    }: {
-      boardId: string;
-      description: string;
-    }) => editDescriptionApi(boardId, description),
-    onMutate: () => {
-      const prevBoard: IBoard | undefined = qClient.getQueryData([
-        "board",
-        boardId,
-      ]);
-      return { prevBoard };
-    },
-    onError(error, variables, context) {
-      console.log(error);
-
-      if (context?.prevBoard) {
-        qClient.setQueryData(["board", boardId], context?.prevBoard);
-      }
-    },
-  });
+  const descriptionUpdater = useUpdateDescription({ boardId });
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -118,7 +84,18 @@ function AboutMode({ boardId }: AboutModeProps) {
               className=" w-[calc(100%-12px)] min-h-40 mr-2 ml-1"
             />
             <div className=" flex gap-1 ml-1 mt-2">
-              <Button className=" py-[6px] px-3">Save</Button>
+              <Button
+                onClick={() => {
+                  descriptionUpdater.mutate({
+                    boardId,
+                    description: descriptionValue!,
+                  });
+                  setEditDescription(false);
+                }}
+                className=" py-[6px] px-3"
+              >
+                Save
+              </Button>
               <Button
                 onClick={() => {
                   setDescriptionValue(board?.description);
