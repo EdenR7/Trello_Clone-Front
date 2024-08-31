@@ -11,10 +11,12 @@ import CardTitleComponent from "@/components/cardDetailsPage/cardTitle";
 import CardDescriptionComponent from "@/components/cardDetailsPage/cardDescription";
 import CardChecklistComponent from "@/components/cardDetailsPage/CardChecklistComponent";
 import CardDataComponent from "@/components/cardDetailsPage/CardDataComponent";
+import CardCoverComponent from "@/components/cardDetailsPage/CardCoverComponent ";
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
   const { data: card, isPending } = usegetCard(cardId!);
   const navigate = useNavigate();
+  console.log("card: ", card);
 
   function handleCloseModal() {
     navigate(`/b/${boardId}`);
@@ -35,6 +37,7 @@ function CardDetailsPage() {
           aria-describedby={undefined}
           className=" text-text_dark_blue max-w-[768px] bg-gray-200 p-0 rounded-md"
         >
+          <CardCoverComponent card={card} />
           <DialogHeader>
             {card && boardId && (
               <CardTitleComponent card={card} boardId={boardId} />
