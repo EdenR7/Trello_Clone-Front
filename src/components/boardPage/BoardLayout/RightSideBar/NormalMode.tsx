@@ -17,6 +17,7 @@ function RightSideBarNormalMode({
     <ul className=" flex flex-col gap-3">
       <li>
         <Button
+          onClick={() => setSideBarMode("About this board")}
           className=" flex gap-3 w-full m-0 justify-start font-normal p-[6px] rounded-lg"
           variant={"naked"}
         >

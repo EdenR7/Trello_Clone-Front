@@ -8,11 +8,17 @@ export interface ILabel {
   title: string;
   color: string;
 }
+export interface IMember {
+  _id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+}
 export interface IBoard {
   _id: string;
   admin: string;
   bg: IBoardBackground;
-  members: string[];
+  members: IMember[];
   labels: ILabel[];
   description?: string;
   name: string;
