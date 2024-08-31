@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { IBoard } from "@/types/board.types";
+import { IBoard, ILabel } from "@/types/board.types";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Pencil } from "lucide-react";
@@ -11,14 +11,20 @@ import { getHoverColorForBackground } from "@/utils/getHoverColorFromText.ts";
 
 interface CardModalLabelsProps {
   boardId: string;
-  cardLabels: string[]; // Assuming cardLabels is an array of label IDs
+  cardLabels: ILabel[];
   onToggleLabel: (labelId: string) => void;
+  setIsEditLabel?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditMode?: React.Dispatch<React.SetStateAction<boolean>>;
+  setLabelToEdit?: React.Dispatch<React.SetStateAction<ILabel | null>>;
 }
 
 function CardModalLabels({
   boardId,
   cardLabels,
   onToggleLabel,
+  setIsEditLabel,
+  setIsEditMode,
+  setLabelToEdit,
 }: CardModalLabelsProps) {
   const qClient = useQueryClient();
 
@@ -49,6 +55,15 @@ function CardModalLabels({
     label.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  function handleEditLabel(label: ILabel) {
+    console.log("labelId in labelLayout: ", label);
+    if (setLabelToEdit && setIsEditLabel && setIsEditMode) {
+      setLabelToEdit(label);
+      setIsEditMode(true);
+      setIsEditLabel(true);
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <Input
@@ -73,7 +88,11 @@ function CardModalLabels({
               <div className="flex justify-between items-center gap-1">
                 <div className="flex items-center gap-2 flex-grow">
                   <Checkbox
-                    checked={cardLabels.includes(label._id)}
+                    checked={
+                      cardLabels.find((lbl) => label._id === lbl._id)
+                        ? true
+                        : false
+                    }
                     onCheckedChange={() => onToggleLabel(label._id)}
                   />
                   <Button
@@ -98,34 +117,28 @@ function CardModalLabels({
                 <Button
                   className="flex justify-center items-center h-8 w-8"
                   size="icon"
+                  onClick={() => handleEditLabel(label)}
                   variant="naked"
                 >
                   <Pencil size={14} />
                 </Button>
-                {/* <PopoverLayout
-                  title="Labels"
-                  triggerVariant="secondary"
-                  popoverClassName="w-[304px]"
-                  side="right"
-                  trigger={
-                    
-                  }
-                  onOpen={handlePopoverOpen}
-                >
-                  <CreateAndEditLabelLayout
-                    labelId={label._id}
-                    color={label.color}
-                    title={label.title !== "Default" ? label.title : ""}
-                    isEditMode={true}
-                  />
-                </PopoverLayout> */}
               </div>
             </li>
           );
         })}
       </ul>
 
-      <Button variant={"secondary"}>Create a new label</Button>
+      <Button
+        onClick={() => {
+          if (setIsEditMode && setIsEditLabel) {
+            setIsEditMode(false);
+            setIsEditLabel(true);
+          }
+        }}
+        variant={"secondary"}
+      >
+        Create a new label
+      </Button>
 
       {!showAllLabels && filteredLabels.length > 8 && (
         <Button variant="secondary" onClick={() => setShowAllLabels(true)}>

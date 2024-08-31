@@ -21,9 +21,9 @@ interface ChecklistItemProps {
   }) => void;
   activeChecklistId: string | null;
   setActiveChecklistId: React.Dispatch<React.SetStateAction<string | null>>;
-  //   hideCheckedItems: boolean;
+
   hideCheckedItems: { [key: string]: boolean };
-  //   setHideCheckedItems: React.Dispatch<React.SetStateAction<boolean>>;
+
   handleHideCheckedItemsToggle: (checklistId: string) => void;
   progressChecklists: IChecklist[];
 }
@@ -33,7 +33,7 @@ export default function ChecklistItem({
   cardId,
   addTodo,
   hideCheckedItems,
-  //   setHideCheckedItems,
+
   handleHideCheckedItemsToggle,
   activeChecklistId,
   setActiveChecklistId,

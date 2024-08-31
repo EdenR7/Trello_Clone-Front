@@ -1,4 +1,5 @@
 import api from "@/lib/api";
+import { IBoard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -22,9 +23,26 @@ export function useToggleCardLabel(boardId: string) {
       await queryClient.cancelQueries({ queryKey: ["card", cardId] });
       const prevCard = queryClient.getQueryData<ICard>(["card", cardId]);
       if (prevCard) {
-        const updatedLabels = prevCard.labels.includes(labelId)
-          ? prevCard.labels.filter((id) => id !== labelId)
-          : [...prevCard.labels, labelId];
+        const isLabelPresent = prevCard.labels.some(
+          (label) => label._id === labelId
+        );
+        let updatedLabels;
+        if (isLabelPresent) {
+          // Remove the label if it's already present
+          updatedLabels = prevCard.labels.filter(
+            (label) => label._id !== labelId
+          );
+        } else {
+          // Add the label if it's not present
+          const boardLabels =
+            queryClient.getQueryData<IBoard>(["board", boardId])?.labels || [];
+          const labelToAdd = boardLabels.find((label) => label._id === labelId);
+          if (labelToAdd) {
+            updatedLabels = [...prevCard.labels, labelToAdd];
+          } else {
+            updatedLabels = prevCard.labels;
+          }
+        }
 
         queryClient.setQueryData(["card", cardId], {
           ...prevCard,

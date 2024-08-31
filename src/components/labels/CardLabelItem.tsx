@@ -1,12 +1,15 @@
 import { ILabel } from "@/types/board.types";
 import { getHoverColorForBackground } from "@/utils/getHoverColorFromText";
 import { getTextColorForBackground } from "@/utils/getTextColorFromBg";
-import PopoverLayout from "../general/PopoverLayout";
 import CardModalLabels from "./CardModalLabelLayout";
+import { useState } from "react";
+import { CreateAndEditLabelLayout } from "./CreateAndEditLabelLayout.tsx";
+import { useParams } from "react-router-dom";
+import LabelPopoverLayout from "../general/LabelPopoverLayout.tsx";
 
 interface CardLabelItemProps {
   label: ILabel;
-  cardLabels: string[];
+  cardLabels: ILabel[];
   boardId: string;
   onToggleLabel: (labelId: string) => void;
 }
@@ -17,6 +20,11 @@ function CardLabelItem({
   cardLabels,
   onToggleLabel,
 }: CardLabelItemProps) {
+  const { cardId } = useParams();
+  const [isEditLabel, setIsEditLabel] = useState(false);
+  const [labelToEdit, setLabelToEdit] = useState<ILabel | null>(null);
+  const [isLabelPopoverOpen, setIsLabelPopoverOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const textColor = getTextColorForBackground(label.color);
   const hoverColor = getHoverColorForBackground(
     label.color,
@@ -24,8 +32,17 @@ function CardLabelItem({
   );
 
   return (
-    <PopoverLayout
-      title="Labels"
+    <LabelPopoverLayout
+      setIsEditLabel={setIsEditLabel}
+      setIsEditMode={setIsEditMode}
+      setLabelToEdit={setLabelToEdit}
+      internalOpen={isLabelPopoverOpen}
+      setInternalOpen={setIsLabelPopoverOpen}
+      title={`${
+        (isEditLabel && isEditMode && "Edit label") ||
+        (!isEditLabel && "Labels") ||
+        (isEditLabel && !isEditMode && "Create label")
+      }`}
       trigger={
         <span
           key={label._id}
@@ -46,12 +63,26 @@ function CardLabelItem({
         </span>
       }
     >
-      <CardModalLabels
-        boardId={boardId}
-        cardLabels={cardLabels}
-        onToggleLabel={onToggleLabel}
-      />
-    </PopoverLayout>
+      {isEditLabel ? (
+        <CreateAndEditLabelLayout
+          isEditMode={isEditMode}
+          color={labelToEdit?.color}
+          labelId={labelToEdit?._id}
+          title={labelToEdit?.title}
+          setIsLabelPopoverOpen={setIsLabelPopoverOpen}
+          cardId={cardId}
+        />
+      ) : (
+        <CardModalLabels
+          boardId={boardId}
+          cardLabels={cardLabels}
+          onToggleLabel={onToggleLabel}
+          setIsEditLabel={setIsEditLabel}
+          setIsEditMode={setIsEditMode}
+          setLabelToEdit={setLabelToEdit}
+        />
+      )}
+    </LabelPopoverLayout>
   );
 }
 

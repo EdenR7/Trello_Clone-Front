@@ -100,7 +100,7 @@
 
 // export default PopoverLayout;
 
-import { cloneElement, ReactElement, useEffect, useState } from "react";
+import { cloneElement, ReactElement, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -125,9 +125,6 @@ interface PopoverLayoutProps {
   trigger?: React.ReactNode;
   popoverClassName?: string;
   side?: "top" | "right" | "bottom" | "left" | "";
-
-  open?: boolean; // Controlled open state
-  onOpenChange?: (open: boolean) => void; // Controlled state handler
 }
 
 function PopoverLayout({
@@ -138,23 +135,11 @@ function PopoverLayout({
   trigger,
   popoverClassName,
   side,
-
-  open,
-  onOpenChange,
 }: PopoverLayoutProps) {
-  const [internalOpen, setInternalOpen] = useState(open || false);
-
-  useEffect(() => {
-    if (open !== undefined) {
-      setInternalOpen(open);
-    }
-  }, [open]);
+  const [internalOpen, setInternalOpen] = useState(false);
 
   function handleOpenChange(newOpen: boolean) {
     setInternalOpen(newOpen);
-    if (onOpenChange) {
-      onOpenChange(newOpen);
-    }
   }
 
   function toggleOpen() {
