@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import CardDetailsLayout from "../general/CardDetailsLayout";
 
 import CardDataLabelsLayout from "./CardDataLabelsLayout";
+import CardDataMembersLayout from "./CardDataMembersLayout";
 
 interface CardDataComponentProps {
   card: ICard;
@@ -18,9 +19,13 @@ function CardDataComponent(props: CardDataComponentProps) {
   const { boardId } = useParams();
 
   const board = qClient.getQueryData<IBoard>(["board", boardId]);
+  console.log("board", board);
 
   return (
     <div className=" mt-2 ml-10">
+      <CardDetailsLayout>
+        <CardDataMembersLayout card={card} />
+      </CardDetailsLayout>
       <CardDetailsLayout>
         <CardDataLabelsLayout card={card} />
       </CardDetailsLayout>

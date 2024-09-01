@@ -28,7 +28,7 @@ export default function ChecklistProgress({
       </span>
       <Progress
         value={progress}
-        indicatorColor={`${progress === 100 ? "green-700" : "primary"}`}
+        indicatorColor={`${progress === 100 ? "[#15803d]" : "primary"}`}
         className="ml-10 relative overflow-hidden h-2 rounded-md bg-btn_bg_primary  "
       />
     </>

@@ -7,7 +7,9 @@ module.exports = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  safelist: ["bg-green-700, 'shadow-archive-card-shadow'"],
+  safelist: [
+    "bg-green-700, bg-green-600, bg-green-500 'shadow-archive-card-shadow'",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -23,6 +25,7 @@ module.exports = {
         btn_bg_primary_hover: "hsl(218, 13%, 80%)",
         text_dark_blue: "#172b4d",
         btn_primary_hover: "#0055cc",
+        progress_complete: "#15803d",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -69,6 +72,15 @@ module.exports = {
           "linear-gradient(to right, #FFE97C, hsl(45, 80%, 71%))",
         "gradient-yellow-reverse":
           "linear-gradient(to right, hsl(45, 80%, 61%), #FFE97C)",
+        ocean: "linear-gradient(80deg, #0C66E4 2%, #37B4C3 100%)",
+        space: "linear-gradient(80deg, #0C66E4 2%, #09326C 100%)",
+        sunset: "linear-gradient(80deg, #09326C 2%, #CD519D 100%)",
+        galaxy: "linear-gradient(80deg, #6E5DC6 2%, #E774BB 100%)",
+        lava: "linear-gradient(80deg, #E34935 2%, #FAA53D 100%)",
+        rose: "linear-gradient(80deg, #E774BB 2%, #F87462 100%)",
+        tropical: "linear-gradient(80deg, #1F845A 2%, #60C6D2 100%)",
+        twilight: "linear-gradient(80deg, #505F79 2%, #172B4D 100%)",
+        desert: "linear-gradient(80deg, #43290F 2%, #AE2A19 100%)",
       },
       screens: {
         "1col": "350px",
