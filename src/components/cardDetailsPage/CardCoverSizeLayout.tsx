@@ -2,6 +2,7 @@ import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 import { useParams } from "react-router-dom";
 import useRemoveBackground from "@/hooks/Query hooks/Card bg hooks/useRemoveBackground";
+import useChangeBgState from "@/hooks/Query hooks/Card bg hooks/useChangeBgState";
 
 interface CardCoverSizeLayoutprops {
   bg: { isCover: boolean; bg: string };
@@ -21,6 +22,7 @@ function CardCoverSizeLayout({
   const { boardId, cardId } = useParams();
 
   const { mutate: removeBackground } = useRemoveBackground(boardId!);
+  const { mutate: changeBgState } = useChangeBgState(boardId!);
 
   function handleRemoveCover() {
     if (activeBgState === null) return;
@@ -28,6 +30,17 @@ function CardCoverSizeLayout({
     setActiveColor(null);
     if (cardId) removeBackground({ cardId });
   }
+
+  function handleChangeBgState(
+    cardId: string,
+    isCover: boolean,
+    side: "Header" | "Cover"
+  ) {
+    setActiveBgState(side);
+    const willBeCover = !isCover;
+    changeBgState({ cardId, isCover: willBeCover });
+  }
+
   return (
     <>
       <h4 className=" font-semibold text-gray-600 leading-4 mb-1 text-xs ">
@@ -35,8 +48,12 @@ function CardCoverSizeLayout({
       </h4>
       <div className=" grid grid-cols-2 -mx-1 p-1 gap-2 overflow-x-hidden ">
         <div
+          onClick={() => {
+            if (bg.bg === "") return;
+            handleChangeBgState(cardId!, bg.isCover, "Header");
+          }}
           className={`h-16 w-[134px] border border-btn_bg_primary rounded-md cursor-pointer ${
-            bg.bg === "" && "cursor-auto"
+            bg.bg === "" && "cursor-context-menu"
           } ${
             activeBgState === "Header" && "ring-2 ring-primary ring-offset-2"
           }`}
@@ -76,9 +93,13 @@ function CardCoverSizeLayout({
           </div>
         </div>
         <div
+          onClick={() => {
+            if (bg.bg === "") return;
+            handleChangeBgState(cardId!, bg.isCover, "Cover");
+          }}
           style={{ backgroundColor: bg.bg }}
           className={`h-16 w-[134px] border border-btn_bg_primary rounded-md cursor-pointer relative ${
-            bg.bg === "" && "cursor-auto bg-gray-300"
+            bg.bg === "" && "cursor-context-menu bg-gray-300"
           } ${
             activeBgState === "Cover" && "ring-2 ring-primary ring-offset-2"
           }`}
@@ -97,13 +118,15 @@ function CardCoverSizeLayout({
           </div>
         </div>
       </div>
-      <Button
-        onClick={handleRemoveCover}
-        className=" mt-1 w-full"
-        variant={"secondary"}
-      >
-        Remove cover
-      </Button>
+      {bg.bg !== "" && (
+        <Button
+          onClick={handleRemoveCover}
+          className=" mt-1 w-full"
+          variant={"secondary"}
+        >
+          Remove cover
+        </Button>
+      )}
     </>
   );
 }
