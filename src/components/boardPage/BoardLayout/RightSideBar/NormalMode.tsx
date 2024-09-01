@@ -44,10 +44,10 @@ function RightSideBarNormalMode({
       <li>
         <Button
           onClick={() => setSideBarMode("Change background")}
-          className=" flex gap-3 w-full m-0 justify-start font-normal p-[6px] rounded-lg"
+          className=" flex gap-3 w-full m-0 justify-start items-center font-normal p-[6px] rounded-lg"
           variant={"naked"}
         >
-          <span className=" w-5 h-5" style={boardStyle} />
+          <span className=" w-5 h-5 rounded-md" style={boardStyle} />
           <span>Change background</span>
         </Button>
       </li>

@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import NormalMode from "./Background-NormalMode";
 import PhotosMode from "./Background-PhotosMode";
@@ -23,7 +22,6 @@ function BackgroundMode({
   setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSideBarMode: React.Dispatch<React.SetStateAction<SideBarMode>>;
 }) {
-  const qClient = useQueryClient();
   const [mode, setMode] = useState<BackgroundModeType>("Normal");
   const CurrentMode = backgroundModeOptions[mode];
 
@@ -57,7 +55,11 @@ function BackgroundMode({
         </Button>
       </header>
       <Separator />
-      <div className=" pt-3 pb-2 overflow-x-auto h-[calc(100%-68px)]">
+      <div
+        className={`pt-3 pb-2 overflow-x-auto ${
+          mode === "Photos" && "overflow-y-hidden"
+        } h-[calc(100%-68px)]`}
+      >
         <CurrentMode setMode={setMode} />
       </div>
     </>
