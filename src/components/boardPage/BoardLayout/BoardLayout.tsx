@@ -41,6 +41,7 @@ function BoardLayout() {
 
   if (!board) return null;
   let boardStyle = getBoardBgStyle(board.bg);
+  // console.log("hi");
 
   if (isPending) return <div>Loadinggg....</div>;
   if (isError) return <div>Error: {error.message}</div>;

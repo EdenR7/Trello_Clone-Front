@@ -15,8 +15,6 @@ function ArchiveLists({ board, setOnArchiveLists }: ArchiveListsrops) {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const listsUnArchiver = useUnArchiveList(board._id);
 
-  console.log(board?.archivedLists.length);
-
   useEffect(() => {
     if (searchInputRef.current) {
       searchInputRef.current.focus();
