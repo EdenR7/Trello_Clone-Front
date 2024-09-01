@@ -43,6 +43,7 @@ function RightSideBarNormalMode({
       <Separator />
       <li>
         <Button
+          onClick={() => setSideBarMode("Change background")}
           className=" flex gap-3 w-full m-0 justify-start font-normal p-[6px] rounded-lg"
           variant={"naked"}
         >

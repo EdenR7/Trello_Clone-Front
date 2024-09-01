@@ -31,3 +31,14 @@ export const labelColorsOptions = [
   "#4bce97",
 ];
 
+export const boardBgColorOptions = [
+  "#0079BF", // rgb(0, 121, 191)
+  "#D29034", // rgb(210, 144, 52)
+  "#519839", // rgb(81, 152, 57)
+  "#B04632", // rgb(176, 70, 50)
+  "#89609E", // rgb(137, 96, 158)
+  "#CD5A91", // rgb(205, 90, 145)
+  "#4BBF6B", // rgb(75, 191, 107)
+  "#00AECC", // rgb(0, 174, 204)
+  "#838C91", // rgb(131, 140, 145)
+];

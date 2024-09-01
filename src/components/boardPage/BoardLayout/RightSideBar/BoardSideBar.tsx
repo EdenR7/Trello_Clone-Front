@@ -9,6 +9,7 @@ import RightSideBarNormalMode from "./NormalMode";
 import LabelLayout from "@/components/labels/LabelLayout";
 import AboutMode from "./AboutMode";
 import ArchiveMode from "./ArchiveMode";
+import BackgroundMode from "./BackgroundMode";
 
 interface BoardSideBarProps {
   boardId: string;
@@ -20,7 +21,7 @@ export type SideBarMode =
   | "Menu"
   | "About this board"
   | "Archive"
-  | "Background"
+  | "Change background"
   | "Labels";
 
 export function BoardSideBar({
@@ -41,45 +42,56 @@ export function BoardSideBar({
         isSideBarOpen ? "w-[305px] md:w-[340px] px-3" : "w-0"
       }`}
     >
-      <header className=" flex justify-center items-center my-[15px]">
-        {sideBarMode !== "Menu" && (
+      {sideBarMode !== "Change background" && (
+        <header className=" flex justify-center items-center my-[15px]">
+          {sideBarMode !== "Menu" && (
+            <Button
+              onClick={() => setSideBarMode("Menu")}
+              variant={"naked"}
+              size={"icon"}
+              className=" mr-auto text-gray-600 h-8 w-8 rounded-lg absolute left-3"
+            >
+              <ChevronLeft size={24} />
+            </Button>
+          )}
+          <h2 className=" text-base font-medium flex-1 text-center">
+            {sideBarMode}
+          </h2>
           <Button
-            onClick={() => setSideBarMode("Menu")}
             variant={"naked"}
             size={"icon"}
-            className=" mr-auto text-gray-600 h-8 w-8 rounded-lg absolute left-3"
+            className=" ml-auto text-gray-600 h-8 w-8 rounded-lg absolute right-3"
+            onClick={() => {
+              setSideBarMode("Menu");
+              setIsSideBarOpen(false);
+            }}
           >
-            <ChevronLeft size={24} />
+            <X size={20} />
           </Button>
-        )}
-        <h2 className=" text-base font-medium flex-1 text-center">
-          {sideBarMode}
-        </h2>
-        <Button
-          variant={"naked"}
-          size={"icon"}
-          className=" ml-auto text-gray-600 h-8 w-8 rounded-lg absolute right-3"
-          onClick={() => {
-            setSideBarMode("Menu");
-            setIsSideBarOpen(false);
-          }}
-        >
-          <X size={20} />
-        </Button>
-      </header>
-      <Separator />
-      <div className=" pt-3 pb-2 overflow-x-auto h-[calc(100%-68px)]">
-        {sideBarMode === "Menu" && (
-          <RightSideBarNormalMode
-            setSideBarMode={setSideBarMode}
-            boardStyle={boardStyle}
-          />
-        )}
-        {sideBarMode === "About this board" && <AboutMode boardId={boardId} />}
-        {sideBarMode === "Archive" && <ArchiveMode boardId={boardId} />}
-        {/* {sideBarMode === "Background" && <div>Background</div>} */}
-        {sideBarMode === "Labels" && <LabelLayout boardId={boardId} />}
-      </div>
+        </header>
+      )}
+
+      {sideBarMode === "Change background" ? (
+        <BackgroundMode
+          setIsSideBarOpen={setIsSideBarOpen}
+          setSideBarMode={setSideBarMode}
+        />
+      ) : (
+        <div className="  overflow-x-auto h-[calc(100%-68px)]">
+          {/* <Separator className=" mb-3" /> */}
+          {sideBarMode === "Menu" && (
+            <RightSideBarNormalMode
+              setSideBarMode={setSideBarMode}
+              boardStyle={boardStyle}
+            />
+          )}
+          {sideBarMode === "About this board" && (
+            <AboutMode boardId={boardId} />
+          )}
+          {sideBarMode === "Archive" && <ArchiveMode boardId={boardId} />}
+          {sideBarMode === "Labels" && <LabelLayout boardId={boardId} />}
+        </div>
+      )}
     </div>
   );
 }

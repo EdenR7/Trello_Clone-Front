@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 
 async function getLists(boardId: string): Promise<IList[]> {
   const res = await api.get(`/list/${boardId}/`);
-  console.log(res.data);
 
   return res.data;
 }
