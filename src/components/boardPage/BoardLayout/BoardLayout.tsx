@@ -37,7 +37,7 @@ export function getBoardBgStyle(bg: IBoardBackground) {
 function BoardLayout() {
   const { boardId } = useParams();
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
-  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   if (!board) return null;
   let boardStyle = getBoardBgStyle(board.bg);

@@ -20,7 +20,7 @@ export type SideBarMode =
   | "Menu"
   | "About this board"
   | "Archive"
-  | "Background"
+  | "Change background"
   | "Labels";
 
 export function BoardSideBar({
@@ -77,7 +77,7 @@ export function BoardSideBar({
         )}
         {sideBarMode === "About this board" && <AboutMode boardId={boardId} />}
         {sideBarMode === "Archive" && <ArchiveMode boardId={boardId} />}
-        {/* {sideBarMode === "Background" && <div>Background</div>} */}
+        {sideBarMode === "Change background" && <div>Background</div>}
         {sideBarMode === "Labels" && <LabelLayout boardId={boardId} />}
       </div>
     </div>

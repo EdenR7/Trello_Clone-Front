@@ -14,8 +14,6 @@ function ArchiveMode({ boardId }: ArchiveModeProps) {
   const [onArchiveLists, setOnArchiveLists] = useState(true);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
-  console.log(board?.archivedLists.length);
-
   useEffect(() => {
     if (searchInputRef.current) {
       searchInputRef.current.focus();
