@@ -1,4 +1,4 @@
-import { ICard } from "./card.types";
+import { IArchiveCard, ICard } from "./card.types";
 
 export interface IBoardBackground {
   bgType: "color" | "gradient" | "image";
@@ -25,6 +25,6 @@ export interface IBoard {
   description?: string;
   name: string;
   listsNumber: number;
-  archivedCards: ICard[];
+  archivedCards: IArchiveCard[];
   archivedLists: { listId: string; name: string }[];
 }

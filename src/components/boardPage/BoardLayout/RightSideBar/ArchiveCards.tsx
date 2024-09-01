@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDeleteCard } from "@/hooks/Query hooks/Card hooks/useDeleteCard";
+import { useUnArchiveCard } from "@/hooks/Query hooks/Card hooks/useUnArchiveCard";
 import { IBoard } from "@/types/board.types";
 import React, { useEffect, useRef } from "react";
 
@@ -10,15 +12,27 @@ interface ArchiveCardsrops {
 
 function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  // unArchive
+  const cardDeleter = useDeleteCard(board._id);
+  const cardUnArchiver = useUnArchiveCard(board._id);
   // delete card
-  console.log(board?.archivedLists.length);
 
   useEffect(() => {
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, []);
+
+  function handleUnarchiveCard(cardId: string) {
+    cardUnArchiver.mutate({ boardId: board._id, cardId });
+  }
+
+  function handleDeleteCard(cardId: string, listId: string) {
+    cardDeleter.mutate({
+      listId,
+      cardId,
+    });
+  }
+
   return (
     <>
       <div className=" flex gap-2 items-center">
@@ -38,7 +52,7 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
       <div className=" mt-4">
         {board?.archivedCards.length > 0 ? (
           board.archivedCards.map((card) => (
-            <>
+            <React.Fragment key={card._id}>
               {/* Card item as in board */}
               <div
                 key={card._id}
@@ -47,16 +61,25 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
                 <span className=" p-2">{card.title}</span>
               </div>
               <div className=" ml-2 mb-2 px-3 flex gap-1 items-center">
-                <Button variant={"asLink"} size={"sm"} className=" p-0">
+                <Button
+                  variant={"asLink"}
+                  size={"sm"}
+                  className=" p-0"
+                  onClick={() => handleUnarchiveCard(card._id)}
+                >
                   Send to board
                 </Button>
                 <span className=" translate-y-[1px]">•</span>
-                <Button variant={"asLink"} size={"sm"} className=" p-0">
+                <Button
+                  onClick={() => handleDeleteCard(card._id, card.list)}
+                  variant={"asLink"}
+                  size={"sm"}
+                  className=" p-0"
+                >
                   Delete
                 </Button>
               </div>
-              {/* <Separator className=" my-1" /> */}
-            </>
+            </React.Fragment>
           ))
         ) : (
           <div className="bg-btn_bg_primary text-text_dark_blue py-6 px-3 rounded-md text-center">

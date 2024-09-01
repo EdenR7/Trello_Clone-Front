@@ -18,3 +18,7 @@ export interface ICard {
   description: string;
   title: string;
 }
+
+export interface IArchiveCard extends Omit<ICard, "list"> {
+  list: string;
+}
