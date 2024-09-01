@@ -132,8 +132,8 @@ export function CreateAndEditLabelLayout({
       <section className=" h-[100px] bg-slate-50 flex items-center justify-center">
         <div
           style={{ backgroundColor: colorInput }}
-          className=" h-8 w-60 rounded-md"
-        ></div>
+          className=" h-8 w-60 rounded-md flex items-center justify-center text-emerald-950"
+        >{titleInput}</div>
       </section>
 
       {/* Main */}

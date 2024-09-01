@@ -1,3 +1,5 @@
+import { ICard } from "./card.types";
+
 export interface IBoardBackground {
   bgType: "color" | "gradient" | "image";
   background: string; // CSS color, gradient string, or image URL
@@ -23,6 +25,6 @@ export interface IBoard {
   description?: string;
   name: string;
   listsNumber: number;
-  archivedCards: string[];
+  archivedCards: ICard[];
   archivedLists: { listId: string; name: string }[];
 }

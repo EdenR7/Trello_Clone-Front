@@ -11,7 +11,6 @@ import VisionPage from "./pages/team-page";
 
 import { useAuth } from "./providers/auth-provider";
 import { ReactNode } from "react";
-import BoardItem from "./components/boardPage/BoardItems";
 import CardDetailsPage from "./pages/card-details-page";
 import BoardLayout from "./components/boardPage/BoardLayout/BoardLayout";
 
@@ -89,3 +88,6 @@ function App() {
 }
 
 export default App;
+
+// Fix in the back the function of create label in both card and board
+// popovers controll of labels 

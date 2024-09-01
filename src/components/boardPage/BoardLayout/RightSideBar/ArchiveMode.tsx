@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { IBoard } from "@/types/board.types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import ArchiveLists from "./ArchiveLists";
+import ArchiveCards from "./ArchiveCards";
 
 interface ArchiveModeProps {
   boardId: string;
@@ -14,20 +14,24 @@ function ArchiveMode({ boardId }: ArchiveModeProps) {
   const [onArchiveLists, setOnArchiveLists] = useState(true);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
+  console.log(board?.archivedLists.length);
+
   useEffect(() => {
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, []);
 
+  if (!board) {
+    return null;
+  }
   return (
     <>
-      <div className=" flex gap-2 items-center">
-        <Input ref={searchInputRef} />
-        <Button variant={"secondary"} className=" ">
-          {onArchiveLists ? "Cards" : "Lists"}
-        </Button>
-      </div>
+      {onArchiveLists ? (
+        <ArchiveLists board={board} setOnArchiveLists={setOnArchiveLists} />
+      ) : (
+        <ArchiveCards board={board} setOnArchiveLists={setOnArchiveLists} />
+      )}
     </>
   );
 }

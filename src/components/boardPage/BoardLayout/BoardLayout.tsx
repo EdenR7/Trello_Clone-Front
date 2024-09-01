@@ -72,7 +72,7 @@ function BoardLayout() {
         </div>
         <div
           className={` pt-2 pb-8 px-[6px] h-[calc(100vh-110px)] overflow-x-auto ${
-            isSideBarOpen && "w-[calc(100%-300px)] md:w-[calc(100%-342px)]"
+            isSideBarOpen && "w-[calc(100%-308px)] md:w-[calc(100%-348px)]"
           }`}
         >
           <BoardItems />

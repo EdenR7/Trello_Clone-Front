@@ -22,6 +22,7 @@ const buttonVariants = cva(
         primaryBtn: "h-5 bg-primary text-primary-foreground py-[6px] px-3",
         notAllowed:
           "bg-btn_bg_primary/5 text-btn_bg_primary/40 cursor-not-allowed",
+        asLink: "hover:underline p-0 m-0 text-text_dark_blue",
       },
       size: {
         default: "h-8 px-4 py-2",

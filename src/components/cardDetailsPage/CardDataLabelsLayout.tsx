@@ -62,6 +62,7 @@ function CardDataLabelsLayout(props: CardDataLabelsLayoutProps) {
             setLabelToEdit={setLabelToEdit}
             internalOpen={isLabelPopoverOpen}
             setInternalOpen={setIsLabelPopoverOpen}
+            side=""
             title="Labels"
             trigger={
               <Button className=" p-2" variant={"secondary"}>

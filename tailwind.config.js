@@ -7,7 +7,7 @@ module.exports = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  safelist: ["bg-green-700"],
+  safelist: ["bg-green-700, 'shadow-archive-card-shadow'"],
   prefix: "",
   theme: {
     container: {
@@ -117,6 +117,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      boxShadow: {
+        "shadow-archive-card-shadow": "rgba(9, 30, 66, 0.25) 0px 1px 1px 0px",
       },
     },
   },
