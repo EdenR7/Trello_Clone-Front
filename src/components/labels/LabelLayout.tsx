@@ -16,7 +16,7 @@ function LabelLayout({ boardId }: LabelLayoutProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   const [showAllLabels, setShowAllLabels] = useState(false);
-  const [isLabelPopoverOpen, setIsLabelPopoverOpen] = useState(false);
+  // const [isLabelPopoverOpen, setIsLabelPopoverOpen] = useState(false);
 
   if (!board) return;
 

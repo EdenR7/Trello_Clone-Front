@@ -11,6 +11,8 @@ import api from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IBoard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
+import { getTextColorForBackground } from "@/utils/getTextColorFromBg";
+import { getHoverColorForBackground } from "@/utils/getHoverColorFromText";
 
 interface CreateAndEditLabelLayoutProps {
   isEditMode: boolean;
@@ -126,14 +128,18 @@ export function CreateAndEditLabelLayout({
     if (setIsLabelPopoverOpen) setIsLabelPopoverOpen(false);
   }
 
+  const textColor = getTextColorForBackground(colorInput);
+
   return (
     <div className=" text-gray-600">
       {/* Title */}
-      <section className=" h-[100px] bg-slate-50 flex items-center justify-center">
+      <section className=" font-semibold h-[100px] bg-slate-50 flex items-center justify-center">
         <div
-          style={{ backgroundColor: colorInput }}
+          style={{ backgroundColor: colorInput, color: textColor }}
           className=" h-8 w-60 rounded-md flex items-center justify-center text-emerald-950"
-        >{titleInput}</div>
+        >
+          {titleInput}
+        </div>
       </section>
 
       {/* Main */}
@@ -150,10 +156,20 @@ export function CreateAndEditLabelLayout({
         <h3 className=" text-xs font-medium mt-3 mb-2">Select a color</h3>
         <div className="grid grid-cols-5 gap-2 auto-rows-[32px] mb-2">
           {labelColorsOptions.map((color, index) => {
+            const hoverColor = getHoverColorForBackground(
+              color,
+              textColor === "#FFF"
+            );
             return (
               <div
                 key={index}
                 onClick={() => setColorInput(color)}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = hoverColor)
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = color)
+                }
                 className={`rounded-sm cursor-pointer ${
                   colorInput === color &&
                   "outline outline-2 outline-blue-700 outline-offset-2"

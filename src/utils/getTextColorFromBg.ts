@@ -36,5 +36,5 @@ export function getTextColorForBackground(bgColor: string): string {
   }
 
   const lum = luminance(rgb.r, rgb.g, rgb.b);
-  return lum > 0.5 ? "#000" : "#FFF"; // Return black or white based on luminance
+  return lum > 0.3 ? "#000" : "#FFF"; // Return black or white based on luminance
 }

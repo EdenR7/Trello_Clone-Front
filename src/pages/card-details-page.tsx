@@ -1,10 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import { usegetCard } from "@/hooks/Query hooks/Card hooks/useGetCard";
 import CardTitleComponent from "@/components/cardDetailsPage/cardTitle";
 
@@ -12,49 +7,37 @@ import CardDescriptionComponent from "@/components/cardDetailsPage/cardDescripti
 import CardChecklistComponent from "@/components/cardDetailsPage/CardChecklistComponent";
 import CardDataComponent from "@/components/cardDetailsPage/CardDataComponent";
 import CardCoverComponent from "@/components/cardDetailsPage/CardCoverComponent ";
+import { Modal } from "@/components/ui/CardDetailsModal";
+
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
-  const { data: card, isPending } = usegetCard(cardId!);
-  const navigate = useNavigate();
+  const { data: card } = usegetCard(cardId!);
+
   console.log("card: ", card);
-
-  function handleCloseModal() {
-    navigate(`/b/${boardId}`);
-  }
-
-  if (isPending)
-    return (
-      <>
-        <div>loading.......</div>
-      </>
-    );
 
   return (
     card && (
-      <Dialog onOpenChange={handleCloseModal} open={true}>
-        <DialogTitle />
-        <DialogContent
-          aria-describedby={undefined}
-          className=" text-text_dark_blue max-w-[768px] bg-gray-200 p-0 rounded-3xl"
+      <Modal>
+        <CardCoverComponent card={card} />
+        <h2>
+          {card && boardId && (
+            <CardTitleComponent card={card} boardId={boardId} />
+          )}
+        </h2>
+        <div
+          onClick={(ev) => ev.stopPropagation()}
+          className=" pb-2 pr-4 break-card_modal:pr-2 pl-4"
         >
-          <CardCoverComponent card={card} />
-          <DialogHeader>
-            {card && boardId && (
-              <CardTitleComponent card={card} boardId={boardId} />
-            )}
-          </DialogHeader>
-          <div className=" pb-2 pr-4 break-card_modal:pr-2 pl-4">
-            {/* main div */}
-            <div>
-              <CardDataComponent card={card} />
-              <CardDescriptionComponent card={card} />
+          {/* main div */}
+          <div>
+            <CardDataComponent card={card} />
+            <CardDescriptionComponent card={card} />
 
-              <CardChecklistComponent card={card} />
-            </div>
-            <div>{/* sidebar div */}</div>
+            <CardChecklistComponent card={card} />
           </div>
-        </DialogContent>
-      </Dialog>
+          <div>{/* sidebar div */}</div>
+        </div>
+      </Modal>
     )
   );
 }

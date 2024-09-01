@@ -134,7 +134,6 @@ function PopoverLayout({
   triggerVariant = "default",
   trigger,
   popoverClassName,
-  side,
 }: PopoverLayoutProps) {
   const [internalOpen, setInternalOpen] = useState(false);
 
@@ -160,7 +159,7 @@ function PopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={side}
+        side="bottom"
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">
@@ -169,7 +168,11 @@ function PopoverLayout({
               {title}
             </h4>
             <Button
-              onClick={() => handleOpenChange(false)}
+              onClick={(ev) => {
+                ev.stopPropagation();
+                ev.preventDefault();
+                handleOpenChange(false);
+              }}
               className="rounded-lg col-start-3 p-[6px]"
               variant={"ghost"}
             >

@@ -50,6 +50,7 @@ function CardCoverSizeLayout({
         <div
           onClick={() => {
             if (bg.bg === "") return;
+            if (activeBgState === "Header") return;
             handleChangeBgState(cardId!, bg.isCover, "Header");
           }}
           className={`h-16 w-[134px] border border-btn_bg_primary rounded-md cursor-pointer ${
@@ -95,11 +96,13 @@ function CardCoverSizeLayout({
         <div
           onClick={() => {
             if (bg.bg === "") return;
+            if (activeBgState === "Cover") return;
+
             handleChangeBgState(cardId!, bg.isCover, "Cover");
           }}
           style={{ backgroundColor: bg.bg }}
           className={`h-16 w-[134px] border border-btn_bg_primary rounded-md cursor-pointer relative ${
-            bg.bg === "" && "cursor-context-menu bg-gray-300"
+            bg.bg === "" && "cursor-default bg-gray-300"
           } ${
             activeBgState === "Cover" && "ring-2 ring-primary ring-offset-2"
           }`}

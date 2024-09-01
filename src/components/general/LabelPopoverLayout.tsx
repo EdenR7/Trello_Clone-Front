@@ -38,7 +38,7 @@ function LabelPopoverLayout({
   triggerVariant = "default",
   trigger,
   popoverClassName,
-  side,
+
   internalOpen,
   setInternalOpen,
   setIsEditLabel,
@@ -70,7 +70,7 @@ function LabelPopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={side}
+        side="bottom"
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">
@@ -79,7 +79,10 @@ function LabelPopoverLayout({
               {title}
             </h4>
             <Button
-              onClick={() => handleOpenChange(false)}
+              onClick={(ev) => {
+                ev.stopPropagation();
+                handleOpenChange(false);
+              }}
               className="rounded-lg col-start-3 p-[6px]"
               variant={"ghost"}
             >

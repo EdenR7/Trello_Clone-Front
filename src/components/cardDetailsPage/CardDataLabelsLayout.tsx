@@ -35,10 +35,10 @@ function CardDataLabelsLayout(props: CardDataLabelsLayoutProps) {
     return a.title.localeCompare(b.title);
   });
   return (
-    <div>
-      <section className=" flex flex-col justify-end max-w-full">
+    <div className=" max-w-full">
+      <section className=" flex flex-col  justify-end max-w-full">
         <CardDetailsHeader title="Labels" />
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1 max-w-full">
           {labels.map((label) => {
             if (label) {
               return (

@@ -22,7 +22,7 @@ function CardDataComponent(props: CardDataComponentProps) {
   console.log("board", board);
 
   return (
-    <div className=" mt-2 ml-10">
+    <div className=" mt-2 ml-10 ">
       <CardDetailsLayout>
         <CardDataMembersLayout card={card} />
       </CardDetailsLayout>

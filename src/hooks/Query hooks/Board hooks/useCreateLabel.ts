@@ -6,12 +6,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export async function CreateLabelApi(
   labelTitle: string,
   labelColor: string,
-  boardId: string
+  boardId: string,
+  cardId?: string
 ) {
   try {
+    console.log("cardId in labelApi: ", cardId);
+
     const res = await api.post(`/board/${boardId}/label`, {
       title: labelTitle,
       color: labelColor,
+      cardId: cardId,
     });
     return res.data;
   } catch (error) {
@@ -31,7 +35,7 @@ export function useCreateLabel(boardId: string, cardId?: string) {
       labelTitle: string;
       labelColor: string;
       boardId: string;
-    }) => CreateLabelApi(labelTitle, labelColor, boardId),
+    }) => CreateLabelApi(labelTitle, labelColor, boardId, cardId),
     onMutate: async ({ labelColor, labelTitle }) => {
       await qClient.cancelQueries({ queryKey: ["board", boardId] });
       if (cardId) await qClient.cancelQueries({ queryKey: ["card", cardId] });
@@ -75,9 +79,9 @@ export function useCreateLabel(boardId: string, cardId?: string) {
     },
     onSettled: () => {
       qClient.invalidateQueries({ queryKey: ["board", boardId] });
-      // if (cardId) {
-      //   qClient.invalidateQueries({ queryKey: ["card", cardId] });
-      // }
+      if (cardId) {
+        qClient.invalidateQueries({ queryKey: ["card", cardId] });
+      }
     },
   });
 }

@@ -1,4 +1,4 @@
-import { IArchiveCard, ICard } from "./card.types";
+import { IArchiveCard } from "./card.types";
 
 export interface IBoardBackground {
   bgType: "color" | "gradient" | "image";

@@ -33,7 +33,7 @@ export function MainNav() {
             </Link>
             <Link
               className=" hover:underline decoration-primary"
-              to="/b/66ce341ec6ae552fd387beb3"
+              to="/b/66d46ee382111fd9687428a5"
             >
               Board
             </Link>

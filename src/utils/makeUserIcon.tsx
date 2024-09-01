@@ -11,10 +11,17 @@ function MakeUserIcon({
   className?: string;
 }) {
   function getUserFirstLetter() {
-    return user.firstName ? user.firstName[0] : "?";
+    return user.firstName && user.lastName
+      ? (user.firstName[0] + user.lastName[0]).toUpperCase()
+      : "?";
   }
   return (
-    <Avatar className={cn("bg-cyan-800 h-8 w-8", className)}>
+    <Avatar
+      className={cn(
+        "bg-[#00A3BF] h-8 w-8 flex items-center justify-center font-bold hover:cursor-pointer ",
+        className
+      )}
+    >
       <AvatarFallback>{getUserFirstLetter()}</AvatarFallback>
     </Avatar>
   );

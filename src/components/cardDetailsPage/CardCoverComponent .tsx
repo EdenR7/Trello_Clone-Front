@@ -13,7 +13,7 @@ function CardCoverComponent(props: CardCoverComponentProps) {
 
   return (
     <div
-      className=" relative w-full transition-opacity overflow-hidden rounded-t-lg h-[116px] min-h-[116px] p-0"
+      className=" relative w-full transition-opacity overflow-hidden rounded-t-2xl h-[116px] min-h-[116px] p-0"
       style={{ backgroundColor: card.bgCover.bg }}
     >
       <div className=" flex absolute w-full p-3 justify-end items-center  bottom-0">
