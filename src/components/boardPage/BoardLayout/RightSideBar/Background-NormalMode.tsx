@@ -3,6 +3,7 @@ import { BackgroundModeType } from "./BackgroundMode";
 
 export interface NormalModeProps {
   setMode?: React.Dispatch<React.SetStateAction<BackgroundModeType>>;
+  boardId?: string;
 }
 
 export function NormalMode({ setMode }: NormalModeProps) {

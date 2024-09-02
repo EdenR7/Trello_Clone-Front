@@ -1,8 +1,9 @@
 import { Input } from "@/components/ui/input";
 import { boardBgImageOptions } from "@/constants/board.constants";
 import { Search } from "lucide-react";
+import { BackgroundModeProps } from "./BackgroundMode";
 
-function PhotosMode() {
+function PhotosMode({ handleBgChange }: BackgroundModeProps) {
   return (
     <>
       <div className=" relative m-[1px]">
@@ -15,14 +16,15 @@ function PhotosMode() {
       </div>
       <div className=" overflow-y-auto max-h-[480px] px-1">
         <ul className=" grid grid-cols-2 gap-2 ">
-          {boardBgImageOptions.map((bg, index) => {
+          {boardBgImageOptions.map((bgUrl, index) => {
             return (
               <li
+                onClick={() => handleBgChange(bgUrl, "image")}
                 key={index}
                 className=" cursor-pointer h-24 overflow-hidden rounded-md"
               >
                 <img
-                  src={bg}
+                  src={bgUrl}
                   alt="bg img"
                   className="w-full h-full object-cover"
                 />

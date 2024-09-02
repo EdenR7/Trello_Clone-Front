@@ -1,8 +1,9 @@
 import { IArchiveCard } from "./card.types";
 
+export type IBgType = "color" | "gradient" | "image";
 export interface IBoardBackground {
-  bgType: "color" | "gradient" | "image";
-  background: string; // CSS color, gradient string, or image URL
+  bgType: IBgType;
+  background: string;
 }
 
 export interface ILabel {

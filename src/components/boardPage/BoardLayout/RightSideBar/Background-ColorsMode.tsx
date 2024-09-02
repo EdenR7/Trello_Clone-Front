@@ -1,23 +1,15 @@
 import { Separator } from "@/components/ui/separator";
 import { boardBgColorOptions } from "@/constants/board.constants";
 import { gradientStrings } from "@/constants/gradient.constant";
-import { useUpdateBg } from "@/hooks/Query hooks/Board hooks/useUpdateBg";
 import { IBoard } from "@/types/board.types";
 import { useQueryClient } from "@tanstack/react-query";
 import { Check } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { BackgroundModeProps } from "./BackgroundMode";
 
-function ColorsMode() {
-  const { boardId } = useParams();
+function ColorsMode({ boardId, handleBgChange }: BackgroundModeProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   if (!board) return;
-
-  const bgChanger = useUpdateBg(boardId!);
-
-  function handleBgChange(background: string, bgType: string) {
-    bgChanger.mutate({ background, bgType });
-  }
 
   return (
     <>

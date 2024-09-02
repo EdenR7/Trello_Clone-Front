@@ -1,18 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArchiveRestore, Eye, Info, Minus, Tag } from "lucide-react";
-import { BoardStyle } from "../BoardLayout";
-import { SideBarMode } from "./BoardSideBar";
-
-interface RightSideBarNormalModeProps {
-  boardStyle: BoardStyle | undefined;
-  setSideBarMode: React.Dispatch<React.SetStateAction<SideBarMode>>;
-}
+import { SideBarModeProps } from "./BoardSideBar";
 
 function RightSideBarNormalMode({
   boardStyle,
   setSideBarMode,
-}: RightSideBarNormalModeProps) {
+}: SideBarModeProps) {
+  if (!setSideBarMode) return null;
   return (
     <ul className=" flex flex-col gap-3">
       <li>
