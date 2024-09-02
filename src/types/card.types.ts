@@ -20,6 +20,7 @@ export interface ICard {
   position: number;
   description: string;
   title: string;
+  isComplete: boolean;
 }
 
 export interface IArchiveCard extends Omit<ICard, "list"> {

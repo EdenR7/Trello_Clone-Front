@@ -67,6 +67,11 @@ function CardDatesPopup(props: CardDatesPopupProps) {
   const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
   function toggleDueDate() {
+    const fromDate =
+      datePickerValue.from instanceof Date
+        ? datePickerValue.from
+        : new Date(datePickerValue.from!);
+
     if (!isStartDate && isEndDate) {
       setDatePickerValue({ from: undefined, to: undefined });
       setTempToDate(""); // Clear temp state when unchecked
@@ -77,9 +82,9 @@ function CardDatesPopup(props: CardDatesPopupProps) {
       setDatePickerValue({ from: datePickerValue.from, to: undefined });
       setTempToDate(""); // Clear temp state when unchecked
     } else if (isStartDate && !isEndDate) {
-      const nextDayAfterStartDate =
-        datePickerValue.from &&
-        new Date(datePickerValue.from.getTime() + 24 * 60 * 60 * 1000);
+      const nextDayAfterStartDate = fromDate
+        ? new Date(fromDate.getTime() + 24 * 60 * 60 * 1000)
+        : undefined;
       setDatePickerValue({
         to: nextDayAfterStartDate,
         from: datePickerValue.from,
