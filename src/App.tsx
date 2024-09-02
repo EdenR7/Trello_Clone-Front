@@ -13,6 +13,8 @@ import { useAuth } from "./providers/auth-provider";
 import { ReactNode } from "react";
 import CardDetailsPage from "./pages/card-details-page";
 import BoardLayout from "./components/boardPage/BoardLayout/BoardLayout";
+import HomeLayout from "./layouts/HomeLayout";
+import BoardPage from "./pages/boards-page";
 
 interface customRouteProps {
   children: ReactNode;
@@ -51,7 +53,17 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PlatformLayout />}>
-          <Route index element={<div>Home</div>} />
+          <Route element={<HomeLayout />}>
+            <Route index element={<div>Home</div>} />
+            <Route
+              path="u/:username/boards"
+              element={
+                <ProtectedRoute>
+                  <BoardPage />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
           <Route path="about" element={<AboutPage />}>
             <Route path="team" element={<TeamPage />} />
             <Route path="vision" element={<VisionPage />} />
@@ -62,7 +74,6 @@ function App() {
             path="b/:boardId"
             element={
               <ProtectedRoute>
-                {/* <BoardItem /> */}
                 <BoardLayout />
               </ProtectedRoute>
             }
@@ -90,4 +101,4 @@ function App() {
 export default App;
 
 // Fix in the back the function of create label in both card and board
-// popovers controll of labels 
+// popovers controll of labels
