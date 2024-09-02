@@ -6,14 +6,19 @@ import { Checkbox } from "../ui/checkbox";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { ICard } from "@/types/card.types";
+import { Button } from "../ui/button";
+import useAddCardDates from "@/hooks/Query hooks/Card dates hooks/useAddCardDates";
+import { useParams } from "react-router-dom";
 
 interface CardDatesPopupProps {
   card: ICard;
+
+  setInternalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function CardDatesPopup(props: CardDatesPopupProps) {
-  const { card } = props;
-
+  const { card, setInternalOpen } = props;
+  const { boardId } = useParams();
   const [isStartDate, setIsStartDate] = useState(!!card.startDate);
 
   const [isEndDate, setIsEndDate] = useState(!!card.dueDate);
@@ -22,6 +27,8 @@ function CardDatesPopup(props: CardDatesPopupProps) {
     to: card.dueDate ? card.dueDate : undefined,
     from: card.startDate ? card.startDate : undefined,
   });
+
+  const { mutate: addCardDates } = useAddCardDates(boardId!);
 
   const [tempFromDate, setTempFromDate] = useState(
     formatFromDateRange({ to: card.dueDate, from: card.startDate })
@@ -169,6 +176,31 @@ function CardDatesPopup(props: CardDatesPopupProps) {
 
   // Determine the mode based on user selections
 
+  function handleRemoveDates() {
+    addCardDates({ cardId: card._id!, formattedDate: {} });
+    setInternalOpen(false);
+  }
+
+  function handleSubmitDates() {
+    const formattedDates: Partial<{ startDate: string; dueDate: string }> = {};
+
+    if (datePickerValue.from) {
+      const startDate = new Date(datePickerValue.from);
+      startDate.setHours(0, 0, 0, 0);
+      formattedDates.startDate = startDate.toISOString();
+    }
+
+    if (datePickerValue.to) {
+      const dueDate = new Date(datePickerValue.to);
+      dueDate.setHours(0, 0, 0, 0);
+      formattedDates.dueDate = dueDate.toISOString();
+    }
+
+    console.log("formattedDates: ", formattedDates);
+    addCardDates({ cardId: card._id!, formattedDate: formattedDates });
+    setInternalOpen(false);
+  }
+
   return (
     <>
       <Calendar
@@ -223,6 +255,14 @@ function CardDatesPopup(props: CardDatesPopupProps) {
               />
             </div>
           </div>
+        </div>
+        <div className=" flex flex-col gap-2 justify-between">
+          <Button onClick={handleSubmitDates} variant={"default"} className="">
+            Save
+          </Button>
+          <Button onClick={handleRemoveDates} variant={"secondary"}>
+            Remove
+          </Button>
         </div>
       </div>
     </>
