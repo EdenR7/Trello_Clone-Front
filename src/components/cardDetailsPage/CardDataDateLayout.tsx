@@ -12,6 +12,7 @@ interface CardDataDateLayoutProps {
 
 function CardDataDateLayout(props: CardDataDateLayoutProps) {
   const { card } = props;
+
   let header = "";
 
   if (card.dueDate && !card.startDate) {
@@ -34,7 +35,7 @@ function CardDataDateLayout(props: CardDataDateLayoutProps) {
             </Button>
           }
         >
-          <CardDatesPopup />
+          <CardDatesPopup card={card} />
         </PopoverLayout>
       </div>
     </>

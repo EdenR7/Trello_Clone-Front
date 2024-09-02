@@ -1,21 +1,38 @@
-import { format } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 
 import { useState } from "react";
 import { DateRange, SelectRangeEventHandler } from "react-day-picker";
 import { Checkbox } from "../ui/checkbox";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
+import { ICard } from "@/types/card.types";
 
-function CardDatesPopup() {
-  const [isStartDate, setIsStartDate] = useState(false);
-  const [isEndDate, setIsEndDate] = useState(false);
+interface CardDatesPopupProps {
+  card: ICard;
+}
+
+function CardDatesPopup(props: CardDatesPopupProps) {
+  const { card } = props;
+
+  const [isStartDate, setIsStartDate] = useState(!!card.startDate);
+
+  const [isEndDate, setIsEndDate] = useState(!!card.dueDate);
+
   const [datePickerValue, setDatePickerValue] = useState<DateRange>({
-    to: undefined,
-    from: undefined,
+    to: card.dueDate ? card.dueDate : undefined,
+    from: card.startDate ? card.startDate : undefined,
   });
+
+  const [tempFromDate, setTempFromDate] = useState(
+    formatFromDateRange({ to: card.dueDate, from: card.startDate })
+  );
+  const [tempToDate, setTempToDate] = useState(
+    formatToDateRange({ to: card.dueDate, from: card.startDate })
+  );
 
   const mode: "single" | "range" =
     isStartDate && isEndDate ? "range" : "single";
+
   function handleSingleSelectDates(newSelected: Date | undefined) {
     if (mode === "single") {
       if (isStartDate) {
@@ -24,39 +41,35 @@ function CardDatesPopup() {
             from: newSelected,
             to: undefined,
           }));
+          setTempFromDate(format(newSelected, "MM/dd/yyyy")); // Update temp state
         }
       } else if (isEndDate) {
         if (newSelected) {
           setDatePickerValue(() => ({ from: undefined, to: newSelected }));
+          setTempToDate(format(newSelected, "MM/dd/yyyy")); // Update temp state
         }
       } else if (!isStartDate && !isEndDate) {
         if (newSelected) {
           setIsEndDate(true);
           setDatePickerValue(() => ({ from: undefined, to: newSelected }));
+          setTempToDate(format(newSelected, "MM/dd/yyyy")); // Update temp state
         }
       }
     }
   }
   const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
-  function getDateAndTime(date: Date) {
-    return `${format(
-      date,
-      "MM/dd/yyyy"
-    )} ${date.getHours()}:${date.getMinutes()}`;
-  }
-
   function toggleDueDate() {
     if (!isStartDate && isEndDate) {
       setDatePickerValue({ from: undefined, to: undefined });
-    }
-    if (!isStartDate && !isEndDate) {
+      setTempToDate(""); // Clear temp state when unchecked
+    } else if (!isStartDate && !isEndDate) {
       setDatePickerValue({ from: undefined, to: tomorrow });
-    }
-    if (isStartDate && isEndDate) {
+      setTempToDate(format(tomorrow, "MM/dd/yyyy")); // Update temp state when checked
+    } else if (isStartDate && isEndDate) {
       setDatePickerValue({ from: datePickerValue.from, to: undefined });
-    }
-    if (isStartDate && !isEndDate) {
+      setTempToDate(""); // Clear temp state when unchecked
+    } else if (isStartDate && !isEndDate) {
       const nextDayAfterStartDate =
         datePickerValue.from &&
         new Date(datePickerValue.from.getTime() + 24 * 60 * 60 * 1000);
@@ -64,6 +77,7 @@ function CardDatesPopup() {
         to: nextDayAfterStartDate,
         from: datePickerValue.from,
       });
+      setTempToDate(format(nextDayAfterStartDate!, "MM/dd/yyyy")); // Update temp state when checked
     }
     setIsEndDate((prev) => !prev);
   }
@@ -71,15 +85,19 @@ function CardDatesPopup() {
   function toggleStartDate() {
     if (isStartDate && !isEndDate) {
       setDatePickerValue({ from: undefined, to: undefined });
+      setTempFromDate(""); // Clear temp state when unchecked
     }
     if (!isStartDate && !isEndDate) {
       setDatePickerValue({ from: new Date(), to: undefined });
+      setTempFromDate(format(new Date(), "MM/dd/yyyy")); // Update temp state when checked
     }
     if (isStartDate && isEndDate) {
       setDatePickerValue({ from: undefined, to: datePickerValue.to });
+      setTempFromDate(""); // Clear temp state when unchecked
     }
     if (!isStartDate && isEndDate) {
       setDatePickerValue({ to: datePickerValue.to, from: new Date() });
+      setTempFromDate(format(new Date(), "MM/dd/yyyy")); // Update temp state when checked
     }
     setIsStartDate((prev) => !prev);
   }
@@ -93,8 +111,60 @@ function CardDatesPopup() {
     if (mode === "range") {
       if (newSelected) {
         setDatePickerValue(newSelected);
+        setTempFromDate(formatFromDateRange(newSelected)); // Update temp state
+        setTempToDate(formatToDateRange(newSelected)); // Update temp state
       }
     }
+  }
+
+  function updateDateFromInput(dateString: string, type: "from" | "to") {
+    const parsedDate = parse(dateString, "MM/dd/yyyy", new Date());
+
+    if (isValid(parsedDate)) {
+      // Check if the new start date is after the end date or vice versa
+      if (
+        (type === "from" &&
+          datePickerValue.to &&
+          parsedDate > datePickerValue.to) ||
+        (type === "to" &&
+          datePickerValue.from &&
+          parsedDate < datePickerValue.from)
+      ) {
+        // If invalid, revert to the previous value
+        type === "from"
+          ? setTempFromDate(formatFromDateRange(datePickerValue))
+          : setTempToDate(formatToDateRange(datePickerValue));
+        return;
+      }
+
+      // If valid, update the date picker value
+      setDatePickerValue((prev) => ({
+        ...prev,
+        [type]: parsedDate,
+      }));
+      // Update the temp value to match
+      type === "from" ? setTempFromDate(dateString) : setTempToDate(dateString);
+    } else {
+      // If the date is invalid, revert to the previous value
+      type === "from"
+        ? setTempFromDate(formatFromDateRange(datePickerValue))
+        : setTempToDate(formatToDateRange(datePickerValue));
+    }
+  }
+
+  function handleBlur(type: "from" | "to") {
+    // Trigger date update on blur
+    updateDateFromInput(type === "from" ? tempFromDate : tempToDate, type);
+  }
+
+  function formatFromDateRange(dateRange: DateRange) {
+    if (!dateRange?.from) return "";
+    return `${format(dateRange.from, "MM/dd/yyyy")}`;
+  }
+
+  function formatToDateRange(dateRange: DateRange) {
+    if (!dateRange?.to) return "";
+    return `${format(dateRange.to, "MM/dd/yyyy")}`;
   }
 
   // Determine the mode based on user selections
@@ -123,8 +193,11 @@ function CardDatesPopup() {
             <div className=" mr-2">
               <Input
                 placeholder="M/D/YYYY"
+                value={tempFromDate}
                 disabled={!isStartDate}
                 className=" w-[92px] p-[6px] h-[34px] disabled:bg-[#F7F8F9] "
+                onChange={(e) => setTempFromDate(e.target.value)}
+                onBlur={() => handleBlur("from")}
               />
             </div>
           </div>
@@ -142,8 +215,11 @@ function CardDatesPopup() {
             <div className=" mr-2">
               <Input
                 placeholder="M/D/YYYY"
+                value={tempToDate}
                 disabled={!isEndDate}
                 className=" w-[92px] p-[6px] h-[34px] disabled:bg-[#F7F8F9] "
+                onChange={(e) => setTempToDate(e.target.value)}
+                onBlur={() => handleBlur("to")}
               />
             </div>
           </div>
