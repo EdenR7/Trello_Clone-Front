@@ -16,17 +16,13 @@ function CardCoverPopup(props: CardCoverPopupProps) {
   const bg = card.bgCover;
 
   const { mutate: changeBackground } = useChangeBackground(boardId!);
-  //   const [activeBgState, setActiveBgState] = useState<"Left" | "Right" | null>(
-  //     null
-  //   );
-  //   const [activeColor, setActiveColor] = useState<string | null>(null);
 
   const [activeBgState, setActiveBgState] = useLocalStorage<
     "Header" | "Cover" | null
-  >("trella-background-active-state", null);
+  >(`trella-background-active-state-${card._id}`, null);
 
   const [activeColor, setActiveColor] = useLocalStorage<string | null>(
-    "trella-background-color",
+    `trella-card-background-color-${card._id}`,
     null
   );
 
