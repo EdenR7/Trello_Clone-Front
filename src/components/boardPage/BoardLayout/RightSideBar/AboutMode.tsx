@@ -6,12 +6,9 @@ import { IBoard } from "@/types/board.types";
 import { useQueryClient } from "@tanstack/react-query";
 import { List, User, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { SideBarModeProps } from "./BoardSideBar";
 
-export interface AboutModeProps {
-  boardId: string;
-}
-
-function AboutMode({ boardId }: AboutModeProps) {
+function AboutMode({ boardId }: SideBarModeProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   const [editDescription, setEditDescription] = useState(false);

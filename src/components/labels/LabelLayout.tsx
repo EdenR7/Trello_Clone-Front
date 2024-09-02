@@ -7,12 +7,9 @@ import { Pencil } from "lucide-react";
 import PopoverLayout from "../general/PopoverLayout";
 import { Separator } from "../ui/separator";
 import { CreateAndEditLabelLayout } from "./CreateAndEditLabelLayout.tsx";
+import { SideBarModeProps } from "../boardPage/BoardLayout/RightSideBar/BoardSideBar.tsx";
 
-interface LabelLayoutProps {
-  boardId: string;
-}
-
-function LabelLayout({ boardId }: LabelLayoutProps) {
+function LabelLayout({ boardId }: SideBarModeProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   const [showAllLabels, setShowAllLabels] = useState(false);

@@ -133,6 +133,7 @@ function PopoverLayout({
   triggerText,
   triggerVariant = "default",
   trigger,
+  side,
   popoverClassName,
 }: PopoverLayoutProps) {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -159,7 +160,7 @@ function PopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side="bottom"
+        side={side}
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">

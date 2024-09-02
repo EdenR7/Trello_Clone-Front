@@ -1,18 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArchiveRestore, Eye, Info, Minus, Tag } from "lucide-react";
-import { BoardStyle } from "../BoardLayout";
-import { SideBarMode } from "./BoardSideBar";
-
-interface RightSideBarNormalModeProps {
-  boardStyle: BoardStyle | undefined;
-  setSideBarMode: React.Dispatch<React.SetStateAction<SideBarMode>>;
-}
+import { SideBarModeProps } from "./BoardSideBar";
 
 function RightSideBarNormalMode({
   boardStyle,
   setSideBarMode,
-}: RightSideBarNormalModeProps) {
+}: SideBarModeProps) {
+  if (!setSideBarMode) return null;
   return (
     <ul className=" flex flex-col gap-3">
       <li>
@@ -44,10 +39,10 @@ function RightSideBarNormalMode({
       <li>
         <Button
           onClick={() => setSideBarMode("Change background")}
-          className=" flex gap-3 w-full m-0 justify-start font-normal p-[6px] rounded-lg"
+          className=" flex gap-3 w-full m-0 justify-start items-center font-normal p-[6px] rounded-lg"
           variant={"naked"}
         >
-          <span className=" w-5 h-5" style={boardStyle} />
+          <span className=" w-5 h-5 rounded-md" style={boardStyle} />
           <span>Change background</span>
         </Button>
       </li>

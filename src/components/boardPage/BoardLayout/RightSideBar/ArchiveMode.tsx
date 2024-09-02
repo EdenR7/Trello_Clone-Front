@@ -3,12 +3,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import ArchiveLists from "./ArchiveLists";
 import ArchiveCards from "./ArchiveCards";
+import { SideBarModeProps } from "./BoardSideBar";
 
-interface ArchiveModeProps {
-  boardId: string;
-}
-
-function ArchiveMode({ boardId }: ArchiveModeProps) {
+function ArchiveMode({ boardId }: SideBarModeProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   const [onArchiveLists, setOnArchiveLists] = useState(true);

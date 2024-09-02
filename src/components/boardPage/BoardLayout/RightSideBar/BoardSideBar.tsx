@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronLeft, X } from "lucide-react";
-import { getBoardBgStyle } from "../BoardLayout";
+import { BoardStyle, getBoardBgStyle } from "../BoardLayout";
 import { IBoard } from "@/types/board.types";
 import { useState } from "react";
 import RightSideBarNormalMode from "./NormalMode";
@@ -10,11 +9,11 @@ import LabelLayout from "@/components/labels/LabelLayout";
 import AboutMode from "./AboutMode";
 import ArchiveMode from "./ArchiveMode";
 import BackgroundMode from "./BackgroundMode";
-
-interface BoardSideBarProps {
+export interface SideBarModeProps {
   boardId: string;
-  setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isSideBarOpen: boolean;
+  setIsSideBarOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSideBarMode?: React.Dispatch<React.SetStateAction<SideBarMode>>;
+  boardStyle?: BoardStyle | undefined;
 }
 
 export type SideBarMode =
@@ -24,6 +23,19 @@ export type SideBarMode =
   | "Change background"
   | "Labels";
 
+const SIDEBAR_MODE_OPTIONS = {
+  Menu: RightSideBarNormalMode,
+  "About this board": AboutMode,
+  Archive: ArchiveMode,
+  "Change background": BackgroundMode,
+  Labels: LabelLayout,
+};
+interface BoardSideBarProps {
+  boardId: string;
+  setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isSideBarOpen: boolean;
+}
+
 export function BoardSideBar({
   boardId,
   setIsSideBarOpen,
@@ -32,6 +44,8 @@ export function BoardSideBar({
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   const [sideBarMode, setSideBarMode] = useState<SideBarMode>("Menu");
+
+  const CurrentSidebarMode = SIDEBAR_MODE_OPTIONS[sideBarMode];
 
   if (!board) return null;
   let boardStyle = getBoardBgStyle(board.bg);
@@ -75,21 +89,16 @@ export function BoardSideBar({
         <BackgroundMode
           setIsSideBarOpen={setIsSideBarOpen}
           setSideBarMode={setSideBarMode}
+          boardId={boardId}
         />
       ) : (
         <div className="  overflow-x-auto h-[calc(100%-68px)]">
-          {/* <Separator className=" mb-3" /> */}
-          {sideBarMode === "Menu" && (
-            <RightSideBarNormalMode
-              setSideBarMode={setSideBarMode}
-              boardStyle={boardStyle}
-            />
-          )}
-          {sideBarMode === "About this board" && (
-            <AboutMode boardId={boardId} />
-          )}
-          {sideBarMode === "Archive" && <ArchiveMode boardId={boardId} />}
-          {sideBarMode === "Labels" && <LabelLayout boardId={boardId} />}
+          <CurrentSidebarMode
+            boardStyle={boardStyle}
+            setIsSideBarOpen={setIsSideBarOpen}
+            setSideBarMode={setSideBarMode}
+            boardId={boardId}
+          />
         </div>
       )}
     </div>

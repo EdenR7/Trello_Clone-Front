@@ -1,12 +1,13 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import NormalMode from "./Background-NormalMode";
 import PhotosMode from "./Background-PhotosMode";
 import ColorsMode from "./Background-ColorsMode";
-import { SideBarMode } from "./BoardSideBar";
+import { SideBarModeProps } from "./BoardSideBar";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useUpdateBg } from "@/hooks/Query hooks/Board hooks/useUpdateBg";
+import { IBgType } from "@/types/board.types";
 
 const backgroundModeOptions = {
   Normal: NormalMode,
@@ -14,18 +15,27 @@ const backgroundModeOptions = {
   Colors: ColorsMode,
 };
 
+export interface BackgroundModeProps {
+  boardId?: string;
+  handleBgChange: (background: string, bgType: IBgType) => void;
+}
+
 export type BackgroundModeType = "Normal" | "Photos" | "Colors";
 
 function BackgroundMode({
   setIsSideBarOpen,
   setSideBarMode,
-}: {
-  setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSideBarMode: React.Dispatch<React.SetStateAction<SideBarMode>>;
-}) {
-  const qClient = useQueryClient();
+  boardId,
+}: SideBarModeProps) {
   const [mode, setMode] = useState<BackgroundModeType>("Normal");
+  const bgChanger = useUpdateBg(boardId!);
+
   const CurrentMode = backgroundModeOptions[mode];
+  function handleBgChange(background: string, bgType: string) {
+    bgChanger.mutate({ background, bgType });
+  }
+
+  if (!setIsSideBarOpen || !setSideBarMode) return null;
 
   return (
     <>
@@ -57,8 +67,16 @@ function BackgroundMode({
         </Button>
       </header>
       <Separator />
-      <div className=" pt-3 pb-2 overflow-x-auto h-[calc(100%-68px)]">
-        <CurrentMode setMode={setMode} />
+      <div
+        className={`pt-3 pb-2 overflow-x-auto ${
+          mode === "Photos" && "overflow-y-hidden"
+        } h-[calc(100%-68px)]`}
+      >
+        <CurrentMode
+          boardId={boardId}
+          setMode={setMode}
+          handleBgChange={handleBgChange}
+        />
       </div>
     </>
   );
