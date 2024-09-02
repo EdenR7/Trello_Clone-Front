@@ -29,7 +29,10 @@ function BoardPage() {
               const boardStyle = getBoardBgStyle(board.bg);
 
               return (
-                <li className=" h-[112px] w-[calc(50%-4px)] md:w-[32%] break-950px:w-[23%]">
+                <li
+                  key={board._id}
+                  className=" h-[112px] w-[calc(50%-4px)] md:w-[32%] break-950px:w-[23%]"
+                >
                   <div
                     onClick={() => handleNavigation(board._id)}
                     style={boardStyle}
@@ -55,7 +58,10 @@ function BoardPage() {
               const boardStyle = getBoardBgStyle(board.bg);
 
               return (
-                <li className=" overflow-hidden h-[112px] w-[calc(50%-4px)] md:w-[32%] break-950px:w-[23%]">
+                <li
+                  key={board._id}
+                  className=" overflow-hidden h-[112px] w-[calc(50%-4px)] md:w-[32%] break-950px:w-[23%]"
+                >
                   <div
                     onClick={() => handleNavigation(board._id)}
                     style={boardStyle}
