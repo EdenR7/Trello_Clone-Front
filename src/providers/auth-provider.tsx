@@ -3,11 +3,27 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import api from "@/lib/api";
 import { RegisterFormValues } from "@/pages/register-page";
 import { LoginFormValues as LoginCredentials } from "@/pages/login-page";
+import { IBoardBackground } from "@/types/board.types";
 
-interface LoggedInUser {
+export interface IBoardOnUser {
+  bg: IBoardBackground;
+  name: string;
+  _id: string;
+}
+export interface IWorkspaceOnUser {
+  bg: string;
+  name: string;
+  _id: string;
+}
+export interface LoggedInUser {
   _id: string;
   username: string;
-  imageUrl: string | null;
+  email: string;
+  firstName: string;
+  lastName: string;
+  recentBoards: IBoardOnUser[];
+  sttaredBoards: IBoardOnUser[];
+  workspaces: IWorkspaceOnUser[];
 }
 
 interface AuthContextType {

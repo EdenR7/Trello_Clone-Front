@@ -40,7 +40,7 @@ function BoardLayout() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   if (!board) return null;
-  let boardStyle = getBoardBgStyle(board.bg);
+  const boardStyle = getBoardBgStyle(board.bg);
   // console.log("hi");
 
   if (isPending) return <div>Loadinggg....</div>;
