@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { usegetCard } from "@/hooks/Query hooks/Card hooks/useGetCard";
 import CardTitleComponent from "@/components/cardDetailsPage/cardTitle";

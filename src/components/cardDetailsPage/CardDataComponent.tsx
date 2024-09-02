@@ -8,6 +8,7 @@ import CardDetailsLayout from "../general/CardDetailsLayout";
 
 import CardDataLabelsLayout from "./CardDataLabelsLayout";
 import CardDataMembersLayout from "./CardDataMembersLayout";
+import CardDataDateLayout from "./CardDataDateLayout";
 
 interface CardDataComponentProps {
   card: ICard;
@@ -28,6 +29,9 @@ function CardDataComponent(props: CardDataComponentProps) {
       </CardDetailsLayout>
       <CardDetailsLayout>
         <CardDataLabelsLayout card={card} />
+      </CardDetailsLayout>
+      <CardDetailsLayout>
+        <CardDataDateLayout card={card} />
       </CardDetailsLayout>
     </div>
   );
