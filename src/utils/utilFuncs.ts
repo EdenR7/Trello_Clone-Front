@@ -1,3 +1,4 @@
+import { IBoardBackground } from "@/types/board.types";
 import { IList } from "@/types/list.types";
 
 export function countDecimalPlaces(number: number) {
@@ -38,4 +39,31 @@ export function reOrderCardPositions(
     }
     return list;
   });
+}
+
+export type BoardStyle = {
+  backgroundColor?: string;
+  backgroundImage?: string;
+  backgroundSize?: string;
+  backgroundPosition?: string;
+};
+
+export function getBoardBgStyle(bg: IBoardBackground) {
+  let boardStyle: BoardStyle | undefined;
+  if (bg) {
+    boardStyle = {
+      ...(bg.bgType === "color" && {
+        backgroundColor: bg.background,
+      }),
+      ...(bg.bgType === "gradient" && {
+        backgroundImage: bg.background,
+      }),
+      ...(bg.bgType === "image" && {
+        backgroundImage: `url(${bg.background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }),
+    };
+  }
+  return boardStyle;
 }

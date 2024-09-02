@@ -1,5 +1,5 @@
-import { getBoardBgStyle } from "@/components/boardPage/BoardLayout/BoardLayout";
 import { useAuth } from "@/providers/auth-provider";
+import { getBoardBgStyle } from "@/utils/utilFuncs";
 import { Clock, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
