@@ -1,5 +1,5 @@
 import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
-import { Outlet, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ListsRender from "./ListsRender";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useQueryClient } from "@tanstack/react-query";
@@ -11,17 +11,18 @@ import { useState } from "react";
 
 function BoardItems() {
   const { boardId } = useParams();
-  const { data: board, isPending, isError, error } = useGetBoard(boardId!);
+  const { data: board, isPending } = useGetBoard(boardId!);
   const qClient = useQueryClient();
   const updateListPosition = useListUpdatePosition(boardId!);
   const moveCardWithinList = useMoveCardWithinList(boardId!);
   const moveCardToList = useMoveCardToList(boardId!);
   const [hoveredItem, setHoveredItem] = useState<null | number>(null);
 
+  if (isPending) return <div>Loading...</div>;
   if (!board) return null;
 
   function handleListDrag(destination: any, source: any, draggableId: string) {
-    if (destination.index === source.index) return; // there wasnt a change list in position
+    if (destination.index === source.index) return;
 
     const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
     if (!data) return;

@@ -161,7 +161,10 @@ function PopoverLayout({
       </PopoverTrigger>
       <PopoverContent
         side={side}
-        className={cn("w-[304px] rounded-lg", popoverClassName)}
+        className={cn(
+          "h-[calc(100vh-105px)]  break-words whitespace-normal",
+          popoverClassName
+        )}
       >
         <div className="">
           <div className="py-1 px-2 text-center relative grid-cols-popover_layout grid items-center">
