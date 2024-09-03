@@ -24,6 +24,7 @@ function ProtectedRoute({ children }: customRouteProps) {
   const { loggedInUser } = useAuth();
 
   if (loggedInUser === undefined) {
+    console.log(11);
     return null;
   }
 

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronLeft, X } from "lucide-react";
-import { BoardStyle, getBoardBgStyle } from "../BoardLayout";
 import { IBoard } from "@/types/board.types";
 import { useState } from "react";
 import RightSideBarNormalMode from "./NormalMode";
@@ -9,6 +8,7 @@ import LabelLayout from "@/components/labels/LabelLayout";
 import AboutMode from "./AboutMode";
 import ArchiveMode from "./ArchiveMode";
 import BackgroundMode from "./BackgroundMode";
+import { BoardStyle, getBoardBgStyle } from "@/utils/utilFuncs";
 export interface SideBarModeProps {
   boardId: string;
   setIsSideBarOpen?: React.Dispatch<React.SetStateAction<boolean>>;

@@ -11,7 +11,6 @@ function HomeNavBar({
   const location = useLocation();
   const slicedUrl = location.pathname.split("/");
   const endUrl = slicedUrl[slicedUrl.length - 1];
-
   const onHome = endUrl === "";
 
   return (
@@ -26,7 +25,11 @@ function HomeNavBar({
             >
               <Link
                 className=" flex px-2 py-[6px] gap-2 rounded-md"
-                to={`/u/${loggedInUser?.username}/boards`}
+                to={`${
+                  loggedInUser
+                    ? `/u/${loggedInUser.username}/boards`
+                    : "/auth/login"
+                }`}
               >
                 <LayoutDashboard size={18} />
                 <span>Boards</span>
