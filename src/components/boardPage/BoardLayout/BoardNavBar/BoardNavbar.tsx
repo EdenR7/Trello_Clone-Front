@@ -1,16 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useClickOutside from "@/hooks/CustomHooks/useClickOutside";
 import api from "@/lib/api";
 import { useAuth } from "@/providers/auth-provider";
 import { IBoard } from "@/types/board.types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Ellipsis, ListFilter, Star } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+async function updateBoardNameApi(boardId: string, name: string) {
+  try {
+    const res = await api.patch(`/board/${boardId}/name`, { name });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export interface BoardNavbarProps {
   isSideBarOpen: boolean;
   board: IBoard | undefined;
   setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+export const averageCharacterWidth = 0.6 * 18;
 
 function BoardNavbar({
   isSideBarOpen,
@@ -21,18 +33,53 @@ function BoardNavbar({
   if (!board || !loggedInUser) return null;
   const [onNewTitleInput, setOnNewTitleInput] = useState(false);
   const [boardTitle, setBoardTitle] = useState(board.name);
-  const [inputWidth, setInputWidth] = useState(board.name.length);
+  const newTitlenputRef = useRef<HTMLInputElement>(null);
+  useClickOutside(newTitlenputRef, handleClickOutside);
 
+  const qClient = useQueryClient();
+  const boardNameUpdater = useMutation({
+    mutationFn: ({ name }: { name: string }) =>
+      updateBoardNameApi(board._id, name),
+    onMutate: async ({ name }) => {
+      const previousData: IBoard | undefined = qClient.getQueryData([
+        "board",
+        board._id,
+      ]);
+      qClient.setQueryData(["board", board._id], { ...previousData, name });
+      return { previousData };
+    },
+    onError(error, __, context) {
+      console.log(error);
+      qClient.setQueryData(["board", board._id], context?.previousData);
+    },
+  });
+
+  const adjustedInputFieldWidth =
+    Math.floor(boardTitle.length * averageCharacterWidth) + 35;
   const isStarred = useMemo(() => {
     return loggedInUser?.sttaredBoards.find((b) => b._id === board._id);
   }, [loggedInUser?.sttaredBoards, board._id]);
 
   useEffect(() => {
-    const newWidth = boardTitle.length;
-    const averageCharacterWidth = 0.6 * 18;
-    setInputWidth(Math.floor(newWidth * averageCharacterWidth) + 1);
-  }, [boardTitle]);
-  //Click outside to save the new title + validation
+    if (onNewTitleInput) {
+      newTitlenputRef.current?.focus();
+      newTitlenputRef.current?.select();
+    }
+  }, [onNewTitleInput]);
+
+  function handleClickOutside() {
+    if (onNewTitleInput) {
+      setOnNewTitleInput(false);
+      if (isValidBoardTitle(boardTitle)) {
+        boardNameUpdater.mutate({ name: boardTitle });
+      } else {
+        setBoardTitle(board?.name as string);
+      }
+    }
+  }
+  function isValidBoardTitle(title: string): boolean {
+    return title.trim().length > 0 && title[0] !== " ";
+  }
 
   async function handleChangeStarredStatus() {
     try {
@@ -57,10 +104,11 @@ function BoardNavbar({
         >
           {onNewTitleInput ? (
             <Input
+              ref={newTitlenputRef}
               onChange={(e) => setBoardTitle(e.target.value)}
-              style={{ width: `${inputWidth + 20}px` }}
+              style={{ width: `${Math.max(adjustedInputFieldWidth, 48)}px` }}
               value={boardTitle}
-              className={`text-text_dark_blue px-[10px] h-8 mx-2`}
+              className={`text-text_dark_blue text-base h-8 mx-2`}
             />
           ) : (
             <h1
