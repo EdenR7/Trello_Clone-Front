@@ -1,5 +1,6 @@
 import api from "@/lib/api";
 import { IBoard } from "@/types/board.types";
+import { ICard } from "@/types/card.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export async function unarchiveCardApi(boardId: string, cardId: string) {
@@ -14,12 +15,16 @@ export async function unarchiveCardApi(boardId: string, cardId: string) {
 export function useUnArchiveCard(boardId: string) {
   const qClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ boardId, cardId }: { boardId: string; cardId: string }) =>
+    mutationFn: ({ cardId }: { cardId: string }) =>
       unarchiveCardApi(boardId, cardId),
-    onMutate: async ({ boardId, cardId }) => {
+    onMutate: async ({ cardId }) => {
       const prevBoard: IBoard | undefined = qClient.getQueryData([
         "board",
         boardId,
+      ]);
+      const prevCard: ICard | undefined = qClient.getQueryData([
+        "card",
+        cardId,
       ]);
       if (prevBoard) {
         const newArchivedCards = prevBoard.archivedCards.filter(
@@ -30,16 +35,22 @@ export function useUnArchiveCard(boardId: string) {
           archivedCards: newArchivedCards,
         });
       }
-      return { prevBoard };
+      if (prevCard) {
+        const updatedCard = { ...prevCard, isArchived: false };
+        qClient.setQueryData(["card", cardId], updatedCard);
+      }
+      return { prevBoard, prevCard };
     },
-    onError(error, _, context) {
+    onError(error, { cardId }, context) {
       console.log(error);
       if (context) {
         qClient.setQueryData(["board", boardId], context.prevBoard);
+        qClient.setQueryData(["card", cardId], context.prevCard);
       }
     },
-    onSettled: (_, __, { boardId }) => {
+    onSettled: (_, __, { cardId }) => {
       qClient.invalidateQueries({ queryKey: ["lists", boardId] });
+      qClient.invalidateQueries({ queryKey: ["card", cardId] });
     },
   });
 }

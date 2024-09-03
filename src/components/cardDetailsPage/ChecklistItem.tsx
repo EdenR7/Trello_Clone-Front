@@ -49,12 +49,19 @@ export default function ChecklistItem({
   >(null);
   const { mutate: updateChecklistTitle } = useUpdateChecklistTitle();
   const { mutate: deleteChecklist } = useDeleteChecklist(boardId!);
+  const [isNew, setIsNew] = useState(true);
 
   useEffect(() => {
     if (addItemTextareaRef.current && activeChecklistId === checklist._id) {
       addItemTextareaRef.current.focus();
     }
   }, [activeChecklistId]);
+
+  useEffect(() => {
+    if (!hideCheckedItems[checklist._id] && checklist.todos.length > 0) {
+      setIsNew(false);
+    }
+  }, [activeChecklistId, hideCheckedItems]);
 
   function handleAddItem(todoTitle: string) {
     if (addItemTextareaRef.current) {
@@ -151,7 +158,7 @@ export default function ChecklistItem({
       </div>
       <div className="relative mb-[6px]">
         <ChecklistProgress checklist={progressChecklist} />
-        {checklist.todos.length === 0 && (
+        {!isNew && checklist.todos.length === 0 && (
           <span className=" block mt-2 ml-10">
             Everything in this checklist is complete!
           </span>

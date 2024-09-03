@@ -24,15 +24,21 @@ function CardDataComponent(props: CardDataComponentProps) {
 
   return (
     <div className=" mt-2 ml-10 ">
-      <CardDetailsLayout>
-        <CardDataMembersLayout card={card} />
-      </CardDetailsLayout>
-      <CardDetailsLayout>
-        <CardDataLabelsLayout card={card} />
-      </CardDetailsLayout>
-      <CardDetailsLayout>
-        <CardDataDateLayout card={card} />
-      </CardDetailsLayout>
+      {card.members.length > 0 && (
+        <CardDetailsLayout>
+          <CardDataMembersLayout card={card} />
+        </CardDetailsLayout>
+      )}
+      {card.labels.length > 0 && (
+        <CardDetailsLayout>
+          <CardDataLabelsLayout card={card} />
+        </CardDetailsLayout>
+      )}
+      {(card.startDate || card.dueDate) && (
+        <CardDetailsLayout>
+          <CardDataDateLayout card={card} />
+        </CardDetailsLayout>
+      )}
     </div>
   );
 }

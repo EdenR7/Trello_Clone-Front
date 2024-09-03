@@ -108,12 +108,12 @@ function BoardNavbar({
               onChange={(e) => setBoardTitle(e.target.value)}
               style={{ width: `${Math.max(adjustedInputFieldWidth, 48)}px` }}
               value={boardTitle}
-              className={`text-text_dark_blue text-base h-8 mx-2`}
+              className={`text-text_dark_blue text-base h-8 mx-2 px-[10px] py-0`}
             />
           ) : (
             <h1
               onClick={() => setOnNewTitleInput(true)}
-              className=" cursor-pointer truncate px-[10px] "
+              className=" cursor-pointer truncate px-[10px]  "
             >
               {board.name}
             </h1>

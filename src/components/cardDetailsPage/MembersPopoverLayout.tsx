@@ -16,6 +16,7 @@ interface MembersPopoverLayoutProps {
 
 function MembersPopoverLayout(props: MembersPopoverLayoutProps) {
   const { card, board } = props;
+
   const [memberSearch, setMemberSearch] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const boardId = board._id;
