@@ -12,6 +12,8 @@ import CardDescriptionComponent from "@/components/cardDetailsPage/cardDescripti
 import CardChecklistComponent from "@/components/cardDetailsPage/CardChecklistComponent";
 import CardDataComponent from "@/components/cardDetailsPage/CardDataComponent";
 import CardCoverComponent from "@/components/cardDetailsPage/CardCoverComponent ";
+import { Button } from "@/components/ui/button";
+import { UserRound } from "lucide-react";
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
   const { data: card, isPending } = usegetCard(cardId!);
@@ -51,7 +53,15 @@ function CardDetailsPage() {
 
               <CardChecklistComponent card={card} />
             </div>
-            <div>{/* sidebar div */}</div>
+            <div className=" h-10">
+              <Button
+                className=" mr-2 w-[calc(50% - 8px)] "
+                variant={"secondary"}
+              >
+                <UserRound />
+              </Button>
+              <h3>wsdasda</h3>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

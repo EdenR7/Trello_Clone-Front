@@ -8,6 +8,8 @@ import CardChecklistComponent from "@/components/cardDetailsPage/CardChecklistCo
 import CardDataComponent from "@/components/cardDetailsPage/CardDataComponent";
 import CardCoverComponent from "@/components/cardDetailsPage/CardCoverComponent ";
 import { Modal } from "@/components/ui/CardDetailsModal";
+import { Tag, UserRound } from "lucide-react";
+import CardSidebarButton from "@/components/general/CardSidebarButton";
 
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
@@ -35,7 +37,10 @@ function CardDetailsPage() {
 
             <CardChecklistComponent card={card} />
           </div>
-          <div>{/* sidebar div */}</div>
+          <div className=" flex">
+            <CardSidebarButton icon={<UserRound size={20} />} text="Members" />
+            <CardSidebarButton icon={<Tag size={20} />} text="Labels" />
+          </div>
         </div>
       </Modal>
     )
