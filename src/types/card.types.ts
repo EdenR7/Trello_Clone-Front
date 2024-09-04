@@ -3,6 +3,9 @@ import { IChecklist } from "./checklist.types";
 
 interface ICardMember extends IMember {
   memberId: string;
+  firstName: string;
+  lastName: string;
+  username: string;
 }
 
 interface ICardList {

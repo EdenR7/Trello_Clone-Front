@@ -34,8 +34,6 @@ export function ExpandedMembers({
     return acc + 1;
   }, 0);
 
-  const allMembersSelected = selectedMembersCount === members.length;
-
   const handleSelect = (e: React.MouseEvent, value: IMember) => {
     e.preventDefault();
     toggleMemberSelection(value.username);
@@ -47,7 +45,6 @@ export function ExpandedMembers({
     );
     return isSelected ? true : false;
   }
-
 
   function toggleAllMembers() {
     if (selectedMembersCount > 0) {

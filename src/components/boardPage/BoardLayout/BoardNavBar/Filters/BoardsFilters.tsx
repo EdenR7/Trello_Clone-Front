@@ -6,7 +6,6 @@ import MembersFilter from "./MembersFilter";
 import DatesFilter from "./DatesFilter";
 import LabelsFilter from "./LabelsFilter";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
 import FilterDefinition from "./FilterDefinition";
 
 interface BoardsFiltersProps {

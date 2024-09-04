@@ -17,7 +17,7 @@ function CardItem(props: CardItemProps) {
     "trella-labels-open-state",
     false
   );
-  console.log(card.labels);
+  console.log(card.members);
 
   return (
     <Draggable draggableId={card._id} index={index}>

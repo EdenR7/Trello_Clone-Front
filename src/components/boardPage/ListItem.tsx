@@ -1,6 +1,8 @@
 import { IList } from "@/types/list.types";
 import CardItem from "./CardItem";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { useSearchParams } from "react-router-dom";
+import { useMemo } from "react";
 
 interface ListItemProps {
   list: IList;
@@ -8,17 +10,56 @@ interface ListItemProps {
   setHoveredItem: (index: number | null) => void;
 }
 function ListItem({ list, index, setHoveredItem }: ListItemProps) {
-  const handleDragOver = (index: number) => {
-    console.log(1);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const filterDefinition = localStorage.getItem("filterDefinition");
+  const membersFilter = searchParams.get("members")?.split(",") || "";
+  const labelsFilter = searchParams.get("labels")?.split(",") || "";
+  const dueDateFilter = searchParams.get("dueDate")?.split(",") || "";
+
+  // console.log("filterDefinition", filterDefinition);
+  // console.log("labelsFilter", labelsFilter);
+  // console.log("dueDateFilter", dueDateFilter);
+
+  const filteredCards = list.cards.filter((card) => {
+    const matchesMembers = membersFilter
+      ? card.members.some((member) => membersFilter.includes(member.username))
+      : true;
+
+    // const matchesLabels =
+    //   !labelsFilter || card.labels.some((label) => label === labelsFilter);
+    // const matchesDueDate = !dueDateFilter || card.dueDate === dueDateFilter;
+    console.log("members", card.members);
+
+    console.log("matchesMembers", matchesMembers);
+    return matchesMembers;
+    // return matchesMembers && matchesLabels && matchesDueDate;
+  });
+  // const filteredCards = useMemo(() => {
+  //   return list.cards.filter((card) => {
+  //     const matchesMembers = membersFilter
+  //       ? card.members.some((member) => membersFilter.includes(member.username))
+  //       : true;
+
+  //     // const matchesLabels =
+  //     //   !labelsFilter || card.labels.some((label) => label === labelsFilter);
+  //     // const matchesDueDate = !dueDateFilter || card.dueDate === dueDateFilter;
+  //     console.log("members",card.members);
+
+  //     console.log("matchesMembers", matchesMembers);
+  //     return matchesMembers;
+  //     // return matchesMembers && matchesLabels && matchesDueDate;
+  //   });
+  // }, [list.cards, membersFilter, labelsFilter, dueDateFilter]);
+
+  const handleDragOver = (index: number) => {
     setHoveredItem(index);
   };
 
   const handleDragLeave = () => {
-    console.log(2);
-
     setHoveredItem(null);
   };
+
   return (
     <Draggable draggableId={list._id} index={index}>
       {(provided) => (
@@ -42,7 +83,7 @@ function ListItem({ list, index, setHoveredItem }: ListItemProps) {
                   className=" flex flex-col gap-3"
                 >
                   cards:
-                  {list.cards.map((card, index) => (
+                  {filteredCards.map((card, index) => (
                     <CardItem key={card._id} card={card} index={index} />
                   ))}
                   {provided.placeholder}
