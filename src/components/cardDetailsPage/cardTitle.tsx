@@ -83,6 +83,8 @@ import { useRef, useState } from "react";
 import { CreditCard } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import DatePopoverLayout from "../general/DatePopoverLayout";
+import MoveCardPopoverLayout from "./card sidebar/MoveCardPopoverLayout";
 
 interface CardTitleProps {
   card: ICard;
@@ -92,6 +94,7 @@ interface CardTitleProps {
 function CardTitleComponent({ card, boardId }: CardTitleProps) {
   const { mutate: updateCardTitle } = useUpdateCardTitle(boardId);
   const [isFocused, setIsFocused] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   function handleTitleBlur() {
@@ -138,9 +141,21 @@ function CardTitleComponent({ card, boardId }: CardTitleProps) {
         <div className=" inline-block ml-[2px] mr-2 mx-2 ">
           <p className=" text-gray-500 inline-block mt-1 mb-2">
             in list{" "}
-            <span className="border-b border-b-gray-500 cursor-pointer">
-              {card.list.name}
-            </span>
+            <DatePopoverLayout
+              internalOpen={isPopoverOpen}
+              setInternalOpen={setIsPopoverOpen}
+              trigger={
+                <span className="border-b border-b-gray-500 cursor-pointer">
+                  {card.list.name}
+                </span>
+              }
+              title="Move card"
+            >
+              <MoveCardPopoverLayout
+                setIsPopoverOpen={setIsPopoverOpen}
+                card={card}
+              />
+            </DatePopoverLayout>
           </p>
         </div>
       </div>

@@ -17,14 +17,25 @@ function CardCoverPopup(props: CardCoverPopupProps) {
 
   const { mutate: changeBackground } = useChangeBackground(boardId!);
 
+  // const [activeBgState, setActiveBgState] = useLocalStorage<
+  //   "Header" | "Cover" | null
+  // >(`trella-background-active-state-${card._id}`, null);
+
   const [activeBgState, setActiveBgState] = useLocalStorage<
     "Header" | "Cover" | null
-  >(`trella-background-active-state-${card._id}`, null);
+  >(
+    `trella-background-active-state-${card._id}`,
+    card.bgCover.isCover ? "Cover" : "Header"
+  );
 
   const [activeColor, setActiveColor] = useLocalStorage<string | null>(
     `trella-card-background-color-${card._id}`,
-    null
+    card.bgCover.bg
   );
+  // const [activeColor, setActiveColor] = useLocalStorage<string | null>(
+  //   `trella-card-background-color-${card._id}`,
+  //   null
+  // );
 
   const colors = [
     "#4BCE97",

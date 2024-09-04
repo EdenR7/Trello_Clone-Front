@@ -162,11 +162,11 @@ function PopoverLayout({
       <PopoverContent
         side={side}
         className={cn(
-          " break-words whitespace-normal",
+          " break-words whitespace-normal w-[304px]",
           popoverClassName
         )}
       >
-        <div className="">
+        <div className=" w-[304px]">
           <div className="py-1 px-2 text-center relative grid-cols-popover_layout grid items-center">
             <h4 className="px-8  font-semibold col-start-2 text-ellipsis overflow-hidden block text-gray-600 whitespace-nowrap">
               {title}
@@ -183,7 +183,7 @@ function PopoverLayout({
               <X size={18} color="gray" />
             </Button>
           </div>
-          <div className="max-h-835px px-3 pb-3">{children}</div>
+          <div className="max-h-835px px-3 pb-3 w-[304px]">{children}</div>
         </div>
       </PopoverContent>
     </Popover>
