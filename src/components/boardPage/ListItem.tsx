@@ -27,7 +27,7 @@ function ListItem({ list, index, setHoveredItem }: ListItemProps) {
           ref={provided.innerRef}
           onDragOver={() => handleDragOver(index)}
           onDragLeave={handleDragLeave}
-          className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden w-[272px] bg-white "
+          className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden w-[272px] bg-gray-200 "
           key={list._id}
         >
           <div {...provided.dragHandleProps}>
