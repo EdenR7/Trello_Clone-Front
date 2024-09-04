@@ -162,7 +162,7 @@ function PopoverLayout({
       <PopoverContent
         side={side}
         className={cn(
-          "h-[calc(100vh-105px)]  break-words whitespace-normal",
+          " break-words whitespace-normal",
           popoverClassName
         )}
       >

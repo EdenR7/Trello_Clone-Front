@@ -3,7 +3,7 @@ import { useAuth } from "@/providers/auth-provider";
 import { IBoard } from "@/types/board.types";
 import { Ellipsis, ListFilter } from "lucide-react";
 import { useState } from "react";
-import FiltersLayout from "./FiltersLayout";
+import FiltersLayout from "./Filters/FiltersLayout";
 import BoardsFilters from "./Filters/BoardsFilters";
 import BoardTitle from "./BoardTitle";
 import BoardStarring from "./BoardStarring";

@@ -1,9 +1,9 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import MakeUserIcon from "@/utils/makeUserIcon";
 import { User } from "lucide-react";
-import ExpandedMembers from "../ExpandMembers";
+import ExpandedMembers from "./ExpandMembers";
 import { LoggedInUser } from "@/providers/auth-provider";
-import { IBoard, IMember } from "@/types/board.types";
+import { IBoard } from "@/types/board.types";
 // import { SetURLSearchParams } from "react-router-dom";
 
 interface MembersFilterProps {
@@ -70,17 +70,14 @@ function MembersFilter({
             <p className=" text-text_dark_blue">Cards assigned to me</p>
           </div>
         </li>
-        <li className=" px-2 pt-1 flex items-center gap-4">
-          <Checkbox
-            color=""
-            className=" border-text_dark_blue/50"
-          />
-          <ExpandedMembers
-            toggleMemberSelection={toggleMemberSelection}
-            selectedMembersFilters={selectedMembersFilters}
-            members={board.members}
-          />
-        </li>
+        <ExpandedMembers
+          selectedMembersFilters={selectedMembersFilters}
+          toggleMemberSelection={toggleMemberSelection}
+          loggedInUser={loggedInUser}
+          members={board.members.filter(
+            (member) => member.username !== loggedInUser.username
+          )}
+        />
       </ul>
     </div>
   );
