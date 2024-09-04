@@ -3,6 +3,11 @@ import { IBoard } from "@/types/board.types";
 import { LoggedInUser } from "@/providers/auth-provider";
 import { useSearchParams } from "react-router-dom";
 import MembersFilter from "./MembersFilter";
+import DatesFilter from "./DatesFilter";
+import LabelsFilter from "./LabelsFilter";
+import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import FilterDefinition from "./FilterDefinition";
 
 interface BoardsFiltersProps {
   board: IBoard;
@@ -13,12 +18,14 @@ function BoardsFilters({ board, loggedInUser }: BoardsFiltersProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const updateUrlParams = (key: string, values: string[]) => {
-    if (values.length > 0) {
-      searchParams.set(key, values.join(","));
-    } else {
-      searchParams.delete(key);
-    }
-    setSearchParams(searchParams);
+    setSearchParams((params) => {
+      if (values.length > 0) {
+        params.set(key, values.join(","));
+      } else {
+        params.delete(key);
+      }
+      return params;
+    });
   };
 
   return (
@@ -39,6 +46,17 @@ function BoardsFilters({ board, loggedInUser }: BoardsFiltersProps) {
         loggedInUser={loggedInUser}
         updateUrlParams={updateUrlParams}
       />
+      <DatesFilter
+        searchParams={searchParams}
+        updateUrlParams={updateUrlParams}
+      />
+      <LabelsFilter
+        board={board}
+        searchParams={searchParams}
+        updateUrlParams={updateUrlParams}
+      />
+      <Separator className=" my-4" />
+      <FilterDefinition />
     </div>
   );
 }
