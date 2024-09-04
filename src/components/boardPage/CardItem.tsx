@@ -28,7 +28,7 @@ function CardItem(props: CardItemProps) {
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
-            <div className="  h-14 cursor-pointer shadow-sm">
+            <div className="  h-14 cursor-pointer shadow rounded-lg">
               <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
                 <div
                   className=" hover:outline hover:outline-2  hover:outline-primary flex rounded-lg min-h-full py-2 pr-2 pl-3"
@@ -48,7 +48,7 @@ function CardItem(props: CardItemProps) {
             ref={provided.innerRef}
           >
             <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
-              <div className=" relative min-h-9 rounded-lg bg-white shadow-sm scroll-m-2  hover:outline hover:outline-2  hover:outline-primary">
+              <div className=" relative min-h-9 rounded-lg bg-white shadow scroll-m-2   hover:outline hover:outline-2  hover:outline-primary">
                 {card.bgCover.bg !== "" && (
                   <div
                     className=" h-9 overflow-hidden rounded-t-lg relative"
