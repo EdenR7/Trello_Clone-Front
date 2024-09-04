@@ -4,6 +4,9 @@ import { Draggable } from "@hello-pangea/dnd";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Link, useParams } from "react-router-dom";
 import CardItemLabels from "../CardItem/CardItemLabels";
+import CardItemDates from "../CardItem/CardItemDates";
+import { AlignLeft } from "lucide-react";
+import CardItemChecklist from "../CardItem/CardItemChecklist";
 
 interface CardItemProps {
   card: ICard;
@@ -17,7 +20,9 @@ function CardItem(props: CardItemProps) {
     "trella-labels-open-state",
     false
   );
-  console.log(card.members);
+  const hasTodos = card.checklist.some(
+    (checklist) => checklist.todos.length > 0
+  );
 
   return (
     <Draggable draggableId={card._id} index={index}>
@@ -69,6 +74,17 @@ function CardItem(props: CardItemProps) {
                   <p className=" mb-1 block overflow-hidden break-words whitespace-normal">
                     {card.title}
                   </p>
+                  <div className=" flex flex-wrap max-w-full gap-1">
+                    {(card.dueDate || card.startDate) && (
+                      <CardItemDates card={card} />
+                    )}
+                    {card.description && (
+                      <span className=" flex relative items-center justify-center w-fit max-w-full h-6 mb-1 p-[2px] rounded-sm text-sm">
+                        <AlignLeft size={16} strokeWidth={1.75} />
+                      </span>
+                    )}
+                    {hasTodos && <CardItemChecklist card={card} />}
+                  </div>
                 </div>
               </div>
             </Link>

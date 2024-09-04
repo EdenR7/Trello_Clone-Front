@@ -6,9 +6,10 @@ import { ChevronDown } from "lucide-react";
 import CardDatesPopup from "./CardDatesPopup";
 import DatePopoverLayout from "../general/DatePopoverLayout";
 import { useState } from "react";
-import { addHours, format, isBefore } from "date-fns";
+import { format } from "date-fns";
 import { useParams } from "react-router-dom";
 import useToggleCardIsComplete from "@/hooks/Query hooks/Card hooks/useToggleCardIsComplete";
+import { getDueDateLabel } from "@/utils/getCardLabelState";
 
 interface CardDataDateLayoutProps {
   card: ICard;
@@ -33,26 +34,6 @@ function CardDataDateLayout(props: CardDataDateLayoutProps) {
   function formatDate(dateString: Date) {
     const date = new Date(dateString);
     return format(date, "MMM dd, yyyy");
-  }
-
-  function getDueDateLabel(dueDate: Date | undefined) {
-    if (!dueDate) return "";
-
-    if (card.isComplete) {
-      return "Complete";
-    }
-
-    const now = new Date();
-    const due = new Date(dueDate);
-    const oneDayAhead = addHours(now, 24);
-
-    if (isBefore(due, now)) {
-      return "Overdue";
-    } else if (isBefore(now, due) && isBefore(due, oneDayAhead)) {
-      return "Due soon";
-    }
-
-    return "";
   }
 
   let dateStringToDisplay = "";
@@ -95,19 +76,18 @@ function CardDataDateLayout(props: CardDataDateLayoutProps) {
               {card.dueDate && (
                 <span
                   className={`my-auto ml-2 px-1 rounded-sm text-xs leading-4 ${
-                    getDueDateLabel(card.dueDate) === "" && "hidden"
+                    getDueDateLabel(card) === "" && "hidden"
                   } ${
-                    getDueDateLabel(card.dueDate) === "Due soon" &&
-                    "bg-yellow-500"
+                    getDueDateLabel(card) === "Due soon" && "bg-yellow-500"
                   } ${
-                    getDueDateLabel(card.dueDate) === "Overdue" &&
+                    getDueDateLabel(card) === "Overdue" &&
                     "bg-[#ca3521] text-white"
                   } ${
-                    getDueDateLabel(card.dueDate) === "Complete" &&
+                    getDueDateLabel(card) === "Complete" &&
                     "bg-[#1f845a] text-white"
                   }`}
                 >
-                  {getDueDateLabel(card.dueDate)}
+                  {getDueDateLabel(card)}
                 </span>
               )}
 

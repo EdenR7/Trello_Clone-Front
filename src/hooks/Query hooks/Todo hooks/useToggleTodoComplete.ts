@@ -58,7 +58,7 @@ export function useToggleTodoComplete(boardId: string) {
     },
     onSettled: (_, __, { cardId }) => {
       queryClient.invalidateQueries({ queryKey: ["card", cardId] });
-      queryClient.invalidateQueries({ queryKey: ["board", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["lists", boardId] });
     },
   });
 }

@@ -9,7 +9,7 @@ async function updateCardDescription(cardId: string, newDesc: string) {
   return res.data;
 }
 
-export function useUpdateCardDescription() {
+export function useUpdateCardDescription(boardId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ cardId, newDesc }: { cardId: string; newDesc: string }) =>
@@ -39,6 +39,7 @@ export function useUpdateCardDescription() {
     },
     onSettled: (_, __, { cardId }) => {
       queryClient.invalidateQueries({ queryKey: ["card", cardId] });
+      queryClient.invalidateQueries({ queryKey: ["lists", boardId] });
     },
   });
 }

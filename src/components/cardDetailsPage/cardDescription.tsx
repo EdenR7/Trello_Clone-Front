@@ -1,10 +1,11 @@
 import { ICard } from "@/types/card.types";
-import { List } from "lucide-react";
+import { AlignLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useUpdateCardDescription } from "@/hooks/Query hooks/Card hooks/useUpdateCardDescription";
+import { useParams } from "react-router-dom";
 
 interface cardDescriptionProps {
   card: ICard;
@@ -12,10 +13,11 @@ interface cardDescriptionProps {
 
 function CardDescriptionComponent(props: cardDescriptionProps) {
   const { card } = props;
+  const { boardId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { mutate: updateCardDescription } = useUpdateCardDescription();
+  const { mutate: updateCardDescription } = useUpdateCardDescription(boardId!);
 
   useEffect(() => {
     if (isEditing && textareaRef.current) {
@@ -52,7 +54,7 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
   return (
     <div className="  relative py-2 mb-12">
       <div className=" mb-1 py-3 ml-10 relative flex items-center">
-        <List
+        <AlignLeft
           className={`absolute top-3 -left-9 ${
             card.description && card.description.length > 0 && "top-4"
           }`}
