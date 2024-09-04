@@ -17,6 +17,7 @@ import DatesLayout from "@/components/cardDetailsPage/card sidebar/DatesLayout";
 import ArchiveLayout from "@/components/cardDetailsPage/card sidebar/ArchiveLayout";
 import CardArchiveIndicator from "@/components/cardDetailsPage/CardArchiveIndicator";
 import CoverLayout from "@/components/cardDetailsPage/card sidebar/CoverLayout ";
+import MoveCardLayout from "@/components/cardDetailsPage/card sidebar/MoveCardLayout";
 
 function CardDetailsPage() {
   const { boardId, cardId } = useParams();
@@ -58,6 +59,7 @@ function CardDetailsPage() {
             </div>
             <CardDetailsHeader className=" mt-6" title="Actions" />
             <div className=" mb-6 flex flex-wrap break-card_modal:w-[176px] ">
+              <MoveCardLayout card={card} />
               <ArchiveLayout card={card} />
             </div>
           </div>
