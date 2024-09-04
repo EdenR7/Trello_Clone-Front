@@ -39,7 +39,7 @@ function FiltersLayout({
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "h-[calc(100vh-105px)] break-words whitespace-normal w-80 sm:w-[368px]",
+          "h-[calc(100vh-105px)] break-words whitespace-normal w-80 break-400px:w-96",
           popoverClassName
         )}
       >
