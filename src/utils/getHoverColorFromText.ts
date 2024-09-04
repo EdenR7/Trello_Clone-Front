@@ -1,5 +1,13 @@
 import { hexToRgb } from "./getTextColorFromBg";
 
+// Convert RGB to hex
+function rgbToHex(r: number, g: number, b: number): string {
+  const toHex = (component: number) => component.toString(16).padStart(2, "0");
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+// Adjust the color brightness and return hex
 function adjustColorBrightness(hex: string, amount: number): string {
   let { r, g, b } = hexToRgb(hex) || { r: 0, g: 0, b: 0 };
 
@@ -7,7 +15,7 @@ function adjustColorBrightness(hex: string, amount: number): string {
   g = Math.min(255, Math.max(0, g + amount));
   b = Math.min(255, Math.max(0, b + amount));
 
-  return `rgb(${r}, ${g}, ${b})`;
+  return rgbToHex(r, g, b);
 }
 
 // Determine hover background color based on original background color
