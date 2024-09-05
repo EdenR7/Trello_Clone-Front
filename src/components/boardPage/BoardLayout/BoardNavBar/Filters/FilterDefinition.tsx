@@ -7,21 +7,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { SetURLSearchParams } from "react-router-dom";
 
-function FilterDefinition() {
-  const [filterDefinition, setFilterDefinition] = useState(
-    localStorage.getItem("filterDefinition")
-  );
-  
+interface FilterDefinitionProps {
+  // board: IBoard;
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
+}
+
+function FilterDefinition({
+  searchParams,
+  setSearchParams,
+}: FilterDefinitionProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const filtersDefinition = searchParams.get("filtersDefinition") || "Any";
 
   function changeFilterDefinition(
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>,
     value: "Exact" | "Any"
   ) {
     ev.preventDefault();
-    localStorage.setItem("filterDefinition", value);
-    setFilterDefinition(value);
+    setSearchParams((prev) => {
+      prev.set("filtersDefinition", value);
+      return prev;
+    });
   }
 
   return (
@@ -32,7 +42,7 @@ function FilterDefinition() {
           className="font-normal h-10 flex justify-between items-center w-full px-2 py-2 border border-white hover:border-slate-400 transition-colors"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <p>{filterDefinition === "Exact" ? "Exact match" : "Any match"}</p>
+          <p>{filtersDefinition} match</p>
           <ChevronDown size={14} strokeWidth={4} />
         </Button>
       </DropdownMenuTrigger>
@@ -43,7 +53,7 @@ function FilterDefinition() {
       >
         <DropdownMenuItem
           className={`pr-2 border-l-2 border-white text-text_dark_blue hover:border-blue-600 hover:bg-slate-200 cursor-pointer ${
-            filterDefinition !== "Exact" &&
+            filtersDefinition !== "Exact" &&
             "bg-blue-200 text-blue-600 border-blue-600 hover:bg-blue-200/60"
           }`}
           onClick={(e) => changeFilterDefinition(e, "Any")}
@@ -55,7 +65,7 @@ function FilterDefinition() {
         </DropdownMenuItem>
         <DropdownMenuItem
           className={`pr-2 border-l-2 text-text_dark_blue border-white hover:border-blue-600 hover:bg-slate-200 cursor-pointer ${
-            filterDefinition === "Exact" &&
+            filtersDefinition === "Exact" &&
             "bg-blue-200 text-blue-600 border-blue-600 hover:bg-blue-200/60"
           }`}
           onClick={(e) => changeFilterDefinition(e, "Exact")}
