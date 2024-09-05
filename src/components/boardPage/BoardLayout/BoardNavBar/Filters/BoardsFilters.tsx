@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { IBoard } from "@/types/board.types";
 import { LoggedInUser } from "@/providers/auth-provider";
-import { SetURLSearchParams, useSearchParams } from "react-router-dom";
+import { SetURLSearchParams } from "react-router-dom";
 import MembersFilter from "./MembersFilter";
 import DatesFilter from "./DatesFilter";
 import LabelsFilter from "./LabelsFilter";
