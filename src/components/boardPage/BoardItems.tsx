@@ -12,6 +12,7 @@ import { useState } from "react";
 function BoardItems() {
   const { boardId } = useParams();
   const { data: board, isPending } = useGetBoard(boardId!);
+
   const qClient = useQueryClient();
   const updateListPosition = useListUpdatePosition(boardId!);
   const moveCardWithinList = useMoveCardWithinList(boardId!);

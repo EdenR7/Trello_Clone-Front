@@ -36,6 +36,7 @@ export default function useChangeBgState(boardId: string) {
     onSettled: (_, __, { cardId }) => {
       queryClient.invalidateQueries({ queryKey: ["card", cardId] });
       queryClient.invalidateQueries({ queryKey: ["lists", boardId] });
+      queryClient.invalidateQueries({ queryKey: ["board", boardId] });
     },
   });
 }
