@@ -218,14 +218,13 @@ function ListItem({
                 <ol
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className=" flex flex-col gap-3"
+                  className=" flex flex-col gap-3 min-h-1"
                 >
                   {filteredCards.map((card, index) => (
-                    <li className=" mx-1 px-1 py-[2px]">
+                    <li key={card._id} className=" mx-1 px-1 py-[2px]">
                       <CardItem
                         isModalOpen={isModalOpen}
                         setIsModalOpen={setIsModalOpen}
-                        key={card._id}
                         card={card}
                         index={index}
                         activeCardId={activeCardId}
@@ -255,7 +254,10 @@ function ListItem({
             )}
             {addACardFormOpen.open &&
               addACardFormOpen.position === "bottom" && (
-                <AddCardForm setAddACardFormOpen={setAddACardFormOpen} />
+                <AddCardForm
+                  listId={list._id}
+                  setAddACardFormOpen={setAddACardFormOpen}
+                />
               )}
           </div>
         </li>

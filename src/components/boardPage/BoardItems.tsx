@@ -158,6 +158,7 @@ function BoardItems() {
               className=" list-none flex gap-3"
             >
               <ListsRender setHoveredItem={setHoveredItem} />
+              
               <div
                 style={{
                   backgroundColor:
