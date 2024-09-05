@@ -213,52 +213,56 @@ function ListItem({
               </Button>
             </header>
             {/* <p>position : {list.position}</p> */}
-            <Droppable droppableId={list._id} type="card">
-              {(provided) => (
-                <ol
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className=" flex flex-col gap-3 min-h-1"
-                >
-                  {filteredCards.map((card, index) => (
-                    <li key={card._id} className=" mx-1 px-1 py-[2px]">
-                      <CardItem
-                        isModalOpen={isModalOpen}
-                        setIsModalOpen={setIsModalOpen}
-                        card={card}
-                        index={index}
-                        activeCardId={activeCardId}
-                        setActiveCardId={setActiveCardId}
-                      />
-                    </li>
-                  ))}
-                  {provided.placeholder}
-                </ol>
-              )}
-            </Droppable>
-          </div>
-          <div className=" px-2 pt-2">
-            {!addACardFormOpen.open && (
-              <Button
-                onClick={() =>
-                  setAddACardFormOpen({
-                    open: true,
-                    position: "bottom",
-                  })
-                }
-                variant={"secondary"}
-                className="flex gap-2 justify-start items-center h-8 py-[6px] pl-2 pr-3 w-[220px] rounded-[8px] bg-inherit text-slate-600 text-start"
-              >
-                <Plus size={18} /> <span className=" flex-1">Add a card</span>
-              </Button>
-            )}
-            {addACardFormOpen.open &&
-              addACardFormOpen.position === "bottom" && (
-                <AddCardForm
-                  listId={list._id}
-                  setAddACardFormOpen={setAddACardFormOpen}
-                />
-              )}
+            <div className=" max-h-[calc(100vh-192px)] overflow-x-hidden overflow-y-auto">
+              <Droppable droppableId={list._id} type="card">
+                {(provided) => (
+                  <ol
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className=" flex flex-col gap-1 min-h-1"
+                  >
+                    {filteredCards.map((card, index) => (
+                      <li key={card._id} className=" mx-1 px-1 py-[2px]">
+                        <CardItem
+                          isModalOpen={isModalOpen}
+                          setIsModalOpen={setIsModalOpen}
+                          card={card}
+                          index={index}
+                          activeCardId={activeCardId}
+                          setActiveCardId={setActiveCardId}
+                        />
+                      </li>
+                    ))}
+
+                    {provided.placeholder}
+                  </ol>
+                )}
+              </Droppable>
+              <div className=" px-2 pt-2">
+                {!addACardFormOpen.open && (
+                  <Button
+                    onClick={() =>
+                      setAddACardFormOpen({
+                        open: true,
+                        position: "bottom",
+                      })
+                    }
+                    variant={"secondary"}
+                    className="flex gap-2 justify-start items-center h-8 py-[6px] pl-2 pr-3 w-[220px] rounded-[8px] bg-inherit text-slate-600 text-start"
+                  >
+                    <Plus size={18} />{" "}
+                    <span className=" flex-1">Add a card</span>
+                  </Button>
+                )}
+                {addACardFormOpen.open &&
+                  addACardFormOpen.position === "bottom" && (
+                    <AddCardForm
+                      listId={list._id}
+                      setAddACardFormOpen={setAddACardFormOpen}
+                    />
+                  )}
+              </div>
+            </div>
           </div>
         </li>
       )}

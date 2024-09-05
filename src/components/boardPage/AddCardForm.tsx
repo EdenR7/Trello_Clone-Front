@@ -23,6 +23,7 @@ interface AddCardFormProps {
 
 function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
   const [newCardTitle, setNewCardTitle] = useState("");
+  const [newFormsCounter, sewFormsCounter] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const formComponentRef = useRef<HTMLFormElement | null>(null);
   useClickOutside(formComponentRef, () => {
@@ -35,8 +36,7 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
     mutationFn: ({ listId, title }: { listId: string; title: string }) =>
       createCardApi(listId, title),
     onMutate: () => {
-        qClient.cancelQueries(["lists", listId] as any);
-        
+      qClient.cancelQueries(["lists", listId] as any);
     },
     onSuccess: () => {
       qClient.invalidateQueries(["lists", listId] as any);
@@ -59,6 +59,7 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
       return setAddACardFormOpen((prev) => ({ ...prev, open: false }));
     cardCreator.mutate({ listId, title: newCardTitle });
     setNewCardTitle("");
+    sewFormsCounter((prev) => prev + 1);
   }
   function validateCardTitle() {
     return newCardTitle.trim() !== "";
@@ -68,7 +69,7 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
     if (textareaRef.current) {
       textareaRef.current.focus();
     }
-  }, []);
+  }, [newFormsCounter]);
 
   return (
     <form ref={formComponentRef} className=" ">

@@ -28,7 +28,7 @@ function BoardLayout() {
           setIsSideBarOpen={setIsSideBarOpen}
         />
         <div
-          className={` pt-2 pb-8 mr-2 px-[6px] h-[calc(100vh-110px)] overflow-x-auto ${
+          className={` pt-2 pb-2 mr-2 px-[6px] h-[calc(100vh-110px)] overflow-x-auto ${
             isSideBarOpen && "w-[calc(100%-308px)] md:w-[calc(100%-348px)]"
           }`}
         >
