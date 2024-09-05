@@ -62,7 +62,7 @@ export function MainNav() {
   const { loggedInUser } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white py-2 border-b border-gray-200">
+    <header className="sticky top-0 z-50 w-full bg-white py-2 border-b border-gray-200 h-12">
       <div className="max-h-10 flex justify-between items-center px-4">
         <div className="flex items-center gap-4">
           <Link to="/" className="text-[#44546F] font-bold text-2xl mr-4">
