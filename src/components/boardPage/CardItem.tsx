@@ -9,7 +9,7 @@ import { AlignLeft, Pen } from "lucide-react";
 import CardItemChecklist from "../CardItem/CardItemChecklist";
 import CardItemUserIcon from "../CardItem/CardItemUserIcon";
 import { Button } from "../ui/button";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Modal from "../EditCardModal/Modal";
 
 interface CardItemProps {
@@ -39,33 +39,81 @@ function CardItem(props: CardItemProps) {
     (checklist) => checklist.todos.length > 0
   );
 
-  //chatGpt
-
   const [modalPosition, setModalPosition] = useState({
     top: 0,
     left: 0,
     menuPosition: "right",
   });
+  //hello
+
   const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const updateModalPosition = useCallback(() => {
+    if (cardRef.current) {
+      const cardRect = cardRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+
+      const menuPosition =
+        cardRect.right + 256 > windowWidth ? "left" : "right"; // Assuming modal width is 300px
+
+      const modalTop = Math.max(
+        0,
+        Math.min(cardRect.top, window.innerHeight - 300)
+      ); // Keep the modal inside view
+
+      const modalLeft = Math.max(0, Math.min(cardRect.left, windowWidth - 256));
+
+      setModalPosition({
+        top: modalTop,
+        left: modalLeft,
+        menuPosition,
+      });
+    }
+  }, [cardRef]);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      updateModalPosition();
+
+      window.addEventListener("scroll", updateModalPosition);
+      window.addEventListener("resize", updateModalPosition);
+
+      return () => {
+        window.removeEventListener("scroll", updateModalPosition);
+        window.removeEventListener("resize", updateModalPosition);
+      };
+    }
+  }, [isModalOpen, updateModalPosition]);
+
+  // const handleOpenModal = (e: React.MouseEvent) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+
+  //   if (cardRef.current) {
+  //     const cardRect = cardRef.current.getBoundingClientRect();
+  //     const windowWidth = window.innerWidth;
+
+  //     // Calculate menu placement
+  //     const menuPosition =
+  //       cardRect.right + 300 > windowWidth ? "left" : "right"; // Assuming modal width is 300px
+
+  //     // Set modal position near the card
+  //     setModalPosition({
+  //       top: cardRect.top,
+  //       left: cardRect.left,
+  //       menuPosition,
+  //     });
+  //     setActiveCardId(card._id);
+  //     setIsModalOpen(true);
+  //   }
+  // };
 
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (cardRef.current) {
-      const cardRect = cardRef.current.getBoundingClientRect();
-      const windowWidth = window.innerWidth;
-
-      // Calculate menu placement
-      const menuPosition =
-        cardRect.right + 300 > windowWidth ? "left" : "right"; // Assuming modal width is 300px
-
-      // Set modal position near the card
-      setModalPosition({
-        top: cardRect.top,
-        left: cardRect.left,
-        menuPosition,
-      });
+      updateModalPosition();
       setActiveCardId(card._id);
       setIsModalOpen(true);
     }
@@ -109,7 +157,10 @@ function CardItem(props: CardItemProps) {
                 <Modal
                   cardId={card._id}
                   position={modalPosition}
-                  onClose={() => setIsModalOpen(false)}
+                  onClose={() => {
+                    setIsModalOpen(false);
+                    setActiveCardId(null);
+                  }}
                 />
               )}
             </div>
@@ -172,7 +223,10 @@ function CardItem(props: CardItemProps) {
               <Modal
                 cardId={card._id}
                 position={modalPosition}
-                onClose={() => setIsModalOpen(false)}
+                onClose={() => {
+                  setIsModalOpen(false);
+                  setActiveCardId(null);
+                }}
               />
             )}
           </div>
