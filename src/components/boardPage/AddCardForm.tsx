@@ -6,6 +6,7 @@ import { IAddACardFormOpen } from "./ListItem";
 import useClickOutside from "@/hooks/CustomHooks/useClickOutside";
 import api from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 export async function createCardApi(listId: string, title: string) {
   try {
@@ -22,6 +23,7 @@ interface AddCardFormProps {
 }
 
 function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
+  const { boardId } = useParams();
   const [newCardTitle, setNewCardTitle] = useState("");
   const [newFormsCounter, sewFormsCounter] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -36,10 +38,10 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
     mutationFn: ({ listId, title }: { listId: string; title: string }) =>
       createCardApi(listId, title),
     onMutate: () => {
-      qClient.cancelQueries(["lists", listId] as any);
+      qClient.cancelQueries(["lists", boardId] as any);
     },
     onSuccess: () => {
-      qClient.invalidateQueries(["lists", listId] as any);
+      qClient.invalidateQueries(["lists", boardId] as any);
     },
     onError: (error) => {
       console.log(error);
