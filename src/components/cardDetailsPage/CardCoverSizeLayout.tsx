@@ -11,6 +11,7 @@ interface CardCoverSizeLayoutprops {
     React.SetStateAction<"Header" | "Cover" | null>
   >;
   setActiveColor: React.Dispatch<React.SetStateAction<string | null>>;
+  cardId: string;
 }
 
 function CardCoverSizeLayout({
@@ -18,8 +19,9 @@ function CardCoverSizeLayout({
   activeBgState,
   setActiveBgState,
   setActiveColor,
+  cardId,
 }: CardCoverSizeLayoutprops) {
-  const { boardId, cardId } = useParams();
+  const { boardId } = useParams();
 
   const { mutate: removeBackground } = useRemoveBackground(boardId!);
   const { mutate: changeBgState } = useChangeBgState(boardId!);

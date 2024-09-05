@@ -17,10 +17,6 @@ function CardCoverPopup(props: CardCoverPopupProps) {
 
   const { mutate: changeBackground } = useChangeBackground(boardId!);
 
-  // const [activeBgState, setActiveBgState] = useLocalStorage<
-  //   "Header" | "Cover" | null
-  // >(`trella-background-active-state-${card._id}`, null);
-
   const [activeBgState, setActiveBgState] = useLocalStorage<
     "Header" | "Cover" | null
   >(
@@ -32,10 +28,6 @@ function CardCoverPopup(props: CardCoverPopupProps) {
     `trella-card-background-color-${card._id}`,
     card.bgCover.bg
   );
-  // const [activeColor, setActiveColor] = useLocalStorage<string | null>(
-  //   `trella-card-background-color-${card._id}`,
-  //   null
-  // );
 
   const colors = [
     "#4BCE97",
@@ -62,6 +54,7 @@ function CardCoverPopup(props: CardCoverPopupProps) {
   return (
     <div>
       <CardCoverSizeLayout
+        cardId={card._id}
         activeBgState={activeBgState}
         setActiveBgState={setActiveBgState}
         setActiveColor={setActiveColor}

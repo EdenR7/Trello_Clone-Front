@@ -5,8 +5,12 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { Link, useParams } from "react-router-dom";
 import CardItemLabels from "../CardItem/CardItemLabels";
 import CardItemDates from "../CardItem/CardItemDates";
-import { AlignLeft } from "lucide-react";
+import { AlignLeft, Pen } from "lucide-react";
 import CardItemChecklist from "../CardItem/CardItemChecklist";
+import CardItemUserIcon from "../CardItem/CardItemUserIcon";
+import { Button } from "../ui/button";
+import { useRef, useState } from "react";
+import Modal from "../EditCardModal/Modal";
 
 interface CardItemProps {
   card: ICard;
@@ -24,6 +28,36 @@ function CardItem(props: CardItemProps) {
     (checklist) => checklist.todos.length > 0
   );
 
+  //chatGpt
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState({
+    top: 0,
+    left: 0,
+    menuPosition: "right",
+  });
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const handleOpenModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (cardRef.current) {
+      const cardRect = cardRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+
+      // Calculate menu placement
+      const menuPosition =
+        cardRect.right + 300 > windowWidth ? "left" : "right"; // Assuming modal width is 300px
+
+      // Set modal position near the card
+      setModalPosition({
+        top: cardRect.top,
+        left: cardRect.left,
+        menuPosition,
+      });
+      setIsModalOpen(true);
+    }
+  };
+
   return (
     <Draggable draggableId={card._id} index={index}>
       {(provided) =>
@@ -33,12 +67,18 @@ function CardItem(props: CardItemProps) {
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
-            <div className="  h-14 cursor-pointer shadow rounded-lg">
+            <div className="  h-14 cursor-pointer shadow rounded-lg relative">
               <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
                 <div
-                  className=" hover:outline hover:outline-2  hover:outline-primary flex rounded-lg min-h-full py-2 pr-2 pl-3"
+                  className=" hover:outline hover:outline-2  hover:outline-primary flex rounded-lg min-h-full py-2 pr-2 pl-3 relative group"
                   style={{ backgroundColor: card.bgCover.bg }}
                 >
+                  <Button
+                    variant={"secondary"}
+                    className=" hidden group-hover:block bg-gray-100 rounded-full px-2 py-2 absolute top-[2px] right-[2px] z-50"
+                  >
+                    <Pen strokeWidth={1.75} size={14} />
+                  </Button>
                   <p className=" z-10 self-end w-full text-[16px] font-semibold leading-5 relative">
                     {card.title}
                   </p>
@@ -50,10 +90,21 @@ function CardItem(props: CardItemProps) {
           <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            ref={provided.innerRef}
+            // ref={provided.innerRef}
+            ref={(el) => {
+              provided.innerRef(el);
+              cardRef.current = el;
+            }}
           >
             <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
-              <div className=" relative min-h-9 rounded-lg bg-white shadow scroll-m-2   hover:outline hover:outline-2  hover:outline-primary">
+              <div className=" relative min-h-9 rounded-lg bg-white shadow scroll-m-2   hover:outline hover:outline-2  hover:outline-primary group ">
+                <Button
+                  onClick={handleOpenModal}
+                  variant={"secondary"}
+                  className=" hidden group-hover:block bg-gray-100 rounded-full px-2 py-2 absolute top-[2px] right-[2px] z-50"
+                >
+                  <Pen strokeWidth={1.75} size={14} />
+                </Button>
                 {card.bgCover.bg !== "" && (
                   <div
                     className=" h-9 overflow-hidden rounded-t-lg relative"
@@ -85,9 +136,17 @@ function CardItem(props: CardItemProps) {
                     )}
                     {hasTodos && <CardItemChecklist card={card} />}
                   </div>
+                  {card.members.length > 0 && <CardItemUserIcon card={card} />}
                 </div>
               </div>
             </Link>
+            {isModalOpen && (
+              <Modal
+                card={card}
+                position={modalPosition}
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
           </div>
         )
       }
