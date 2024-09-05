@@ -4,10 +4,17 @@ import useArchiveCard from "@/hooks/Query hooks/Card hooks/useArchiveCard";
 import { ICard } from "@/types/card.types";
 import { useParams } from "react-router-dom";
 
-function EditCardModalArchive({ card }: { card: ICard }) {
+function EditCardModalArchive({
+  card,
+  onClose,
+}: {
+  card: ICard;
+  onClose: () => void;
+}) {
   const { boardId } = useParams();
   const { mutate: archiveCard } = useArchiveCard();
   function handleArchiveCard() {
+    onClose();
     archiveCard({ boardId: boardId!, cardId: card._id! });
   }
   return (
