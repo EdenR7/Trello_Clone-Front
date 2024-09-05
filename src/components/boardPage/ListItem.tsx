@@ -4,7 +4,6 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
 import { ICard } from "@/types/card.types";
-import { log } from "console";
 
 interface ListItemProps {
   list: IList;
@@ -25,14 +24,7 @@ function ListItem({
 }: ListItemProps) {
   const [searchParams] = useSearchParams();
 
-  // console.log("here");
-  // for (let i = 0; i < list.cards.length; i++) {
-  //   console.log("list", list.name);
-
-  //   console.log(list.cards[i].title);
-  // }
-
-  const filterDefinition = localStorage.getItem("filterDefinition");
+  const filterDefinition = searchParams.get("filtersDefinition") || "Any";
   const membersFilter = searchParams.get("members")?.split(",") || [];
   const labelsFilter = searchParams.get("labels")?.split(",") || [];
   const dueDateFilter = searchParams.get("dueDate")?.split(",") || [];

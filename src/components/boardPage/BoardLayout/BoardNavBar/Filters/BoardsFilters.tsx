@@ -60,7 +60,10 @@ function BoardsFilters({
         updateUrlParams={updateUrlParams}
       />
       <Separator className=" my-4" />
-      <FilterDefinition />
+      <FilterDefinition
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
     </div>
   );
 }
