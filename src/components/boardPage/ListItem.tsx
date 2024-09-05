@@ -2,8 +2,11 @@ import { IList } from "@/types/list.types";
 import CardItem from "./CardItem";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useSearchParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ICard } from "@/types/card.types";
+import { Button } from "../ui/button";
+import { Ellipsis, Plus } from "lucide-react";
+import AddCardForm from "./AddCardForm";
 
 interface ListItemProps {
   list: IList;
@@ -14,6 +17,12 @@ interface ListItemProps {
   activeCardId: string | null;
   setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
+
+export interface IAddACardFormOpen {
+  open: boolean;
+  position: "top" | "bottom";
+}
+
 function ListItem({
   list,
   index,
@@ -23,6 +32,11 @@ function ListItem({
   setActiveCardId,
 }: ListItemProps) {
   const [searchParams] = useSearchParams();
+
+  const [addACardFormOpen, setAddACardFormOpen] = useState<IAddACardFormOpen>({
+    open: false,
+    position: "bottom",
+  });
 
   const filterDefinition = searchParams.get("filtersDefinition") || "Any";
   const membersFilter = searchParams.get("members")?.split(",") || [];
@@ -181,13 +195,24 @@ function ListItem({
           ref={provided.innerRef}
           // onDragOver={() => handleDragOver(index)}
           // onDragLeave={handleDragLeave}
-          className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden min-w-[272px] max-w-[272px] bg-gray-200 "
+          className="h-full pb-2 shadow-sm rounded-xl overflow-hidden min-w-[272px] max-w-[272px] bg-gray-200 text-text_dark_blue"
           key={list._id}
         >
           <div {...provided.dragHandleProps}>
-            <div>{list.name}</div>
-            <div>id: {list._id}</div>
-            <p>position : {list.position}</p>
+            <header className=" flex justify-between px-2 pt-2">
+              <h3 className=" py-[6px] pl-3 pr-2 font-semibold">{list.name}</h3>
+              <Button
+                variant={"secondary"}
+                className=" p-2 bg-inherit rounded-lg"
+              >
+                <Ellipsis
+                  strokeWidth={1.8}
+                  size={16}
+                  className=" text-slate-600"
+                />
+              </Button>
+            </header>
+            {/* <p>position : {list.position}</p> */}
             <Droppable droppableId={list._id} type="card">
               {(provided) => (
                 <ol
@@ -195,22 +220,43 @@ function ListItem({
                   ref={provided.innerRef}
                   className=" flex flex-col gap-3"
                 >
-                  cards:
                   {filteredCards.map((card, index) => (
-                    <CardItem
-                      isModalOpen={isModalOpen}
-                      setIsModalOpen={setIsModalOpen}
-                      key={card._id}
-                      card={card}
-                      index={index}
-                      activeCardId={activeCardId}
-                      setActiveCardId={setActiveCardId}
-                    />
+                    <li className=" mx-1 px-1 py-[2px]">
+                      <CardItem
+                        isModalOpen={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                        key={card._id}
+                        card={card}
+                        index={index}
+                        activeCardId={activeCardId}
+                        setActiveCardId={setActiveCardId}
+                      />
+                    </li>
                   ))}
                   {provided.placeholder}
                 </ol>
               )}
             </Droppable>
+          </div>
+          <div className=" px-2 pt-2">
+            {!addACardFormOpen.open && (
+              <Button
+                onClick={() =>
+                  setAddACardFormOpen({
+                    open: true,
+                    position: "bottom",
+                  })
+                }
+                variant={"secondary"}
+                className="flex gap-2 justify-start items-center h-8 py-[6px] pl-2 pr-3 w-[220px] rounded-[8px] bg-inherit text-slate-600 text-start"
+              >
+                <Plus size={18} /> <span className=" flex-1">Add a card</span>
+              </Button>
+            )}
+            {addACardFormOpen.open &&
+              addACardFormOpen.position === "bottom" && (
+                <AddCardForm setAddACardFormOpen={setAddACardFormOpen} />
+              )}
           </div>
         </li>
       )}

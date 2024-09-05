@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
 import { IBoard } from "@/types/board.types";
-import { Ellipsis, ListFilter, X } from "lucide-react";
+import { CircleAlert, Ellipsis, ListFilter, X } from "lucide-react";
 import { useState } from "react";
 import FiltersLayout from "./Filters/FiltersLayout";
 import BoardsFilters from "./Filters/BoardsFilters";
@@ -70,6 +70,12 @@ function BoardNavbar({
                   <ListFilter
                     size={hasFilters ? 14 : 18}
                     color={`${hasFilters ? "black" : "white"}`}
+                  />
+                  <CircleAlert
+                    size={14}
+                    className={`${
+                      hasFilters ? " ml-2 text-blue-600" : "hidden"
+                    }`}
                   />
                 </Button>
               }
