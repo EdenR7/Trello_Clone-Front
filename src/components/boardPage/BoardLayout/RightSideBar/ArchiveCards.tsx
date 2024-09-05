@@ -70,7 +70,23 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
               );
             }
 
-            return (
+            return card.bgCover.isCover ? (
+              <div
+                key={card._id}
+                className="  h-14 cursor-pointer shadow rounded-lg relative"
+              >
+                <Link key={card._id} to={`/b/${board._id}/c/${card._id}`}>
+                  <div
+                    className=" hover:outline hover:outline-2  hover:outline-primary flex rounded-lg min-h-full py-2 pr-2 pl-3 relative group"
+                    style={{ backgroundColor: card.bgCover.bg }}
+                  >
+                    <p className=" z-10 self-end w-full text-[16px] font-semibold leading-5 relative">
+                      {card.title}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ) : (
               <React.Fragment key={card._id}>
                 {/* Card item as in board */}
                 <Link key={card._id} to={`/b/${board._id}/c/${card._id}`}>
