@@ -47,25 +47,43 @@ export function useMoveCardToList(boardId: string) {
       destinationIndex,
       previousLists,
     }) => {
-      targetCard.position = newPos;
+      // targetCard.position = newPos;
       if (previousLists) {
-        cardInitialList?.cards.splice(sourceIndex, 1);
-        const cardFinalListCards = cardFinalList.cards;
-        cardFinalListCards?.splice(destinationIndex, 0, targetCard);
+        const initialList = [...cardInitialList.cards];
+        initialList.splice(sourceIndex, 1);
+        const finalList = [...cardFinalList.cards];
+        // const cardFinalListCards = cardFinalList.cards;
+        finalList.splice(destinationIndex, 0, {
+          ...targetCard,
+          position: newPos,
+        });
+
+        const updatedLists = previousLists.map(
+          (list) => {
+            if (list._id === cardFinalList._id) {
+              return { ...list, cards: finalList };
+            } else if (list._id === cardInitialList._id) {
+              return { ...list, cards: initialList };
+            } else {
+              return list;
+            }
+          }
+          // list._id === listId ? { ...list, cards: finalList } : list
+        );
 
         if (countDecimalPlaces(newPos) > 10) {
           qClient.setQueryData(
             ["lists", boardId],
-            reOrderCardPositions(previousLists, listId)
+            reOrderCardPositions(updatedLists, listId)
           );
         } else {
-          qClient.setQueryData(["lists", boardId], previousLists);
+          qClient.setQueryData(["lists", boardId], updatedLists);
         }
       }
 
       return { previousLists };
     },
-    onError: (err, variables, context) => {
+    onError: (err, _, context) => {
       if (context?.previousLists) {
         qClient.setQueryData(["lists", boardId], context.previousLists);
       }

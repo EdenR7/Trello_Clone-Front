@@ -10,10 +10,13 @@ function ListsRender({ setHoveredItem }: ListRenderProps) {
   const { boardId } = useParams();
   const { data: lists, isPending, isError, error } = useGetLists(boardId!);
 
+  // console.log(isPending);
+
   if (isPending) return <div>Loading lists...</div>;
   if (isError) return <div>Error: {error.message}</div>;
+  const NewLists = [...lists!];
 
-  return lists?.map((list, index) => (
+  return NewLists?.map((list, index) => (
     <ListItem
       setHoveredItem={setHoveredItem}
       key={list._id}

@@ -41,23 +41,30 @@ export function useMoveCardWithinList(boardId: string) {
       const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
       targetCard.position = newPos;
       if (previousLists) {
-        const cards = cardsInitialList;
-        cards.splice(lastIndex, 1);
-        cards.splice(destinationIndex, 0, targetCard);
+        const updatedCards = [...cardsInitialList];
+        updatedCards.splice(lastIndex, 1);
+        updatedCards.splice(destinationIndex, 0, {
+          ...targetCard,
+          position: newPos,
+        });
+
+        const updatedLists = previousLists.map((list) =>
+          list._id === listId ? { ...list, cards: updatedCards } : list
+        );
 
         if (countDecimalPlaces(newPos) > 10) {
           qClient.setQueryData(
             ["lists", boardId],
-            reOrderCardPositions(previousLists, listId)
+            reOrderCardPositions(updatedLists, listId)
           );
         } else {
-          qClient.setQueryData(["lists", boardId], previousLists);
+          qClient.setQueryData(["lists", boardId], updatedLists);
         }
       }
 
       return { previousLists };
     },
-    onError: (err, variables, context) => {
+    onError: (err, _, context) => {
       if (context?.previousLists) {
         qClient.setQueryData(["lists", boardId], context.previousLists);
       }

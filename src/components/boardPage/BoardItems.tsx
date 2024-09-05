@@ -102,6 +102,7 @@ function BoardItems() {
         targetCard: card,
       });
     } else {
+      // Calc the new position of the card
       if (destination.index === 0) {
         cardNewPos =
           cardFinalList.cards.length === 0
@@ -119,6 +120,7 @@ function BoardItems() {
             cardFinalList.cards[destination.index - 1].position) /
           2;
       }
+
       moveCardToList.mutate({
         cardId: draggableId,
         listId: destination.droppableId,
