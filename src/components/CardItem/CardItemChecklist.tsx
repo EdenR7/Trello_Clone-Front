@@ -25,9 +25,9 @@ function CardItemChecklist(props: CardItemChecklistProps) {
       }`}
     >
       <span className=" flex items-center justify-center w-5 h-5 leading-5 mr-[2px]">
-        <SquareCheckBig size={13} strokeWidth={1.75} />
+        <SquareCheckBig size={12} strokeWidth={1.75} />
       </span>
-      <span>
+      <span className=" text-xs">
         {completeTodos}/{totalTodos}
       </span>
     </span>
