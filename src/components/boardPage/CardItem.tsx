@@ -15,10 +15,21 @@ import Modal from "../EditCardModal/Modal";
 interface CardItemProps {
   card: ICard;
   index: number;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activeCardId: string | null;
+  setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 function CardItem(props: CardItemProps) {
-  const { card, index } = props;
+  const {
+    card,
+    index,
+    isModalOpen,
+    setIsModalOpen,
+    activeCardId,
+    setActiveCardId,
+  } = props;
   const { boardId } = useParams();
   const [isLabelsOpen, setIsLabelsOpen] = useLocalStorage(
     "trella-labels-open-state",
@@ -29,7 +40,7 @@ function CardItem(props: CardItemProps) {
   );
 
   //chatGpt
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [modalPosition, setModalPosition] = useState({
     top: 0,
     left: 0,
@@ -39,6 +50,7 @@ function CardItem(props: CardItemProps) {
 
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (cardRef.current) {
       const cardRect = cardRef.current.getBoundingClientRect();
@@ -54,18 +66,26 @@ function CardItem(props: CardItemProps) {
         left: cardRect.left,
         menuPosition,
       });
+      setActiveCardId(card._id);
       setIsModalOpen(true);
     }
   };
 
   return (
-    <Draggable draggableId={card._id} index={index}>
+    <Draggable
+      draggableId={card._id}
+      index={index}
+      isDragDisabled={isModalOpen}
+    >
       {(provided) =>
         card.bgCover.isCover ? (
           <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            ref={provided.innerRef}
+            ref={(el) => {
+              provided.innerRef(el);
+              cardRef.current = el;
+            }}
           >
             <div className="  h-14 cursor-pointer shadow rounded-lg relative">
               <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
@@ -74,6 +94,7 @@ function CardItem(props: CardItemProps) {
                   style={{ backgroundColor: card.bgCover.bg }}
                 >
                   <Button
+                    onClick={handleOpenModal}
                     variant={"secondary"}
                     className=" hidden group-hover:block bg-gray-100 rounded-full px-2 py-2 absolute top-[2px] right-[2px] z-50"
                   >
@@ -84,6 +105,13 @@ function CardItem(props: CardItemProps) {
                   </p>
                 </div>
               </Link>
+              {isModalOpen && activeCardId === card._id && (
+                <Modal
+                  cardId={card._id}
+                  position={modalPosition}
+                  onClose={() => setIsModalOpen(false)}
+                />
+              )}
             </div>
           </div>
         ) : (
@@ -140,9 +168,9 @@ function CardItem(props: CardItemProps) {
                 </div>
               </div>
             </Link>
-            {isModalOpen && (
+            {isModalOpen && activeCardId === card._id && (
               <Modal
-                card={card}
+                cardId={card._id}
                 position={modalPosition}
                 onClose={() => setIsModalOpen(false)}
               />

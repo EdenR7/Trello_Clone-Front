@@ -9,9 +9,28 @@ interface ListItemProps {
   list: IList;
   index: number;
   setHoveredItem: (index: number | null) => void;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activeCardId: string | null;
+  setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
-function ListItem({ list, index, setHoveredItem }: ListItemProps) {
+function ListItem({
+  list,
+  index,
+  isModalOpen,
+  setIsModalOpen,
+  activeCardId,
+  setActiveCardId,
+}: ListItemProps) {
   const [searchParams] = useSearchParams();
+
+  // console.log("here");
+  // for (let i = 0; i < list.cards.length; i++) {
+  //   console.log("list", list.name);
+
+  //   console.log(list.cards[i].title);
+  // }
+
   const filterDefinition = localStorage.getItem("filterDefinition");
   const membersFilter = searchParams.get("members")?.split(",") || [];
   const labelsFilter = searchParams.get("labels")?.split(",") || [];
@@ -154,7 +173,11 @@ function ListItem({ list, index, setHoveredItem }: ListItemProps) {
   }
 
   return (
-    <Draggable draggableId={list._id} index={index}>
+    <Draggable
+      draggableId={list._id}
+      index={index}
+      isDragDisabled={isModalOpen}
+    >
       {(provided) => (
         <li
           {...provided.draggableProps}
@@ -177,7 +200,15 @@ function ListItem({ list, index, setHoveredItem }: ListItemProps) {
                 >
                   cards:
                   {filteredCards.map((card, index) => (
-                    <CardItem key={card._id} card={card} index={index} />
+                    <CardItem
+                      isModalOpen={isModalOpen}
+                      setIsModalOpen={setIsModalOpen}
+                      key={card._id}
+                      card={card}
+                      index={index}
+                      activeCardId={activeCardId}
+                      setActiveCardId={setActiveCardId}
+                    />
                   ))}
                   {provided.placeholder}
                 </ol>

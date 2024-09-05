@@ -60,7 +60,7 @@ function DatePopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={side}
+        side={""}
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">
