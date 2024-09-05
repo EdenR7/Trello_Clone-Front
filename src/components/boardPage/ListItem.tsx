@@ -9,56 +9,118 @@ interface ListItemProps {
   index: number;
   setHoveredItem: (index: number | null) => void;
 }
-function ListItem({ list, index, setHoveredItem }: ListItemProps) {
+function ListItem({
+  list,
+  index,
+  setHoveredItem,
+}: ListItemProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // console.log("here");
+  // for (let i = 0; i < list.cards.length; i++) {
+  //   console.log("list", list.name);
+
+  //   console.log(list.cards[i].title);
+  // }
+
   const filterDefinition = localStorage.getItem("filterDefinition");
-  const membersFilter = searchParams.get("members")?.split(",") || "";
-  const labelsFilter = searchParams.get("labels")?.split(",") || "";
-  const dueDateFilter = searchParams.get("dueDate")?.split(",") || "";
+  const membersFilter = searchParams.get("members")?.split(",") || [];
+  const labelsFilter = searchParams.get("labels")?.split(",") || [];
+  const dueDateFilter = searchParams.get("dueDate")?.split(",") || [];
 
   // console.log("filterDefinition", filterDefinition);
   // console.log("labelsFilter", labelsFilter);
   // console.log("dueDateFilter", dueDateFilter);
 
-  const filteredCards = list.cards.filter((card) => {
-    const matchesMembers = membersFilter
-      ? card.members.some((member) => membersFilter.includes(member.username))
-      : true;
+  // const filteredCards = list.cards.filter((card) => {
+  //   if (filterDefinition === "Exact") {
+  //     const isMembersFilterActive = membersFilter && membersFilter.length > 0;
+  //     const isLabelsFilterActive = labelsFilter && labelsFilter.length > 0;
 
-    // const matchesLabels =
-    //   !labelsFilter || card.labels.some((label) => label === labelsFilter);
-    // const matchesDueDate = !dueDateFilter || card.dueDate === dueDateFilter;
-    console.log("members", card.members);
-
-    console.log("matchesMembers", matchesMembers);
-    return matchesMembers;
-    // return matchesMembers && matchesLabels && matchesDueDate;
-  });
-  // const filteredCards = useMemo(() => {
-  //   return list.cards.filter((card) => {
-  //     const matchesMembers = membersFilter
-  //       ? card.members.some((member) => membersFilter.includes(member.username))
+  //     const matchesMembers = isMembersFilterActive
+  //       ? membersFilter.every((selectedMember) =>
+  //           card.members.some((member) => member.username === selectedMember)
+  //         )
   //       : true;
 
-  //     // const matchesLabels =
-  //     //   !labelsFilter || card.labels.some((label) => label === labelsFilter);
-  //     // const matchesDueDate = !dueDateFilter || card.dueDate === dueDateFilter;
-  //     console.log("members",card.members);
+  //     const matchesLabels = isLabelsFilterActive
+  //       ? labelsFilter.every((selectedLabelId) =>
+  //           card.labels.some((label) => label._id === selectedLabelId)
+  //         )
+  //       : true;
 
-  //     console.log("matchesMembers", matchesMembers);
-  //     return matchesMembers;
-  //     // return matchesMembers && matchesLabels && matchesDueDate;
-  //   });
-  // }, [list.cards, membersFilter, labelsFilter, dueDateFilter]);
+  //     console.log(card.title);
 
-  const handleDragOver = (index: number) => {
-    setHoveredItem(index);
-  };
+  //     console.log(matchesLabels, matchesMembers);
 
-  const handleDragLeave = () => {
-    setHoveredItem(null);
-  };
+  //     return matchesMembers && matchesLabels;
+  //   } else {
+  //     console.log(1);
+
+  //     const isMembersFilterActive = membersFilter && membersFilter.length > 0;
+  //     const isLabelsFilterActive = labelsFilter && labelsFilter.length > 0;
+
+  //     const matchesMembers = isMembersFilterActive
+  //       ? card.members.some((member) => membersFilter.includes(member.username))
+  //       : false;
+
+  //     const matchesLabels = isLabelsFilterActive
+  //       ? card.labels.some((label) => labelsFilter.includes(label._id))
+  //       : false;
+
+  //     if (!isMembersFilterActive && !isLabelsFilterActive) {
+  //       return true;
+  //     }
+
+  //     return matchesMembers || matchesLabels;
+  //   }
+  // });
+  // console.log("filteredCards", filteredCards);
+
+
+  const filteredCards = useMemo(() => {
+    console.log(1);
+
+    return list.cards.filter((card) => {
+      if (filterDefinition === "Exact") {
+        const isMembersFilterActive = membersFilter && membersFilter.length > 0;
+        const isLabelsFilterActive = labelsFilter && labelsFilter.length > 0;
+
+        const matchesMembers = isMembersFilterActive
+          ? membersFilter.every((selectedMember) =>
+              card.members.some((member) => member.username === selectedMember)
+            )
+          : true;
+
+        const matchesLabels = isLabelsFilterActive
+          ? labelsFilter.every((selectedLabelId) =>
+              card.labels.some((label) => label._id === selectedLabelId)
+            )
+          : true;
+
+        return matchesMembers && matchesLabels;
+      } else {
+        const isMembersFilterActive = membersFilter && membersFilter.length > 0;
+        const isLabelsFilterActive = labelsFilter && labelsFilter.length > 0;
+
+        const matchesMembers = isMembersFilterActive
+          ? card.members.some((member) =>
+              membersFilter.includes(member.username)
+            )
+          : false;
+
+        const matchesLabels = isLabelsFilterActive
+          ? card.labels.some((label) => labelsFilter.includes(label._id))
+          : false;
+
+        if (!isMembersFilterActive && !isLabelsFilterActive) {
+          return true;
+        }
+
+        return matchesMembers || matchesLabels;
+      }
+    });
+  }, [list, searchParams, filterDefinition]);
 
   return (
     <Draggable draggableId={list._id} index={index}>
@@ -66,8 +128,8 @@ function ListItem({ list, index, setHoveredItem }: ListItemProps) {
         <li
           {...provided.draggableProps}
           ref={provided.innerRef}
-          onDragOver={() => handleDragOver(index)}
-          onDragLeave={handleDragLeave}
+          // onDragOver={() => handleDragOver(index)}
+          // onDragLeave={handleDragLeave}
           className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden w-[272px] bg-gray-200 "
           key={list._id}
         >
