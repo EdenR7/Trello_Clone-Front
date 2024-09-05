@@ -53,6 +53,7 @@ function Modal({ cardId, position, onClose }: ModalProps) {
 
   function handleUpdateCardTitle() {
     if (titleRef.current) {
+      if (titleRef.current.value.trim() === "") return;
       updateCardTitle({ cardId: card!._id!, newTitle: titleRef.current.value });
       onClose();
     }
