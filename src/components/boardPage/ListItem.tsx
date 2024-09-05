@@ -195,7 +195,7 @@ function ListItem({
           ref={provided.innerRef}
           // onDragOver={() => handleDragOver(index)}
           // onDragLeave={handleDragLeave}
-          className="h-full pb-2 shadow-sm rounded-xl overflow-hidden min-w-[272px] max-w-[272px] bg-gray-200 text-text_dark_blue"
+          className="h-full pb-2 pr-1 shadow-sm rounded-xl overflow-hidden min-w-[272px] max-w-[272px] bg-gray-200 text-text_dark_blue"
           key={list._id}
         >
           <div {...provided.dragHandleProps}>
@@ -213,7 +213,7 @@ function ListItem({
               </Button>
             </header>
             {/* <p>position : {list.position}</p> */}
-            <div className=" max-h-[calc(100vh-192px)] overflow-x-hidden overflow-y-auto">
+            <div className=" max-h-[calc(100vh-192px)] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
               <Droppable droppableId={list._id} type="card">
                 {(provided) => (
                   <ol
@@ -250,7 +250,7 @@ function ListItem({
                     variant={"secondary"}
                     className="flex gap-2 justify-start items-center h-8 py-[6px] pl-2 pr-3 w-[220px] rounded-[8px] bg-inherit text-slate-600 text-start"
                   >
-                    <Plus size={18} />{" "}
+                    <Plus size={18} />
                     <span className=" flex-1">Add a card</span>
                   </Button>
                 )}

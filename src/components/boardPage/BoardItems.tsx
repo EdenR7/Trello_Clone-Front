@@ -8,6 +8,8 @@ import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdateP
 import { useMoveCardWithinList } from "@/hooks/Query hooks/Card hooks/useMoveCardWithinList";
 import { useMoveCardToList } from "@/hooks/Query hooks/Card hooks/useMoveCardToList";
 import { useState } from "react";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
 
 function BoardItems() {
   const { boardId } = useParams();
@@ -170,6 +172,13 @@ function BoardItems() {
               >
                 {provided.placeholder}
               </div>
+              <Button
+                variant={"naked"}
+                className="text-left justify-start flex gap-2 p-3 bg-white/30 rounded-xl min-w-[272px] h-11 font-medium text-white hover:bg-white/20 transition-colors"
+              >
+                <Plus size={20} />
+                Add another list
+              </Button>
             </ol>
           )}
         </Droppable>

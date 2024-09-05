@@ -68,6 +68,10 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();
+      textareaRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [newFormsCounter]);
 
