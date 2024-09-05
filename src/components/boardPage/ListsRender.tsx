@@ -1,6 +1,7 @@
 import { useGetLists } from "@/hooks/Query hooks/List hooks/useGetList";
 import { useParams } from "react-router-dom";
 import ListItem from "./ListItem";
+import { useState } from "react";
 
 interface ListRenderProps {
   setHoveredItem: (index: number | null) => void;
@@ -9,6 +10,8 @@ interface ListRenderProps {
 function ListsRender({ setHoveredItem }: ListRenderProps) {
   const { boardId } = useParams();
   const { data: lists, isPending, isError, error } = useGetLists(boardId!);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   // console.log(isPending);
 
@@ -22,6 +25,10 @@ function ListsRender({ setHoveredItem }: ListRenderProps) {
       key={list._id}
       list={list}
       index={index}
+      activeCardId={activeCardId}
+      setActiveCardId={setActiveCardId}
+      isModalOpen={isModalOpen}
+      setIsModalOpen={setIsModalOpen}
     />
   ));
 }

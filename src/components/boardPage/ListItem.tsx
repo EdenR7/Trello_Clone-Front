@@ -2,17 +2,25 @@ import { IList } from "@/types/list.types";
 import CardItem from "./CardItem";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useSearchParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 interface ListItemProps {
   list: IList;
   index: number;
   setHoveredItem: (index: number | null) => void;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activeCardId: string | null;
+  setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 function ListItem({
   list,
   index,
   setHoveredItem,
+  isModalOpen,
+  setIsModalOpen,
+  activeCardId,
+  setActiveCardId,
 }: ListItemProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -77,7 +85,6 @@ function ListItem({
   // });
   // console.log("filteredCards", filteredCards);
 
-
   const filteredCards = useMemo(() => {
     console.log(1);
 
@@ -123,14 +130,18 @@ function ListItem({
   }, [list, searchParams, filterDefinition]);
 
   return (
-    <Draggable draggableId={list._id} index={index}>
+    <Draggable
+      draggableId={list._id}
+      index={index}
+      isDragDisabled={isModalOpen}
+    >
       {(provided) => (
         <li
           {...provided.draggableProps}
           ref={provided.innerRef}
           // onDragOver={() => handleDragOver(index)}
           // onDragLeave={handleDragLeave}
-          className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden w-[272px] bg-gray-200 "
+          className="h-full shadow-sm border-black border rounded-xl p-2 overflow-hidden min-w-[272px] bg-gray-200 "
           key={list._id}
         >
           <div {...provided.dragHandleProps}>
@@ -146,7 +157,15 @@ function ListItem({
                 >
                   cards:
                   {filteredCards.map((card, index) => (
-                    <CardItem key={card._id} card={card} index={index} />
+                    <CardItem
+                      isModalOpen={isModalOpen}
+                      setIsModalOpen={setIsModalOpen}
+                      key={card._id}
+                      card={card}
+                      index={index}
+                      activeCardId={activeCardId}
+                      setActiveCardId={setActiveCardId}
+                    />
                   ))}
                   {provided.placeholder}
                 </ol>

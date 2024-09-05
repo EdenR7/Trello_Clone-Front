@@ -15,9 +15,15 @@ const EditCardModalSideButton = React.forwardRef<
   return (
     <Button
       ref={ref} // forward the ref to the Button
-      onClick={onClick}
+      onClick={(ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        if (onClick) {
+          onClick(ev);
+        }
+      }}
       variant={"secondary"}
-      className={`h-8 overflow-hidden relative text-ellipsis whitespace-nowrap w-auto flex justify-start items-center py-[6px] pr-3 pl-[10px] mb-1 bg-gray-200`}
+      className={`h-8 overflow-hidden relative text-ellipsis whitespace-nowrap w-auto flex justify-start items-center py-[6px] pr-3 pl-3 mb-1 bg-gray-200`}
     >
       <span className="mr-[6px] -ml-[6px]">{icon}</span>
       <span>{title}</span>

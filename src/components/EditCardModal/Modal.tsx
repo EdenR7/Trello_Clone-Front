@@ -5,23 +5,27 @@ import CardItemUserIcon from "@/components/CardItem/CardItemUserIcon";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateCardTitle } from "@/hooks/Query hooks/Card hooks/useUpdateCardTitle";
-import { ICard } from "@/types/card.types";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { AlignLeft, CreditCard } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EditCardModalLabels from "./EditCardModalLabels";
 import EditCardModalSideButton from "./EditCardModalSideButton";
 import EditCardModalMembers from "./EditCardModalMembers";
 import EditCardModalCover from "./EditCardModalCover";
+import { usegetCard } from "@/hooks/Query hooks/Card hooks/useGetCard";
+import EditCardModalDates from "./EditCardModalDates";
+import EditCardModalMove from "./EditCardModalMove";
+import EditCardModalArchive from "./EditCardModalArchive";
 
 interface ModalProps {
   position: { top: number; left: number; menuPosition: string };
   onClose: () => void;
-  card: ICard;
+  cardId: string;
 }
 
-function Modal({ card, position, onClose }: ModalProps) {
+function Modal({ cardId, position, onClose }: ModalProps) {
+  const { data: card } = usegetCard(cardId);
   const { top, left, menuPosition } = position;
   const [isLabelsOpen, setIsLabelsOpen] = useLocalStorage(
     "trella-labels-open-state",
@@ -30,21 +34,36 @@ function Modal({ card, position, onClose }: ModalProps) {
   const { boardId } = useParams();
   const { mutate: updateCardTitle } = useUpdateCardTitle(boardId!);
   const titleRef = useRef<HTMLTextAreaElement | null>(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    setTimeout(() => {
+      if (titleRef.current) {
+        console.log("working");
+        titleRef.current.focus();
+        titleRef.current.select();
+      }
+    }, 0);
+  }, [cardId]);
+
+  if (!card) return;
+
   const hasTodos = card.checklist.some(
     (checklist) => checklist.todos.length > 0
   );
-  const navigate = useNavigate();
 
   function handleUpdateCardTitle() {
     if (titleRef.current) {
-      updateCardTitle({ cardId: card._id!, newTitle: titleRef.current.value });
+      updateCardTitle({ cardId: card!._id!, newTitle: titleRef.current.value });
       onClose();
     }
   }
 
   return (
     // Modal backdrop to darken the background
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/75">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/75"
+    >
       {/* Modal content */}
       <div
         style={{
@@ -56,6 +75,10 @@ function Modal({ card, position, onClose }: ModalProps) {
           zIndex: 1000,
         }}
         className="rounded-lg w-64 bg-white text-[#172b4d]"
+        onClick={(ev) => {
+          ev.stopPropagation();
+          ev.preventDefault();
+        }}
       >
         {card.bgCover.bg !== "" && (
           <div
@@ -108,19 +131,24 @@ function Modal({ card, position, onClose }: ModalProps) {
         }}
         className=" flex flex-col items-start"
       >
-        <EditCardModalSideButton
-          onClick={(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            ev.stopPropagation();
-            ev.preventDefault();
-            onClose();
-            navigate(`/b/${boardId}/c/${card._id}`);
-          }}
-          icon={<CreditCard size={16} strokeWidth={1.75} />}
-          title="Open card"
-        />
-        <EditCardModalLabels card={card} />
-        <EditCardModalMembers card={card} />
+        {!card.bgCover.isCover && (
+          <EditCardModalSideButton
+            onClick={(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+              ev.stopPropagation();
+              ev.preventDefault();
+              onClose();
+              navigate(`/b/${boardId}/c/${card._id}`);
+            }}
+            icon={<CreditCard size={16} strokeWidth={1.75} />}
+            title="Open card"
+          />
+        )}
+        {!card.bgCover.isCover && <EditCardModalLabels card={card} />}
+        {!card.bgCover.isCover && <EditCardModalMembers card={card} />}
         <EditCardModalCover card={card} />
+        {!card.bgCover.isCover && <EditCardModalDates card={card} />}
+        <EditCardModalMove card={card} />
+        <EditCardModalArchive card={card} />
       </div>
     </div>
   );
