@@ -47,12 +47,10 @@ export function useMoveCardToList(boardId: string) {
       destinationIndex,
       previousLists,
     }) => {
-      // targetCard.position = newPos;
       if (previousLists) {
         const initialList = [...cardInitialList.cards];
         initialList.splice(sourceIndex, 1);
         const finalList = [...cardFinalList.cards];
-        // const cardFinalListCards = cardFinalList.cards;
         finalList.splice(destinationIndex, 0, {
           ...targetCard,
           position: newPos,
@@ -68,7 +66,6 @@ export function useMoveCardToList(boardId: string) {
               return list;
             }
           }
-          // list._id === listId ? { ...list, cards: finalList } : list
         );
 
         if (countDecimalPlaces(newPos) > 10) {

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { IBoard } from "@/types/board.types";
 import { LoggedInUser } from "@/providers/auth-provider";
-import { useSearchParams } from "react-router-dom";
+import { SetURLSearchParams, useSearchParams } from "react-router-dom";
 import MembersFilter from "./MembersFilter";
 import DatesFilter from "./DatesFilter";
 import LabelsFilter from "./LabelsFilter";
@@ -11,11 +11,16 @@ import FilterDefinition from "./FilterDefinition";
 interface BoardsFiltersProps {
   board: IBoard;
   loggedInUser: LoggedInUser;
+  searchParams: URLSearchParams;
+  setSearchParams: SetURLSearchParams;
 }
 
-function BoardsFilters({ board, loggedInUser }: BoardsFiltersProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
+function BoardsFilters({
+  board,
+  loggedInUser,
+  searchParams,
+  setSearchParams,
+}: BoardsFiltersProps) {
   const updateUrlParams = (key: string, values: string[]) => {
     setSearchParams((params) => {
       if (values.length > 0) {

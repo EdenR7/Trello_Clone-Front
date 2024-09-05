@@ -7,6 +7,7 @@ import FiltersLayout from "./Filters/FiltersLayout";
 import BoardsFilters from "./Filters/BoardsFilters";
 import BoardTitle from "./BoardTitle";
 import BoardStarring from "./BoardStarring";
+import { useSearchParams } from "react-router-dom";
 
 export interface BoardNavbarProps {
   isSideBarOpen: boolean;
@@ -19,9 +20,11 @@ function BoardNavbar({
   board,
   setIsSideBarOpen,
 }: BoardNavbarProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { loggedInUser } = useAuth();
   if (!board || !loggedInUser) return null;
   const [onNewTitleInput, setOnNewTitleInput] = useState(false);
+  const [openFilters, setOpenFilters] = useState(false);
 
   return (
     <div
@@ -44,6 +47,8 @@ function BoardNavbar({
         </div>
         <div className=" flex items-center gap-2">
           <FiltersLayout
+            setOpenFilters={setOpenFilters}
+            openFilters={openFilters}
             trigger={
               <Button
                 className=" py-[6px] px-2 hover:bg-white hover:bg-opacity-10 "
@@ -53,7 +58,12 @@ function BoardNavbar({
               </Button>
             }
           >
-            <BoardsFilters board={board} loggedInUser={loggedInUser} />
+            <BoardsFilters
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+              board={board}
+              loggedInUser={loggedInUser}
+            />
           </FiltersLayout>
           <span className=" h-5 w-[1px] bg-gray-400 rounded-xl opacity-35"></span>
           <div>

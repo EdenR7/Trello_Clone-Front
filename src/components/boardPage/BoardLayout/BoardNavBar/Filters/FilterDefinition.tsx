@@ -12,6 +12,7 @@ function FilterDefinition() {
   const [filterDefinition, setFilterDefinition] = useState(
     localStorage.getItem("filterDefinition")
   );
+  
   const [isOpen, setIsOpen] = useState(false);
 
   function changeFilterDefinition(

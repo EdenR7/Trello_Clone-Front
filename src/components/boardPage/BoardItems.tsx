@@ -155,7 +155,6 @@ function BoardItems() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className=" list-none flex gap-3"
-              // style={boardStyle}
             >
               <ListsRender setHoveredItem={setHoveredItem} />
               <div

@@ -7,31 +7,33 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
-import { cloneElement, ReactElement, useState } from "react";
+import { cloneElement, ReactElement } from "react";
 
 interface FiltersLayoutProps {
   children: React.ReactNode;
   trigger: React.ReactNode;
   popoverClassName?: string;
+  openFilters: boolean;
+  setOpenFilters: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function FiltersLayout({
   children,
   trigger,
   popoverClassName,
+  openFilters,
+  setOpenFilters,
 }: FiltersLayoutProps) {
-  const [internalOpen, setInternalOpen] = useState(false);
-
   function handleOpenChange(newOpen: boolean) {
-    setInternalOpen(newOpen);
+    setOpenFilters(newOpen);
   }
 
   function toggleOpen() {
-    handleOpenChange(!internalOpen);
+    handleOpenChange(!openFilters);
   }
 
   return (
-    <Popover open={internalOpen} onOpenChange={handleOpenChange}>
+    <Popover open={openFilters} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         {cloneElement(trigger as ReactElement, {
           onClick: toggleOpen,
