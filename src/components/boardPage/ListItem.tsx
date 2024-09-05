@@ -4,6 +4,7 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
 import { ICard } from "@/types/card.types";
+import { log } from "console";
 
 interface ListItemProps {
   list: IList;
@@ -168,7 +169,11 @@ function ListItem({
         return true;
       }
 
-      return matchesMembers || matchesLabels || matchesDueDate;
+      return (
+        matchesMembers ||
+        matchesLabels ||
+        (matchesDueDate && isDueDateFilterActive)
+      );
     }
   }
 
