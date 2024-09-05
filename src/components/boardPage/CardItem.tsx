@@ -138,7 +138,7 @@ function CardItem(props: CardItemProps) {
             <div className="  h-14 cursor-pointer shadow rounded-lg relative">
               <Link key={card._id} to={`/b/${boardId}/c/${card._id}`}>
                 <div
-                  className=" hover:outline hover:outline-2  hover:outline-primary flex rounded-lg min-h-full py-2 pr-2 pl-3 relative group"
+                  className=" hover:outline hover:outline-1 hover:outline-primary flex rounded-lg min-h-full py-2 pr-2 pl-3 relative group"
                   style={{ backgroundColor: card.bgCover.bg }}
                 >
                   <Button
