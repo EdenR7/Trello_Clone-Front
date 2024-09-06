@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { useUnArchiveList } from "@/hooks/Query hooks/List hooks/useUnArchiveList";
 import { IBoard } from "@/types/board.types";
 import { RotateCcw } from "lucide-react";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface ArchiveListsrops {
   board: IBoard;
@@ -44,11 +44,8 @@ function ArchiveLists({ board, setOnArchiveLists }: ArchiveListsrops) {
       <div className=" mt-4">
         {board?.archivedLists.length > 0 ? (
           board.archivedLists.map((list) => (
-            <>
-              <div
-                key={list.listId}
-                className=" py-[2px] flex justify-between items-center"
-              >
+            <React.Fragment key={list.listId}>
+              <div className=" py-[2px] flex justify-between items-center">
                 <span className=" p-2">{list.name}</span>
                 <Button
                   variant={"secondary"}
@@ -60,7 +57,7 @@ function ArchiveLists({ board, setOnArchiveLists }: ArchiveListsrops) {
                 </Button>
               </div>
               <Separator className=" my-1" />
-            </>
+            </React.Fragment>
           ))
         ) : (
           <div className="bg-btn_bg_primary text-text_dark_blue py-6 px-3 rounded-md text-center">

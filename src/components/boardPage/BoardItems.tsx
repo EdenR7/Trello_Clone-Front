@@ -8,10 +8,14 @@ import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdateP
 import { useMoveCardWithinList } from "@/hooks/Query hooks/Card hooks/useMoveCardWithinList";
 import { useMoveCardToList } from "@/hooks/Query hooks/Card hooks/useMoveCardToList";
 import { useState } from "react";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
+import AddListForm from "./AddListForm";
 
 function BoardItems() {
   const { boardId } = useParams();
   const { data: board, isPending } = useGetBoard(boardId!);
+  const [onCreateNewList, setOnCreateNewList] = useState(false);
 
   const qClient = useQueryClient();
   const updateListPosition = useListUpdatePosition(boardId!);
@@ -158,7 +162,7 @@ function BoardItems() {
               className=" list-none flex gap-3"
             >
               <ListsRender setHoveredItem={setHoveredItem} />
-              
+
               <div
                 style={{
                   backgroundColor:
@@ -170,6 +174,21 @@ function BoardItems() {
               >
                 {provided.placeholder}
               </div>
+              {onCreateNewList ? (
+                <AddListForm
+                  setOnCreateNewList={setOnCreateNewList}
+                  boardId={boardId}
+                />
+              ) : (
+                <Button
+                  onClick={() => setOnCreateNewList(true)}
+                  variant={"naked"}
+                  className="text-left justify-start flex gap-2 p-3 bg-white/30 rounded-xl min-w-[272px] h-11 font-medium text-white hover:bg-white/20 transition-colors"
+                >
+                  <Plus size={20} />
+                  Add another list
+                </Button>
+              )}
             </ol>
           )}
         </Droppable>
