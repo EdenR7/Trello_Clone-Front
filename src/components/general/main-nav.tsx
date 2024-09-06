@@ -1,68 +1,127 @@
-// import { Link } from "react-router-dom";
-// import { ModeToggle } from "./mode-toggle";
-// import { AuthButton } from "./auth-button";
-// import { UserButton } from "./user-button";
-// import { useAuth } from "@/providers/auth-provider";
-// import MainSideBar from "./main-sidebar";
-
-// export function MainNav() {
-//   const { loggedInUser } = useAuth();
-
-//   return (
-//     <header className=" sticky top-0 py-2 z-50 w-full border-border/40 bg-foreground/95 backdrop-blur supports-[backdrop-filter]:bg-foreground/60 shadow-md dark:border-b dark: border-b-primary">
-//       <div className=" max-h-8 flex justify-between items-center px-6">
-//         <div className="flex gap-4">
-//           <Link
-//             to="/"
-//             className="uppercase mr-4 flex items-center space-x-2 lg:mr-6 text-lg"
-//           >
-//             Logo
-//           </Link>
-//           <nav className="  hidden w-full sm:flex items-center gap-4 text-sm lg:gap-6">
-//             <Link className=" hover:underline decoration-primary" to="/about">
-//               About
-//             </Link>
-//             <Link className=" hover:underline decoration-primary" to="/contact">
-//               Contact
-//             </Link>
-//             <Link
-//               className=" hover:underline decoration-primary"
-//               to="/services"
-//             >
-//               Services
-//             </Link>
-//             <Link
-//               className=" hover:underline decoration-primary"
-//               to="/b/66d46ee382111fd9687428a5"
-//             >
-//               Board
-//             </Link>
-//           </nav>
-//         </div>
-//         <div className="flex items-center space-x-2 md:justify-end">
-//           <div className=" hidden break-500px:block">
-//             {loggedInUser ? <UserButton /> : <AuthButton />}
-//           </div>
-//           <ModeToggle />
-//           <MainSideBar />
-//         </div>
-//       </div>
-//     </header>
-//   );
-// }
-
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthButton } from "./auth-button";
 import { UserButton } from "./user-button";
 import { useAuth } from "@/providers/auth-provider";
 import MainSideBar from "./main-sidebar";
 import { Search, Bell, HelpCircle, Plus, ChevronDown } from "lucide-react"; // Import the down arrow icon
+import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
+import { useEffect, useState } from "react";
+import { getAverageColor } from "@/utils/getAverageImgColor";
+import { getTextColorForBackground } from "@/utils/getTextColorFromBg";
+
+// Utility function to convert HEX to RGB
+const hexToRgb = (hex: string): [number, number, number] => {
+  let r = 0,
+    g = 0,
+    b = 0;
+
+  // 3 digits
+  if (hex.length === 4) {
+    r = parseInt(hex[1] + hex[1], 16);
+    g = parseInt(hex[2] + hex[2], 16);
+    b = parseInt(hex[3] + hex[3], 16);
+  }
+  // 6 digits
+  else if (hex.length === 7) {
+    r = parseInt(hex[1] + hex[2], 16);
+    g = parseInt(hex[3] + hex[4], 16);
+    b = parseInt(hex[5] + hex[6], 16);
+  }
+
+  return [r, g, b];
+};
+
+// Utility function to convert RGB to HSL
+const rgbToHsl = (r: number, g: number, b: number): string => {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s: number;
+  let l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+
+  return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(
+    l * 100
+  )}%)`;
+};
 
 export function MainNav() {
   const { loggedInUser } = useAuth();
+  const { boardId } = useParams();
+  const [boardBg, setBoardBg] = useState("rgb(255, 255, 255)");
+  const [textColor, setTextColor] = useState("FFF");
+
+  const { data: board } = useGetBoard(boardId ?? null);
+
+  useEffect(() => {
+    const applyBackgroundColor = async () => {
+      if (!board) {
+        setBoardBg("#FFF");
+        setTextColor("#000");
+        return;
+      }
+
+      const { bgType, background } = board.bg;
+
+      switch (bgType) {
+        case "color":
+          setBoardBg(background);
+          setTextColor(getTextColorForBackground(boardBg));
+          break;
+        case "gradient":
+          // Extracting colors from gradient is complex; here we assume the first color
+          const gradientColors = background.match(/#[0-9a-fA-F]{6}/g) || [];
+          const gradientColor = gradientColors[0] || "#fff";
+          setBoardBg(rgbToHsl(...hexToRgb(gradientColor))); // Convert to HSL
+          setTextColor(getTextColorForBackground(boardBg));
+
+          break;
+        case "image":
+          try {
+            const dominantColor = await getAverageColor(background);
+            setBoardBg(dominantColor);
+            console.log(boardBg);
+
+            console.log("textColor: ", textColor);
+          } catch (error) {
+            console.error("Failed to extract color from image", error);
+          }
+          break;
+        default:
+          setBoardBg("#fff");
+      }
+    };
+
+    applyBackgroundColor();
+  }, [boardId, board?.bg]);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white py-2 border-b border-gray-200 h-12">
+    <header
+      style={{ color: textColor, backgroundColor: boardBg }}
+      className="sticky top-0 z-50 w-full py-2 border-b border-gray-200 h-12"
+    >
       <div className="max-h-10 flex justify-between items-center px-4">
         <div className="flex items-center gap-4">
           <Link to="/" className="text-[#44546F] font-bold text-2xl mr-4">

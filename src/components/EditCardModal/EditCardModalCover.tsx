@@ -3,8 +3,13 @@ import PopoverLayout from "../general/PopoverLayout";
 import CardCoverPopup from "../cardDetailsPage/CardCoverPopup";
 import EditCardModalSideButton from "./EditCardModalSideButton";
 import { Rows2 } from "lucide-react";
+import React from "react";
 
-function EditCardModalCover({ card }: { card: ICard }) {
+const EditCardModalCover = React.memo(function EditCardModalCover({
+  card,
+}: {
+  card: ICard;
+}) {
   console.log("card: ", card);
 
   return (
@@ -20,6 +25,6 @@ function EditCardModalCover({ card }: { card: ICard }) {
       <CardCoverPopup card={card} />
     </PopoverLayout>
   );
-}
+});
 
 export default EditCardModalCover;
