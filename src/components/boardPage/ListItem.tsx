@@ -222,8 +222,7 @@ function ListItem({
                   </Button>
                 </DropdownMenuTrigger>
                 <ListMenu
-                  listId={list._id}
-                  boardId={list.board}
+                  list={list}
                   setAddACardFormOpen={setAddACardFormOpen}
                   setOpenListMenu={setOpenListMenu}
                 />

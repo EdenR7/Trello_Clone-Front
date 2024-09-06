@@ -1,40 +1,61 @@
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { X } from "lucide-react";
+import { ChevronLeft, X } from "lucide-react";
 // import { useState } from "react";
 import { IAddACardFormOpen } from "./ListItem";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IBoard } from "@/types/board.types";
+import ListMenuActions from "./ListMenu-Actions";
+import { useState } from "react";
+import ListMenuMoveList from "./ListMenu-MoveList";
 import { IList } from "@/types/list.types";
-import { useArchiveList } from "@/hooks/Query hooks/List hooks/useArchiveList";
+
+export type ListMenuModes = "List actions" | "Copy list" | "Move list";
+const LIST_MENU_MODE_OPTIONS = {
+  "List actions": ListMenuActions,
+  "Copy list": ListMenuMoveList,
+  "Move list": ListMenuMoveList,
+};
+export interface ListMenuModesProps {
+  setOpenListMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  setAddACardFormOpen: React.Dispatch<React.SetStateAction<IAddACardFormOpen>>;
+  setSideBarMode: React.Dispatch<React.SetStateAction<ListMenuModes>>;
+  //   listId: string;
+  //   boardId: string;
+  list: IList;
+}
 
 interface ListMenuProps {
   setOpenListMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setAddACardFormOpen: React.Dispatch<React.SetStateAction<IAddACardFormOpen>>;
-  listId: string;
-  boardId: string;
+  list: IList;
 }
 
 function ListMenu({
   setOpenListMenu,
   setAddACardFormOpen,
-  listId,
-  boardId,
+  list,
 }: ListMenuProps) {
-  //   const qClient = useQueryClient();
-  const listArchiver = useArchiveList(boardId);
+  const [sideBarMode, setSideBarMode] = useState<ListMenuModes>("List actions");
 
-  function handleArchiveList() {
-    listArchiver.mutate({ listId });
-  }
+  const CurrentSidebarMode = LIST_MENU_MODE_OPTIONS[sideBarMode];
 
   return (
     <DropdownMenuContent className="w-64 text-slate-600 p-0 rounded-lg pb-3">
+      {sideBarMode !== "List actions" && (
+        <Button
+          onClick={() => setSideBarMode("List actions")}
+          variant={"naked"}
+          size={"icon"}
+          className=" mr-auto text-slate-500 h-8 w-8 rounded-lg absolute left-2 top-[9px]"
+        >
+          <ChevronLeft size={18} />
+        </Button>
+      )}
+      <DropdownMenuLabel className=" h-12 flex justify-center items-center font-semibold text-center py-1 px-2">
+        {sideBarMode}
+      </DropdownMenuLabel>
       <Button
         variant={"naked"}
         size={"icon"}
@@ -45,35 +66,13 @@ function ListMenu({
       >
         <X size={16} />
       </Button>
-      <DropdownMenuLabel className=" h-12 flex justify-center items-center font-semibold text-center py-1 px-2">
-        List actions
-      </DropdownMenuLabel>
-      <DropdownMenuItem
-        onClick={() => {
-          setOpenListMenu(false);
-          setAddACardFormOpen({ open: true, position: "top" });
-        }}
-        className=" px-3 py-[6px] cursor-pointer hover:bg-slate-100"
-      >
-        Add card
-      </DropdownMenuItem>
-      <DropdownMenuItem className=" px-3 py-[6px] cursor-pointer hover:bg-slate-100">
-        copy list
-      </DropdownMenuItem>
-      <DropdownMenuItem className=" px-3 py-[6px] cursor-pointer hover:bg-slate-100">
-        Move list
-      </DropdownMenuItem>
-      <DropdownMenuSeparator className=" mx-[10px] my-2" />
-
-      <DropdownMenuItem
-        onClick={handleArchiveList}
-        className=" px-3 py-[6px] cursor-pointer hover:bg-slate-100"
-      >
-        Archive this list
-      </DropdownMenuItem>
-      <DropdownMenuItem className=" px-3 py-[6px] cursor-pointer hover:bg-slate-100">
-        Archive all cards in this list
-      </DropdownMenuItem>
+      <CurrentSidebarMode
+        setSideBarMode={setSideBarMode}
+        // boardId={boardId}
+        list={list}
+        setAddACardFormOpen={setAddACardFormOpen}
+        setOpenListMenu={setOpenListMenu}
+      />
     </DropdownMenuContent>
   );
 }
