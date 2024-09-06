@@ -5,15 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import useClickOutside from "@/hooks/CustomHooks/useClickOutside";
 import api from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export async function createListApi(boardId: string, name: string) {
-  try {
-    const res = await api.post(`list/${boardId}`, { name });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+import { useCreateList } from "@/hooks/Query hooks/List hooks/useCreateList";
 
 interface AddListFormProps {
   setOnCreateNewList: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,21 +22,7 @@ function AddListForm({ setOnCreateNewList, boardId }: AddListFormProps) {
     handleSubmit();
   });
 
-  const qClient = useQueryClient();
-
-  const listCreator = useMutation({
-    mutationFn: ({ boardId, name }: { boardId: string; name: string }) =>
-      createListApi(boardId, name),
-    onMutate: () => {
-      qClient.cancelQueries(["lists", boardId] as any);
-    },
-    onSuccess: () => {
-      qClient.invalidateQueries(["lists", boardId] as any);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const listCreator = useCreateList(boardId);
 
   function handleInput() {
     const textarea = textareaRef.current;

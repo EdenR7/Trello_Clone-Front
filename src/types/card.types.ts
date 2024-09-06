@@ -1,5 +1,6 @@
 import { ILabel, IMember } from "./board.types";
 import { IChecklist } from "./checklist.types";
+import { IList } from "./list.types";
 
 interface ICardMember extends IMember {
   memberId: string;
@@ -8,7 +9,7 @@ interface ICardMember extends IMember {
   username: string;
 }
 
-interface ICardList {
+export interface ICardList {
   _id: string;
   board: string;
   isArchived: boolean;
@@ -26,7 +27,7 @@ export interface ICard {
   startDate?: Date;
   isArchived: boolean;
   labels: ILabel[];
-  list: ICardList;
+  list: ICardList | IList;
   members: ICardMember[];
   position: number;
   description: string;

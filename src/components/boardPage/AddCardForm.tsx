@@ -4,18 +4,8 @@ import { Textarea } from "../ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import { IAddACardFormOpen } from "./ListItem";
 import useClickOutside from "@/hooks/CustomHooks/useClickOutside";
-import api from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-
-export async function createCardApi(listId: string, title: string) {
-  try {
-    const res = await api.post(`list/${listId}/card/add`, { title });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+import { useCreateCard } from "@/hooks/Query hooks/Card hooks/useCreateCard";
 
 interface AddCardFormProps {
   setAddACardFormOpen: React.Dispatch<React.SetStateAction<IAddACardFormOpen>>;
@@ -33,20 +23,7 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
     setAddACardFormOpen((prev) => ({ ...prev, open: false }));
   });
 
-  const qClient = useQueryClient();
-  const cardCreator = useMutation({
-    mutationFn: ({ listId, title }: { listId: string; title: string }) =>
-      createCardApi(listId, title),
-    onMutate: () => {
-      qClient.cancelQueries(["lists", boardId] as any);
-    },
-    onSuccess: () => {
-      qClient.invalidateQueries(["lists", boardId] as any);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const cardCreator = useCreateCard(boardId!);
 
   function handleInput() {
     const textarea = textareaRef.current;
