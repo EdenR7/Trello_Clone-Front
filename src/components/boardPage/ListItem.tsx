@@ -7,6 +7,12 @@ import { ICard } from "@/types/card.types";
 import { Button } from "../ui/button";
 import { Ellipsis, Plus } from "lucide-react";
 import AddCardForm from "./AddCardForm";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import ListMenu from "./ListMenu";
 
 interface ListItemProps {
   list: IList;
@@ -32,10 +38,10 @@ function ListItem({
   setActiveCardId,
 }: ListItemProps) {
   const [searchParams] = useSearchParams();
-
+  const [openListMenu, setOpenListMenu] = useState(false);
   const [addACardFormOpen, setAddACardFormOpen] = useState<IAddACardFormOpen>({
     open: false,
-    position: "bottom",
+    position: "top",
   });
 
   const filterDefinition = searchParams.get("filtersDefinition") || "Any";
@@ -199,21 +205,40 @@ function ListItem({
           key={list._id}
         >
           <div {...provided.dragHandleProps}>
-            <header className=" flex justify-between px-2 pt-2">
+            <header className=" flex justify-between px-2 pt-2 mb-2">
               <h3 className=" py-[6px] pl-3 pr-2 font-semibold">{list.name}</h3>
-              <Button
-                variant={"secondary"}
-                className=" p-2 bg-inherit rounded-lg"
-              >
-                <Ellipsis
-                  strokeWidth={1.8}
-                  size={16}
-                  className=" text-slate-600"
+              <DropdownMenu open={openListMenu} onOpenChange={setOpenListMenu}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    onClick={() => setOpenListMenu(true)}
+                    variant={"secondary"}
+                    className=" p-2 bg-inherit rounded-lg"
+                  >
+                    <Ellipsis
+                      strokeWidth={1.8}
+                      size={16}
+                      className=" text-slate-600"
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <ListMenu
+                  listId={list._id}
+                  boardId={list.board}
+                  setAddACardFormOpen={setAddACardFormOpen}
+                  setOpenListMenu={setOpenListMenu}
                 />
-              </Button>
+              </DropdownMenu>
             </header>
             {/* <p>position : {list.position}</p> */}
             <div className=" max-h-[calc(100vh-192px)] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+              {addACardFormOpen.open && addACardFormOpen.position === "top" && (
+                <div className=" mx-1 px-1 py-[2px] mb-1">
+                  <AddCardForm
+                    listId={list._id}
+                    setAddACardFormOpen={setAddACardFormOpen}
+                  />
+                </div>
+              )}
               <Droppable droppableId={list._id} type="card">
                 {(provided) => (
                   <ol
