@@ -21,21 +21,22 @@ export interface ListMenuModesProps {
   setOpenListMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setAddACardFormOpen: React.Dispatch<React.SetStateAction<IAddACardFormOpen>>;
   setSideBarMode: React.Dispatch<React.SetStateAction<ListMenuModes>>;
-  //   listId: string;
-  //   boardId: string;
   list: IList;
+  indexInBoard: number;
 }
 
 interface ListMenuProps {
   setOpenListMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setAddACardFormOpen: React.Dispatch<React.SetStateAction<IAddACardFormOpen>>;
   list: IList;
+  indexInBoard: number;
 }
 
 function ListMenu({
   setOpenListMenu,
   setAddACardFormOpen,
   list,
+  indexInBoard,
 }: ListMenuProps) {
   const [sideBarMode, setSideBarMode] = useState<ListMenuModes>("List actions");
 
@@ -67,6 +68,7 @@ function ListMenu({
         <X size={16} />
       </Button>
       <CurrentSidebarMode
+        indexInBoard={indexInBoard}
         setSideBarMode={setSideBarMode}
         // boardId={boardId}
         list={list}

@@ -102,7 +102,7 @@ export function MainNav() {
       }
 
       const { bgType, background } = board.bg;
-      console.log("background: ", background);
+      // console.log("background: ", background);
 
       let newBgColor = "#FFFFFF";
       setHoverColor(getHoverColor(newBgColor));
@@ -129,7 +129,7 @@ export function MainNav() {
         default:
           newBgColor = "#FFFFFF";
       }
-      console.log("new bgColor at the end: ", newBgColor);
+      // console.log("new bgColor at the end: ", newBgColor);
 
       setBoardBg(newBgColor);
       setHoverColor(getHoverColor(newBgColor));
@@ -140,7 +140,7 @@ export function MainNav() {
     applyBackgroundColor();
   }, [boardId, board?.bg]);
 
-  console.log("boardBg: ", boardBg);
+  // console.log("boardBg: ", boardBg);
 
   const navigate = useNavigate();
 

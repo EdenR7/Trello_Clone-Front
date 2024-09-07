@@ -7,11 +7,7 @@ import { ICard } from "@/types/card.types";
 import { Button } from "../ui/button";
 import { Ellipsis, Plus } from "lucide-react";
 import AddCardForm from "./AddCardForm";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import ListMenu from "./ListMenu";
 
 interface ListItemProps {
@@ -222,6 +218,7 @@ function ListItem({
                   </Button>
                 </DropdownMenuTrigger>
                 <ListMenu
+                  indexInBoard={index}
                   list={list}
                   setAddACardFormOpen={setAddACardFormOpen}
                   setOpenListMenu={setOpenListMenu}
@@ -229,15 +226,21 @@ function ListItem({
               </DropdownMenu>
             </header>
             {/* <p>position : {list.position}</p> */}
-            <div className=" max-h-[calc(100vh-192px)] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-              {addACardFormOpen.open && addACardFormOpen.position === "top" && (
-                <div className=" mx-1 px-1 py-[2px] mb-1">
-                  <AddCardForm
-                    listId={list._id}
-                    setAddACardFormOpen={setAddACardFormOpen}
-                  />
-                </div>
-              )}
+            {addACardFormOpen.open && addACardFormOpen.position === "top" && (
+              <div className=" mx-1 px-1 py-[2px] mb-1">
+                <AddCardForm
+                  listId={list._id}
+                  setAddACardFormOpen={setAddACardFormOpen}
+                />
+              </div>
+            )}
+            <div
+              className={` ${
+                addACardFormOpen.open
+                  ? "max-h-[calc(100vh-192px-40px-104px)]"
+                  : "max-h-[calc(100vh-192px-40px)]"
+              } overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200`}
+            >
               <Droppable droppableId={list._id} type="card">
                 {(provided) => (
                   <ol
@@ -262,30 +265,30 @@ function ListItem({
                   </ol>
                 )}
               </Droppable>
-              <div className=" px-2 pt-2">
-                {!addACardFormOpen.open && (
-                  <Button
-                    onClick={() =>
-                      setAddACardFormOpen({
-                        open: true,
-                        position: "bottom",
-                      })
-                    }
-                    variant={"secondary"}
-                    className="flex gap-2 justify-start items-center h-8 py-[6px] pl-2 pr-3 w-[220px] rounded-[8px] bg-inherit text-slate-600 text-start"
-                  >
-                    <Plus size={18} />
-                    <span className=" flex-1">Add a card</span>
-                  </Button>
+            </div>
+            <div className=" px-2 pt-2">
+              {!addACardFormOpen.open && (
+                <Button
+                  onClick={() =>
+                    setAddACardFormOpen({
+                      open: true,
+                      position: "bottom",
+                    })
+                  }
+                  variant={"secondary"}
+                  className="flex gap-2 justify-start items-center h-8 py-[6px] pl-2 pr-3 w-[220px] rounded-[8px] bg-inherit text-slate-600 text-start"
+                >
+                  <Plus size={18} />
+                  <span className=" flex-1">Add a card</span>
+                </Button>
+              )}
+              {addACardFormOpen.open &&
+                addACardFormOpen.position === "bottom" && (
+                  <AddCardForm
+                    listId={list._id}
+                    setAddACardFormOpen={setAddACardFormOpen}
+                  />
                 )}
-                {addACardFormOpen.open &&
-                  addACardFormOpen.position === "bottom" && (
-                    <AddCardForm
-                      listId={list._id}
-                      setAddACardFormOpen={setAddACardFormOpen}
-                    />
-                  )}
-              </div>
             </div>
           </div>
         </li>
