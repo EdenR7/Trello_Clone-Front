@@ -21,7 +21,7 @@ function BoardItems() {
   const updateListPosition = useListUpdatePosition(boardId!);
   const moveCardWithinList = useMoveCardWithinList(boardId!);
   const moveCardToList = useMoveCardToList(boardId!);
-  const [hoveredItem, setHoveredItem] = useState<null | number>(null);
+  const [_, setHoveredItem] = useState<null | number>(null);
 
   if (isPending) return <div>Loading...</div>;
   if (!board) return null;
@@ -118,7 +118,7 @@ function BoardItems() {
           cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
         );
       } else {
-        let secPositionToCalc = -1;
+        let secPositionToCalc: number;
         destination.index > source.index && (secPositionToCalc = 1);
         cardNewPos =
           (cardFinalList.cards[destination.index].position +
@@ -159,11 +159,11 @@ function BoardItems() {
             <ol
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className=" list-none flex gap-3"
+              className=" list-none flex gap-3 pr-20"
             >
               <ListsRender setHoveredItem={setHoveredItem} />
 
-              <div
+              {/* <div
                 style={{
                   backgroundColor:
                     hoveredItem !== null ? "black" : "transparent",
@@ -171,9 +171,10 @@ function BoardItems() {
                   // minWidth: "100px", // Adjust width based on your needs
                   transition: "background-color 0.2s ease",
                 }}
-              >
-                {provided.placeholder}
-              </div>
+              ></div> */}
+              {provided.placeholder}
+              {/* <div className="min-w-44 w-64"></div> Large enough width to allow dragging */}
+
               {onCreateNewList ? (
                 <AddListForm
                   setOnCreateNewList={setOnCreateNewList}

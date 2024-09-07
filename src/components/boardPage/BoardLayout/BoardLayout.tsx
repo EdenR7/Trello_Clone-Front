@@ -28,7 +28,7 @@ function BoardLayout() {
           setIsSideBarOpen={setIsSideBarOpen}
         />
         <div
-          className={` pt-2 pb-2 mr-2 px-[6px] h-[calc(100vh-110px)] overflow-x-auto overflow-y-hidden scrollbar scrollbar-thumb-slate-300/50 scrollbar-track-black/10 ${
+          className={`pt-2 pb-2 mr-2 px-[6px] h-[calc(100vh-110px)] overflow-x-auto overflow-y-hidden scrollbar scrollbar-thumb-slate-300/50 scrollbar-track-black/10 ${
             isSideBarOpen && "w-[calc(100%-308px)] md:w-[calc(100%-348px)]"
           }`}
         >
