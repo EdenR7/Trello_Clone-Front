@@ -29,13 +29,6 @@ export default function useArchiveCard() {
       const prevBoard = queryClient.getQueryData<IBoard>(["board", boardId]);
       const prevCard = queryClient.getQueryData<ICard>(["card", cardId]);
 
-      if (prevBoard) {
-        const updatedBoard = {
-          ...prevBoard,
-          archivedCards: [...prevBoard.archivedCards, cardId],
-        };
-        queryClient.setQueryData(["board", boardId], updatedBoard);
-      }
       if (prevCard) {
         const updatedCard = { ...prevCard, isArchived: true };
         queryClient.setQueryData(["card", cardId], updatedCard);

@@ -30,6 +30,8 @@ function luminance(r: number, g: number, b: number): number {
 
 // Helper function to determine if a text color should be light or dark based on background color
 export function getTextColorForBackground(bgColor: string): string {
+  console.log("hex to rgb: ", bgColor);
+
   const rgb = hexToRgb(bgColor);
 
   if (!rgb) {

@@ -25,7 +25,6 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
     "trella-labels-open-state",
     false
   );
-  // delete card
 
   useEffect(() => {
     if (searchInputRef.current) {
@@ -69,8 +68,11 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
                 (checklist) => checklist.todos.length > 0
               );
             }
+            console.log("card in archive: ", card.bgCover);
+            console.log("board in archive", board.archivedCards);
 
-            return card.bgCover.isCover ? (
+            if (!card) return <div></div>;
+            return card?.bgCover.isCover ? (
               <div
                 key={card._id}
                 className="  h-14 cursor-pointer shadow rounded-lg relative"
