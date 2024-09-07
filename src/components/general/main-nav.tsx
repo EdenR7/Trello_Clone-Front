@@ -179,10 +179,10 @@ export function MainNav() {
           <Link to="/" className="font-bold text-xl mr-3">
             Trello
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
-            <button className="font-medium px-3 py-1.5 rounded-sm text-sm hover:bg-[var(--hover-color)]">
+          <nav className="flex items-center gap-1">
+            {/* <button className="font-medium px-3 py-1.5 rounded-sm text-sm hover:bg-[var(--hover-color)]">
               Workspaces <ChevronDown className="inline h-4 w-4" />
-            </button>
+            </button> */}
             <RecentBoardsPopover
               isPopoverOpen={isRecentPopoverOpen}
               setIsPopoverOpen={setIsRecentPopoverOpen}
@@ -214,16 +214,18 @@ export function MainNav() {
               size={16}
             />
           </div>
-          <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
-            <Bell size={18} style={{ transform: "rotate(45deg)" }} />
-          </button>
-          <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
-            <HelpCircle size={18} />
-          </button>
-          <div className="hidden md:block">
+          <div className=" hidden md:block">
+            <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
+              <Bell size={18} style={{ transform: "rotate(45deg)" }} />
+            </button>
+            <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
+              <HelpCircle size={18} />
+            </button>
+          </div>
+          <div className="">
             {loggedInUser ? <UserButton /> : <AuthButton />}
           </div>
-          <MainSideBar />
+          {/* <MainSideBar /> */}
         </div>
       </div>
     </header>

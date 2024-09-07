@@ -202,7 +202,7 @@ function ListItem({
         >
           <div {...provided.dragHandleProps}>
             <header className=" flex justify-between px-2 pt-2 mb-2">
-              <h3 className=" py-[6px] pl-3 pr-2 font-semibold">{list.name}</h3>
+              <h3 className=" py-[6px] pl-3 pr-2 font-semibold">{list.name}, {list.position}</h3>
               <DropdownMenu open={openListMenu} onOpenChange={setOpenListMenu}>
                 <DropdownMenuTrigger asChild>
                   <Button

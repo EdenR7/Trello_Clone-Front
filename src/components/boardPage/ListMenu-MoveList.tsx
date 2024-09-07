@@ -2,7 +2,6 @@ import { useAuth } from "@/providers/auth-provider";
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -11,6 +10,29 @@ import { useGetUserWorkspaces } from "@/hooks/Query hooks/Workspace hooks/useGet
 import { useEffect, useState } from "react";
 import { IWorksapceBoard } from "@/types/workspace.types";
 import ListMenuSelectItem from "./ListMenu-SelectItem";
+import api from "@/lib/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "../ui/button";
+
+export async function MenuMoveListApi(
+  listId: string,
+  sourceId: string,
+  destinationId: string,
+  newPosition: number
+) {
+  // API call to move list
+  try {
+    const res = await api.patch(
+      `/list/${listId}/move/${sourceId}/${destinationId}`,
+      {
+        newIndex: newPosition,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
   const { loggedInUser } = useAuth();
@@ -19,6 +41,27 @@ function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
     null
   );
   const [newPosition, setNewPosition] = useState<number>(indexInBoard + 1);
+
+  const qClient = useQueryClient();
+  const listMover = useMutation({
+    mutationFn: ({
+      newPosition,
+      destinationId,
+      sourceId,
+      listId,
+    }: {
+      listId: string;
+      sourceId: string;
+      destinationId: string;
+      newPosition: number;
+    }) => MenuMoveListApi(listId, sourceId, destinationId, newPosition),
+    onSuccess: () => {
+      qClient.invalidateQueries({ queryKey: ["lists", list.board] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   useEffect(() => {
     if (workspaces) {
@@ -45,6 +88,23 @@ function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
       }
     }
     console.log("Board not found");
+  }
+
+  function handleMoveList() {
+    if (
+      !selectedBoard ||
+      !list ||
+      !newPosition ||
+      (list.board === selectedBoard._id && indexInBoard + 1 === newPosition)
+    )
+      return;
+
+    listMover.mutate({
+      listId: list._id,
+      sourceId: list.board,
+      destinationId: selectedBoard._id,
+      newPosition,
+    });
   }
 
   return (
@@ -96,9 +156,12 @@ function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
           <SelectContent>
             {Array.from(
               {
-                length: selectedBoard?.listsNumber
-                  ? selectedBoard.listsNumber + 1
-                  : 1,
+                length:
+                  selectedBoard?._id !== list.board
+                    ? selectedBoard?.listsNumber
+                      ? selectedBoard.listsNumber + 1
+                      : 1
+                    : selectedBoard?.listsNumber || 1,
               },
               (_, i) => (
                 <ListMenuSelectItem
@@ -115,6 +178,9 @@ function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
           </SelectContent>
         </Select>
       </div>
+      <Button onClick={handleMoveList} className=" px-6">
+        Move
+      </Button>
     </div>
   );
 }
