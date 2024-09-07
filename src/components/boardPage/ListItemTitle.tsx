@@ -64,7 +64,7 @@ function ListItemTitle({ list }: ListItemTitleProps) {
           onClick={() => setEditTitleMode(true)}
           className=" py-[6px] pl-3 pr-2 font-semibold cursor-pointer w-full"
         >
-          {list.name}, {list.position}
+          {list.name}
         </h3>
       )}
     </>

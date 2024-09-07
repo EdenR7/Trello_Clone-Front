@@ -226,20 +226,11 @@ function ListItem({
                 />
               </DropdownMenu>
             </header>
-            {/* <p>position : {list.position}</p> */}
-            {addACardFormOpen.open && addACardFormOpen.position === "top" && (
-              <div className=" mx-1 px-1 py-[2px] mb-1">
-                <AddCardForm
-                  listId={list._id}
-                  setAddACardFormOpen={setAddACardFormOpen}
-                />
-              </div>
-            )}
             <div
               className={` ${
                 addACardFormOpen.open
-                  ? "max-h-[calc(100vh-192px-40px-104px)]"
-                  : "max-h-[calc(100vh-192px-40px)]"
+                  ? "max-h-[calc(100vh-192px-14px)]"
+                  : "max-h-[calc(100vh-192px-54px)]"
               } overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200`}
             >
               <Droppable droppableId={list._id} type="card">
@@ -249,6 +240,15 @@ function ListItem({
                     ref={provided.innerRef}
                     className=" flex flex-col gap-1 min-h-1"
                   >
+                    {addACardFormOpen.open &&
+                      addACardFormOpen.position === "top" && (
+                        <div className=" mx-1 px-1 py-[2px] mb-1">
+                          <AddCardForm
+                            listId={list._id}
+                            setAddACardFormOpen={setAddACardFormOpen}
+                          />
+                        </div>
+                      )}
                     {filteredCards.map((card, index) => (
                       <li key={card._id} className=" mx-1 px-1 py-[2px]">
                         <CardItem
@@ -263,11 +263,20 @@ function ListItem({
                     ))}
 
                     {provided.placeholder}
+                    {addACardFormOpen.open &&
+                      addACardFormOpen.position === "bottom" && (
+                        <div className=" px-2 pt-2">
+                          <AddCardForm
+                            listId={list._id}
+                            setAddACardFormOpen={setAddACardFormOpen}
+                          />
+                        </div>
+                      )}
                   </ol>
                 )}
               </Droppable>
             </div>
-            <div className=" px-2 pt-2">
+            <div className=" px-2 pt-2 ">
               {!addACardFormOpen.open && (
                 <Button
                   onClick={() =>
@@ -283,13 +292,6 @@ function ListItem({
                   <span className=" flex-1">Add a card</span>
                 </Button>
               )}
-              {addACardFormOpen.open &&
-                addACardFormOpen.position === "bottom" && (
-                  <AddCardForm
-                    listId={list._id}
-                    setAddACardFormOpen={setAddACardFormOpen}
-                  />
-                )}
             </div>
           </div>
         </li>
