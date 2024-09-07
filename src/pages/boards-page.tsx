@@ -92,7 +92,7 @@ function BoardPage() {
   if (!loggedInUser) return null;
   const sttaredBoards = [...loggedInUser?.sttaredBoards];
   const recentBoards = loggedInUser.recentBoards.filter((board) => {
-    return !sttaredBoards.includes(board);
+    return !sttaredBoards.find((b) => b._id === board._id);
   });
 
   function handleNavigation(boardId: string) {
