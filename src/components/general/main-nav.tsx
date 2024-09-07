@@ -176,7 +176,7 @@ export function MainNav() {
       <div className="max-h-10 w-full flex justify-between items-center pl-4 pr-1.5">
         <div className="flex items-center gap-4">
           <Link
-            to={`/u/${loggedInUser?.firstName}/boards`}
+            to={loggedInUser ? `/u/${loggedInUser?.firstName}/boards` : "/"}
             className="font-bold text-xl mr-3"
           >
             Trello
@@ -195,37 +195,44 @@ export function MainNav() {
               handleBoardClick={handleBoardClick}
               handleChangeStarredStatus={handleChangeStarredStatus}
             />
-            <CreateBoardPopover
-              trigger={
-                <button className="hover:bg-[var(--hover-color-for-button)] bg-[var(--hover-color)]  px-1 py-0 w-8 h-8 rounded-sm text-sm">
-                  <Plus size={22} />
-                </button>
-              }
-              isCreateOpen={isCreateOpen}
-              setIsCreateOpen={setIsCreateOpen}
-            />
+            {loggedInUser && (
+              <CreateBoardPopover
+                trigger={
+                  <button className="hover:bg-[var(--hover-color-for-button)] bg-[var(--hover-color)]  px-1 py-0 w-8 h-8 rounded-sm text-sm">
+                    <Plus size={22} />
+                  </button>
+                }
+                isCreateOpen={isCreateOpen}
+                setIsCreateOpen={setIsCreateOpen}
+              />
+            )}
           </nav>
         </div>
         <div className="flex items-center gap-2">
-          <div className="relative hidden md:block">
-            <input
-              type="text"
-              placeholder="Search"
-              className="bg-white  placeholder-gray-400 px-8 py-1 rounded-md text-sm w-48 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
-            />
-            <Search
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={16}
-            />
-          </div>
-          <div className=" hidden md:block">
-            <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
-              <Bell size={18} style={{ transform: "rotate(45deg)" }} />
-            </button>
-            <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
-              <HelpCircle size={18} />
-            </button>
-          </div>
+          {loggedInUser && (
+            <>
+              <div className="relative hidden md:block">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="bg-white  placeholder-gray-400 px-8 py-1 rounded-md text-sm w-48 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                />
+                <Search
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={16}
+                />
+              </div>
+              <div className=" hidden md:block">
+                <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
+                  <Bell size={18} style={{ transform: "rotate(45deg)" }} />
+                </button>
+                <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
+                  <HelpCircle size={18} />
+                </button>
+              </div>
+            </>
+          )}
+
           <div className="">
             {loggedInUser ? <UserButton /> : <AuthButton />}
           </div>

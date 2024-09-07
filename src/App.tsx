@@ -15,6 +15,7 @@ import CardDetailsPage from "./pages/card-details-page";
 import BoardLayout from "./components/boardPage/BoardLayout/BoardLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import BoardPage from "./pages/boards-page";
+import HomePage from "./pages/home-page";
 
 interface customRouteProps {
   children: ReactNode;
@@ -53,6 +54,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PlatformLayout />}>
+          <Route index element={<HomePage />} />
           <Route element={<HomeLayout />}>
             <Route
               path="u/:username/boards"
