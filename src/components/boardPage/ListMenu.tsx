@@ -4,7 +4,6 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { ChevronLeft, X } from "lucide-react";
-// import { useState } from "react";
 import { IAddACardFormOpen } from "./ListItem";
 import ListMenuActions from "./ListMenu-Actions";
 import { useState } from "react";
@@ -43,7 +42,7 @@ function ListMenu({
   const CurrentSidebarMode = LIST_MENU_MODE_OPTIONS[sideBarMode];
 
   return (
-    <DropdownMenuContent className="w-64 text-slate-600 p-0 rounded-lg pb-3">
+    <DropdownMenuContent className="w-[304px] text-slate-600 p-0 rounded-lg pb-3">
       {sideBarMode !== "List actions" && (
         <Button
           onClick={() => setSideBarMode("List actions")}

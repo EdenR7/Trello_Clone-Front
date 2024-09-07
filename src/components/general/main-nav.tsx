@@ -219,16 +219,18 @@ export function MainNav() {
               size={16}
             />
           </div>
-          <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
-            <Bell size={18} style={{ transform: "rotate(45deg)" }} />
-          </button>
-          <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
-            <HelpCircle size={18} />
-          </button>
-          <div className="hidden md:block">
+          <div className=" hidden md:block">
+            <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
+              <Bell size={18} style={{ transform: "rotate(45deg)" }} />
+            </button>
+            <button className=" hover:bg-[var(--hover-color)] p-1.5 rounded-sm">
+              <HelpCircle size={18} />
+            </button>
+          </div>
+          <div className="">
             {loggedInUser ? <UserButton /> : <AuthButton />}
           </div>
-          <MainSideBar />
+          {/* <MainSideBar /> */}
         </div>
       </div>
     </header>
