@@ -40,7 +40,7 @@
 
 // export default AddTodoForm;
 
-import { RefObject } from "react";
+import { RefObject, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
@@ -61,11 +61,30 @@ export default function AddTodoForm({
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // Prevents a new line from being added
+        handleSubmit();
+      }
+    };
+
+    if (textareaRef.current) {
+      textareaRef.current.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      if (textareaRef.current) {
+        textareaRef.current.removeEventListener("keydown", handleKeyDown);
+      }
+    };
+  }, [textareaRef]);
+
   return (
     <>
       <Textarea
         ref={textareaRef}
-        className="rounded-sm mt-1 ring-2 ring-primary border-none focus-visible:ring-offset-0 resize-y min-h-8 h-[56px] overflow-y-hidden"
+        className="rounded-none mt-1 ring-2 ring-primary border-none focus-visible:ring-offset-0 focus-visible:ring-2 focus-visible:ring-primary resize-y min-h-8 h-[56px] overflow-y-hidden"
         placeholder="Add an item..."
       />
       <div className="flex justify-between">
