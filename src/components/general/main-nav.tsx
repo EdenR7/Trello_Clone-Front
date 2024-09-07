@@ -3,7 +3,7 @@ import { AuthButton } from "./auth-button";
 import { UserButton } from "./user-button";
 import { useAuth } from "@/providers/auth-provider";
 import MainSideBar from "./main-sidebar";
-import { Search, Bell, HelpCircle, ChevronDown } from "lucide-react"; // Import the down arrow icon
+import { Search, Bell, HelpCircle, Plus } from "lucide-react"; // Import the down arrow icon
 import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import { useEffect, useState } from "react";
 import { getAverageColor } from "@/utils/getAverageImgColor";
@@ -67,7 +67,7 @@ const getAverageGradientColor = (gradient: string): string => {
   return darkenColor(avgHex, 20); // Darken by 20% for contrast
 };
 
-const darkenColor = (hex: string, amount: number): string => {
+export const darkenColor = (hex: string, amount: number): string => {
   const rgb = hexToRgb(hex);
   const hsl = rgbToHsl(...rgb);
   return hslToHex(hsl[0], hsl[1], Math.max(0, hsl[2] - amount));
@@ -76,14 +76,14 @@ const darkenColor = (hex: string, amount: number): string => {
 const getTextColorForBackground = (backgroundColor: string): string => {
   const rgb = hexToRgb(backgroundColor);
   const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
-  return brightness > 150 ? "#172B4D" : "#FFFFFF";
+  return brightness > 150 ? "#44546F" : "#FFFFFF";
 };
 
 export function MainNav() {
   const { loggedInUser, setLoggedInUser } = useAuth();
   const { boardId } = useParams();
   const [boardBg, setBoardBg] = useState("#FFFFFF");
-  const [textColor, setTextColor] = useState("#FFF");
+  const [textColor, setTextColor] = useState("#44546F");
   const [isRecentPopoverOpen, setIsRecentPopoverOpen] = useState(false);
   const [isStarredPopoverOpen, setIsStarredPopoverOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -97,7 +97,7 @@ export function MainNav() {
     const applyBackgroundColor = async () => {
       if (!board) {
         setBoardBg("#FFFFFF");
-        setTextColor("#000000");
+        setTextColor("#44546F");
         return;
       }
 
@@ -176,13 +176,13 @@ export function MainNav() {
     >
       <div className="max-h-10 w-full flex justify-between items-center pl-4 pr-1.5">
         <div className="flex items-center gap-4">
-          <Link to="/" className="font-bold text-xl mr-3">
+          <Link
+            to={`/u/${loggedInUser?.firstName}/boards`}
+            className="font-bold text-xl mr-3"
+          >
             Trello
           </Link>
-          <nav className="flex items-center gap-1">
-            {/* <button className="font-medium px-3 py-1.5 rounded-sm text-sm hover:bg-[var(--hover-color)]">
-              Workspaces <ChevronDown className="inline h-4 w-4" />
-            </button> */}
+          <nav className="hidden md:flex items-center gap-1">
             <RecentBoardsPopover
               isPopoverOpen={isRecentPopoverOpen}
               setIsPopoverOpen={setIsRecentPopoverOpen}
@@ -197,6 +197,11 @@ export function MainNav() {
               handleChangeStarredStatus={handleChangeStarredStatus}
             />
             <CreateBoardPopover
+              trigger={
+                <button className="hover:bg-[var(--hover-color-for-button)] bg-[var(--hover-color)]  px-1 py-0 w-8 h-8 rounded-sm text-sm">
+                  <Plus size={22} />
+                </button>
+              }
               isCreateOpen={isCreateOpen}
               setIsCreateOpen={setIsCreateOpen}
             />

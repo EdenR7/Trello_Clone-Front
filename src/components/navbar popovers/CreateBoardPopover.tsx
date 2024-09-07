@@ -1,6 +1,6 @@
-import { Check, Plus } from "lucide-react";
+import { Check } from "lucide-react";
 
-import { useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { getBoardBgStyle } from "@/utils/utilFuncs";
 import { boardBgImageOptions } from "@/constants/board.constants";
 import { IBoardBackground } from "@/types/board.types";
@@ -23,11 +23,13 @@ import DatePopoverLayout from "../general/DatePopoverLayout";
 interface CreateBoardPopoverProps {
   isCreateOpen: boolean;
   setIsCreateOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  trigger: ReactElement<HTMLButtonElement>;
 }
 
 function CreateBoardPopover({
   isCreateOpen,
   setIsCreateOpen,
+  trigger,
 }: CreateBoardPopoverProps) {
   const [tempBg, setTempBg] = useState<IBoardBackground>({
     background:
@@ -102,11 +104,7 @@ function CreateBoardPopover({
       internalOpen={isCreateOpen}
       setInternalOpen={setIsCreateOpen}
       title="Create board"
-      trigger={
-        <button className="hover:bg-[var(--hover-color-for-button)] bg-[var(--hover-color)]  px-1 py-0 w-8 h-8 rounded-sm text-sm">
-          <Plus size={22} />
-        </button>
-      }
+      trigger={trigger}
     >
       <div className=" flex justify-center pb-2">
         <div

@@ -1,4 +1,4 @@
-import { House, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Separator } from "../ui/separator";
 import { LoggedInUser } from "@/providers/auth-provider";
@@ -33,16 +33,6 @@ function HomeNavBar({
               >
                 <LayoutDashboard size={18} />
                 <span>Boards</span>
-              </Link>
-            </li>
-            <li
-              className={`mb-1 w-full font-medium ${
-                onHome && "text-blue-500 bg-blue-50 rounded-lg "
-              } `}
-            >
-              <Link className=" flex px-2 py-[6px] gap-2 rounded-md" to={"/"}>
-                <House size={18} />
-                <span>Home</span>
               </Link>
             </li>
           </ul>
