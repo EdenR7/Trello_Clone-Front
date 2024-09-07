@@ -14,9 +14,7 @@ export function useUpdateCardDescription(boardId: string) {
   return useMutation({
     mutationFn: ({ cardId, newDesc }: { cardId: string; newDesc: string }) =>
       updateCardDescription(cardId, newDesc),
-    // onSuccess: (_, { cardId }) => {
-    //   queryClient.invalidateQueries({ queryKey: ["card", cardId] });
-    // },
+
     onMutate: async ({ cardId, newDesc }) => {
       await queryClient.cancelQueries({ queryKey: ["card", cardId] });
 
@@ -32,7 +30,6 @@ export function useUpdateCardDescription(boardId: string) {
       return { previousCard };
     },
     onError: (_, { cardId }, context) => {
-      // If the mutation fails, use the context returned from onMutate to roll back
       if (context?.previousCard) {
         queryClient.setQueryData<ICard>(["card", cardId], context.previousCard);
       }

@@ -68,7 +68,8 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
       </div>
       <div className="mt-4 mb-4 ">
         {filteredArchivedCards.length > 0 ? (
-          filteredArchivedCards.map((card) => {
+          filteredArchivedCards.map((card, index) => {
+
             let hasTodos = false;
             if (card.checklist && card.checklist.length > 0) {
               hasTodos = card.checklist.some(
@@ -76,17 +77,14 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
               );
             }
 
-            if (!card) return <div></div>;
+            if (!card) return <div key={index}></div>;
             return (
-              <div>
+              <div key={card._id}>
                 {card?.bgCover.isCover ? (
-                  <div
-                    key={card._id}
-                    className="  h-14 cursor-pointer shadow rounded-lg relative w-[260px] mx-auto"
-                  >
+                  <div className="  h-14 cursor-pointer shadow rounded-lg relative w-[260px] mx-auto">
                     <Link
                       className=""
-                      key={card._id}
+                      // key={card._id}
                       to={`/b/${board._id}/c/${card._id}`}
                     >
                       <div
@@ -102,7 +100,7 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
                 ) : (
                   <React.Fragment key={card._id}>
                     {/* Card item as in board */}
-                    <Link key={card._id} to={`/b/${board._id}/c/${card._id}`}>
+                    <Link to={`/b/${board._id}/c/${card._id}`}>
                       <div className=" mx-auto relative min-h-9 rounded-lg bg-white shadow scroll-m-2 max-w-[260px] hover:outline hover:outline-2 hover:outline-primary group ">
                         {card.bgCover.bg !== "" && (
                           <div
@@ -154,7 +152,7 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
                   </Button>
                   <span className=" translate-y-[1px]">•</span>
                   <Button
-                    onClick={() => handleDeleteCard(card._id, card.list._id)}
+                    onClick={() => handleDeleteCard(card._id, card.list!)}
                     variant={"asLink"}
                     size={"sm"}
                     className=" p-0"

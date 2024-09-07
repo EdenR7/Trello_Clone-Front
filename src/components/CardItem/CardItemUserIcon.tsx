@@ -1,7 +1,8 @@
+import { IArchiveCard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
 import MakeUserIcon from "@/utils/makeUserIcon";
 
-function CardItemUserIcon({ card }: { card: ICard }) {
+function CardItemUserIcon({ card }: { card: ICard | IArchiveCard }) {
   return (
     <div className=" flex wrap justify-end -mr-1 mb-1 gap-1">
       {card.members.map((member) => (

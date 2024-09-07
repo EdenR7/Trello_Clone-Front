@@ -17,6 +17,7 @@ export interface IMember {
   firstName: string;
   lastName: string;
 }
+export type IArchiveCard = Omit<ICard, "list"> & { list: string };
 export interface IBoard {
   _id: string;
   admin: string;
@@ -26,6 +27,6 @@ export interface IBoard {
   description?: string;
   name: string;
   listsNumber: number;
-  archivedCards: ICard[];
+  archivedCards: IArchiveCard[];
   archivedLists: { listId: string; name: string }[];
 }

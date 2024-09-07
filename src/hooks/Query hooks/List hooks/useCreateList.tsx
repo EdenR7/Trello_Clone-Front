@@ -18,7 +18,7 @@ export function useCreateList(boardId: string) {
     mutationFn: ({ boardId, name }: { boardId: string; name: string }) =>
       createListApi(boardId, name),
     onMutate: ({ name }) => {
-      qClient.cancelQueries(["lists", boardId] as any);
+      qClient.cancelQueries({ queryKey: ["lists", boardId] });
       const prevData: IList[] | undefined = qClient.getQueryData([
         "lists",
         boardId,
@@ -42,7 +42,7 @@ export function useCreateList(boardId: string) {
       qClient.setQueryData(["lists", boardId], context?.prevData);
     },
     onSettled: () => {
-      qClient.invalidateQueries(["lists", boardId] as any);
+      qClient.invalidateQueries({ queryKey: ["lists", boardId] });
     },
   });
 }

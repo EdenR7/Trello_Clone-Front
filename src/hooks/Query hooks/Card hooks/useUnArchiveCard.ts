@@ -18,6 +18,8 @@ export function useUnArchiveCard(boardId: string) {
     mutationFn: ({ cardId }: { cardId: string }) =>
       unarchiveCardApi(boardId, cardId),
     onMutate: async ({ cardId }) => {
+      qClient.cancelQueries({ queryKey: ["board", boardId] });
+      qClient.cancelQueries({ queryKey: ["card", cardId] });
       const prevBoard: IBoard | undefined = qClient.getQueryData([
         "board",
         boardId,

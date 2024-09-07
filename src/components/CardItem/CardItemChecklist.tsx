@@ -1,8 +1,9 @@
+import { IArchiveCard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
 import { SquareCheckBig } from "lucide-react";
 
 interface CardItemChecklistProps {
-  card: ICard;
+  card: ICard | IArchiveCard;
 }
 
 function CardItemChecklist(props: CardItemChecklistProps) {

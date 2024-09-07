@@ -30,6 +30,7 @@ export function useUpdateBg(boardId: string) {
       bgType: string;
     }) => changeBackgroundApi(boardId!, background, bgType),
     onMutate: async ({ background, bgType }) => {
+      qClient.cancelQueries({ queryKey: ["board", boardId] });
       const previousData: IBoard | undefined = qClient.getQueryData([
         "board",
         boardId,

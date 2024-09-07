@@ -1,7 +1,8 @@
+import { IArchiveCard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
 import { addHours, isBefore } from "date-fns";
 
-export function getDueDateLabel(card: ICard) {
+export function getDueDateLabel(card: ICard | IArchiveCard) {
   if (!card.dueDate) return "";
 
   if (card.isComplete) {

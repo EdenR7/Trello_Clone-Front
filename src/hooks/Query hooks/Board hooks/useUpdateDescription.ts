@@ -25,6 +25,7 @@ export function useUpdateDescription({ boardId }: { boardId: string }) {
       description: string;
     }) => editDescriptionApi(boardId, description),
     onMutate: ({ description }) => {
+      qClient.cancelQueries({ queryKey: ["board", boardId] });
       const prevBoard: IBoard | undefined = qClient.getQueryData([
         "board",
         boardId,

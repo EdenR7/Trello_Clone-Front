@@ -4,7 +4,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export async function deleteCardApi(listId: string, cardId: string) {
   try {
+    console.log(listId);
     const res = await api.delete(`/list/${listId}/card/${cardId}`);
+
     return res.data;
   } catch (error) {
     console.log(error);

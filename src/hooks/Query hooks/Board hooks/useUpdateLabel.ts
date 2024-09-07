@@ -34,6 +34,7 @@ export function useUpdateLabel(boardId: string, cardId?: string) {
       colorInput: string;
     }) => updateLabelApi(boardId!, labelId!, titleInput, colorInput),
     onMutate: async ({ labelId, titleInput, colorInput }) => {
+      qClient.cancelQueries({ queryKey: ["board", boardId] });
       const prevBoard: IBoard | undefined = qClient.getQueryData([
         "board",
         boardId,

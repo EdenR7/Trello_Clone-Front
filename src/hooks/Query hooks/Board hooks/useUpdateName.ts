@@ -17,6 +17,7 @@ export function useUpdateName(boardId: string) {
     mutationFn: ({ name }: { name: string }) =>
       updateBoardNameApi(boardId, name),
     onMutate: async ({ name }) => {
+      qClient.cancelQueries({ queryKey: ["board", boardId] });
       const previousData: IBoard | undefined = qClient.getQueryData([
         "board",
         boardId,

@@ -28,6 +28,7 @@ export function useListUpdatePosition(boardId: string) {
       newLoc: number;
     }) => updateListPos(listId, newPos),
     onMutate: async ({ listId, newPos, draggedList, newLoc }) => {
+      qClient.cancelQueries({ queryKey: ["lists", boardId] });
       const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
 
       if (previousLists) {
@@ -47,15 +48,11 @@ export function useListUpdatePosition(boardId: string) {
 
       return { previousLists };
     },
-    onError: (err, variables, context) => {
+    onError: (err, _, context) => {
       if (context?.previousLists) {
         qClient.setQueryData(["lists", boardId], context.previousLists);
       }
       console.error("Error updating list position:", err);
     },
-
-    // onSettled: () => {
-    //   qClient.invalidateQueries({ queryKey: ["lists", boardId] });
-    // },
   });
 }

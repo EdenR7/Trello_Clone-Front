@@ -15,6 +15,8 @@ function LabelLayout({ boardId }: SideBarModeProps) {
   const qClient = useQueryClient();
   const board: IBoard | undefined = qClient.getQueryData(["board", boardId]);
   const [showAllLabels, setShowAllLabels] = useState(false);
+  const [filteredLabelsInput, setFilteredLabelsInput] = useState("");
+
   // const [isLabelPopoverOpen, setIsLabelPopoverOpen] = useState(false);
 
   if (!board) return;
@@ -26,16 +28,22 @@ function LabelLayout({ boardId }: SideBarModeProps) {
     return a.title.localeCompare(b.title);
   });
 
+  const filteredLabels = labels.filter((label) =>
+    label.title.includes(filteredLabelsInput)
+  );
+
   return (
     <div className=" flex flex-col gap-3">
       <Input
+        value={filteredLabelsInput}
+        onChange={(e) => setFilteredLabelsInput(e.target.value)}
         className="border h-9  border-gray-400 py-0 focus-visible:ring-0 focus:border-blue-500 focus:border-2 focus:outline-none"
         placeholder=" Search labels..."
       />
       <h3 className=" text-xs font-semibold">Labels</h3>
 
       <ul className=" flex flex-col gap-1">
-        {labels.map((label, index) => {
+        {filteredLabels.map((label, index) => {
           if (index > 7 && !showAllLabels) return;
           const textColor = getTextColorForBackground(label.color);
           const hoverColor = getHoverColorForBackground(
@@ -110,7 +118,7 @@ function LabelLayout({ boardId }: SideBarModeProps) {
       >
         <CreateAndEditLabelLayout isEditMode={false} />
       </PopoverLayout>
-      {!showAllLabels && labels.length > 8 && (
+      {!showAllLabels && filteredLabels.length > 8 && (
         <Button variant={"secondary"} onClick={() => setShowAllLabels(true)}>
           Show more labels
         </Button>

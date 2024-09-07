@@ -1,4 +1,5 @@
 import useToggleCardIsComplete from "@/hooks/Query hooks/Card hooks/useToggleCardIsComplete";
+import { IArchiveCard } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
 import { getDueDateLabel } from "@/utils/getCardLabelState";
 import { format } from "date-fns";
@@ -6,7 +7,7 @@ import { Clock, Square, SquareCheckBig } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 interface CardItemDatesProps {
-  card: ICard;
+  card: ICard | IArchiveCard;
 }
 
 function CardItemDates(props: CardItemDatesProps) {

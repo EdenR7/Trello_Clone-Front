@@ -19,7 +19,7 @@ export function useCreateCard(boardId: string) {
     mutationFn: ({ listId, title }: { listId: string; title: string }) =>
       createCardApi(listId, title),
     onMutate: ({ title, listId }) => {
-      qClient.cancelQueries(["lists", boardId] as any);
+      qClient.cancelQueries({ queryKey: ["lists", boardId] });
 
       const prevLists: IList[] | undefined = qClient.getQueryData([
         "lists",
@@ -62,7 +62,7 @@ export function useCreateCard(boardId: string) {
       qClient.setQueryData(["lists", boardId], context?.prevLists);
     },
     onSettled: () => {
-      qClient.invalidateQueries(["lists", boardId] as any);
+      qClient.invalidateQueries({ queryKey: ["lists", boardId] });
     },
   });
 }
