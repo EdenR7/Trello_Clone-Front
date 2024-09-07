@@ -6,8 +6,13 @@ import { IBoard } from "@/types/board.types";
 import { useQueryClient } from "@tanstack/react-query";
 import EditCardModalSideButton from "./EditCardModalSideButton";
 import { User } from "lucide-react";
+import { memo } from "react";
 
-function EditCardModalMembers({ card }: { card: ICard }) {
+const EditCardModalMembers = memo(function EditCardModalMembers({
+  card,
+}: {
+  card: ICard;
+}) {
   const { boardId } = useParams();
   if (!boardId) return null;
   const queryClient = useQueryClient();
@@ -25,6 +30,6 @@ function EditCardModalMembers({ card }: { card: ICard }) {
       <MembersPopoverLayout board={board!} card={card} />
     </PopoverLayout>
   );
-}
+});
 
 export default EditCardModalMembers;

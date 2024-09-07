@@ -27,7 +27,7 @@ export const Modal: React.FC<ModalProps> = ({ children }) => {
     >
       <div
         onClick={(ev) => ev.stopPropagation()}
-        className=" text-text_dark_blue max-w-[768px] bg-gray-100 p-0 my-12 w-full rounded-2xl relative "
+        className=" text-text_dark_blue max-w-[768px] bg-gray-100 p-0 my-12 w-full rounded-2xl relative min-h-[600px] "
       >
         <Button
           onClick={() => navigate(-1)}

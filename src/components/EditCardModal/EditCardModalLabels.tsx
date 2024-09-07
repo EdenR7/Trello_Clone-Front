@@ -5,7 +5,7 @@ import { useToggleCardLabel } from "@/hooks/Query hooks/Label hooks/useToggleCar
 import { ILabel } from "@/types/board.types";
 import { ICard } from "@/types/card.types";
 import { Tag } from "lucide-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useParams } from "react-router-dom";
 import EditCardModalSideButton from "./EditCardModalSideButton";
 
@@ -13,7 +13,9 @@ interface LabelsLayoutProps {
   card: ICard;
 }
 
-function EditCardModalLabels(props: LabelsLayoutProps) {
+const EditCardModalLabels = memo(function EditCardModalLabels(
+  props: LabelsLayoutProps
+) {
   const { card } = props;
   const { boardId } = useParams();
   const [isEditLabel, setIsEditLabel] = useState(false);
@@ -61,6 +63,6 @@ function EditCardModalLabels(props: LabelsLayoutProps) {
     </LabelPopoverLayout>
     // <CardSidebarButton icon={<Tag size={20} />} text="Labels" />
   );
-}
+});
 
 export default EditCardModalLabels;

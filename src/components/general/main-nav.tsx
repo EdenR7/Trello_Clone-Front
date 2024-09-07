@@ -172,11 +172,11 @@ export function MainNav() {
           "--hover-color-for-button": hoverColorForButton,
         } as React.CSSProperties
       }
-      className="sticky top-0 z-50 w-full py-2 border-b border-gray-200 h-12 px-2 flex items-center"
+      className="sticky top-0 z-50 w-full py-2 border-b border-gray-200 h-12 pl-1 pr-0 flex items-center"
     >
-      <div className="max-h-10 w-full flex justify-between items-center px-4">
+      <div className="max-h-10 w-full flex justify-between items-center pl-4 pr-1.5">
         <div className="flex items-center gap-4">
-          <Link to="/" className=" font-bold text-2xl mr-4">
+          <Link to="/" className="font-bold text-xl mr-3">
             Trello
           </Link>
           <nav className="hidden md:flex items-center gap-1">

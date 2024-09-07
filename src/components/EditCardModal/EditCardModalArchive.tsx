@@ -3,8 +3,9 @@ import { Button } from "../ui/button";
 import useArchiveCard from "@/hooks/Query hooks/Card hooks/useArchiveCard";
 import { ICard } from "@/types/card.types";
 import { useParams } from "react-router-dom";
+import { memo } from "react";
 
-function EditCardModalArchive({
+const EditCardModalArchive = memo(function EditCardModalArchive({
   card,
   onClose,
 }: {
@@ -29,6 +30,6 @@ function EditCardModalArchive({
       <span>Archive</span>
     </Button>
   );
-}
+});
 
 export default EditCardModalArchive;

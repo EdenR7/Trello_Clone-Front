@@ -70,14 +70,18 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full hover:bg-[var(--hover-color)]"
+        >
           <div className="w-6 h-6">
             <Avatar className="w-full h-full">
               <AvatarImage
                 // src={loggedInUser?.imageUrl || ""}
                 alt={loggedInUser?.username}
               />
-              <AvatarFallback className="bg-[#44546F] text-white rounded-full">
+              <AvatarFallback className="bg-[#00A3BF] text-white rounded-full">
                 {" "}
                 {/* Same color as words */}
                 {loggedInUser?.username[0].toUpperCase()}

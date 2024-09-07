@@ -39,7 +39,6 @@ function Modal({ cardId, position, onClose }: ModalProps) {
   useEffect(() => {
     setTimeout(() => {
       if (titleRef.current) {
-        console.log("working");
         titleRef.current.focus();
         titleRef.current.select();
       }
@@ -162,7 +161,7 @@ function Modal({ cardId, position, onClose }: ModalProps) {
           {!card.bgCover.isCover && <EditCardModalMembers card={card} />}
           <EditCardModalCover card={card} />
           {!card.bgCover.isCover && <EditCardModalDates card={card} />}
-          <EditCardModalMove card={card} />
+          <EditCardModalMove onClose={onClose} card={card} />
           <EditCardModalArchive onClose={onClose} card={card} />
         </div>
       </div>

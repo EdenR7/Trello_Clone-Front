@@ -78,7 +78,7 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
               ref={textareaRef}
               className={cn(
                 "text-md w-11/12 resize-none overflow-hidden transition-colors duration-200 ring-1 ring-gray-500",
-                "min-h-[220px] p-5 rounded-sm ring-offset-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                "min-h-[220px] p-5 rounded-none border-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-primary"
               )}
               placeholder="Add a more detailed description..."
             />

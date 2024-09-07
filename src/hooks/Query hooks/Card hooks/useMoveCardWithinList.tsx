@@ -37,7 +37,11 @@ export function useMoveCardWithinList(boardId: string) {
       destinationIndex,
       cardsInitialList,
       targetCard,
+      cardId,
     }) => {
+      await qClient.cancelQueries({ queryKey: ["lists", listId] });
+      await qClient.cancelQueries({ queryKey: ["card", cardId] });
+
       const previousLists = qClient.getQueryData<IList[]>(["lists", boardId]);
       targetCard.position = newPos;
       if (previousLists) {
@@ -69,6 +73,10 @@ export function useMoveCardWithinList(boardId: string) {
         qClient.setQueryData(["lists", boardId], context.previousLists);
       }
       console.error("Error updating list position:", err);
+    },
+    onSettled: (_, __, { listId, cardId }) => {
+      qClient.invalidateQueries({ queryKey: ["lists", listId] });
+      qClient.invalidateQueries({ queryKey: ["card", cardId] });
     },
   });
 }
