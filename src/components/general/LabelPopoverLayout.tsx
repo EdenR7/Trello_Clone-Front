@@ -70,7 +70,10 @@ function LabelPopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side=""
+        side={"" as "top" | "right" | "bottom" | "left"}
+        // side="right"
+        // alignOffset={-1000}
+        // align="start"
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">

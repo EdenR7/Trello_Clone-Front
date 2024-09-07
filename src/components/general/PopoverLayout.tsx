@@ -160,7 +160,7 @@ function PopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={side}
+        side={side as "top" | "right" | "bottom" | "left"}
         className={cn(
           " break-words whitespace-normal w-[304px]",
           popoverClassName
