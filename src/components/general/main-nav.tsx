@@ -2,7 +2,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthButton } from "./auth-button";
 import { UserButton } from "./user-button";
 import { useAuth } from "@/providers/auth-provider";
-import MainSideBar from "./main-sidebar";
 import { Search, Bell, HelpCircle, Plus } from "lucide-react"; // Import the down arrow icon
 import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import { useEffect, useState } from "react";

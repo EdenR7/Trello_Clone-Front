@@ -8,6 +8,7 @@ import BoardsFilters from "./Filters/BoardsFilters";
 import BoardTitle from "./BoardTitle";
 import BoardStarring from "./BoardStarring";
 import { useSearchParams } from "react-router-dom";
+import MakeUserIcon from "@/utils/makeUserIcon";
 
 export interface BoardNavbarProps {
   isSideBarOpen: boolean;
@@ -100,6 +101,25 @@ function BoardNavbar({
             </div>
           </div>
           <span className=" h-5 w-[1px] bg-gray-400 rounded-xl opacity-35"></span>
+          <div className=" relative align-baseline top-0.5 max-h-8 mr-2 pl-0.5 overflow-visible leading-8 flex justify-center ">
+            {board.members.map((member) => (
+              <div
+                key={member._id}
+                className=" z-10 w-[30px] h-[30px] relative -mr-1 "
+              >
+                <MakeUserIcon user={member} />
+                {board.admin === member._id && (
+                  <span
+                    className=" h-3 w-3 absolute z-50 right-[1px] -bottom-[2px] "
+                    style={{
+                      backgroundImage: `url("https://trello.com/assets/88a4454280d68a816b89.png")`,
+                      backgroundSize: "100%",
+                    }}
+                  ></span>
+                )}
+              </div>
+            ))}
+          </div>
           <div>
             <Button
               className=" py-[6px] px-2 hover:bg-white hover:bg-opacity-10"

@@ -42,7 +42,7 @@ function AuthRoutes({ children }: customRouteProps) {
   }
 
   if (loggedInUser) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={`/u/${loggedInUser.firstName}/boards`} replace />;
   }
 
   return children;
