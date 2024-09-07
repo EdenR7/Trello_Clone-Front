@@ -46,7 +46,10 @@ export function useMoveCardToList(boardId: string) {
       cardFinalList,
       destinationIndex,
       previousLists,
+      cardId,
     }) => {
+      await qClient.cancelQueries({ queryKey: ["lists", listId] });
+      await qClient.cancelQueries({ queryKey: ["card", cardId] });
       if (previousLists) {
         const initialList = [...cardInitialList.cards];
         initialList.splice(sourceIndex, 1);
@@ -56,17 +59,15 @@ export function useMoveCardToList(boardId: string) {
           position: newPos,
         });
 
-        const updatedLists = previousLists.map(
-          (list) => {
-            if (list._id === cardFinalList._id) {
-              return { ...list, cards: finalList };
-            } else if (list._id === cardInitialList._id) {
-              return { ...list, cards: initialList };
-            } else {
-              return list;
-            }
+        const updatedLists = previousLists.map((list) => {
+          if (list._id === cardFinalList._id) {
+            return { ...list, cards: finalList };
+          } else if (list._id === cardInitialList._id) {
+            return { ...list, cards: initialList };
+          } else {
+            return list;
           }
-        );
+        });
 
         if (countDecimalPlaces(newPos) > 10) {
           qClient.setQueryData(
@@ -85,6 +86,10 @@ export function useMoveCardToList(boardId: string) {
         qClient.setQueryData(["lists", boardId], context.previousLists);
       }
       console.error("Error updating list position:", err);
+    },
+    onSettled: (_, __, { listId, cardId }) => {
+      qClient.invalidateQueries({ queryKey: ["lists", listId] });
+      qClient.invalidateQueries({ queryKey: ["card", cardId] });
     },
   });
 }

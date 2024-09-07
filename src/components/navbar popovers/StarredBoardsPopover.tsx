@@ -28,7 +28,7 @@ function StarredBoardsPopover(props: StarredBoardsPopoverProps) {
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger asChild>
-        <button className="font-medium  hover:bg-[var(--hover-color)] px-3 py-1.5 rounded-sm text-sm">
+        <button className="font-medium  hover:bg-[var(--hover-color)] px-3 py-1.5 rounded-sm text-sm mr-1">
           Starred <ChevronDown className="inline h-4 w-4" />
         </button>
       </PopoverTrigger>
