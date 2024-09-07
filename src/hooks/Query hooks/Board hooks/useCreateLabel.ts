@@ -10,8 +10,6 @@ export async function CreateLabelApi(
   cardId?: string
 ) {
   try {
-    console.log("cardId in labelApi: ", cardId);
-
     const res = await api.post(`/board/${boardId}/label`, {
       title: labelTitle,
       color: labelColor,
@@ -62,7 +60,6 @@ export function useCreateLabel(boardId: string, cardId?: string) {
             ...prevCard,
             labels: [...prevCard.labels, newLabel],
           });
-          console.log("finished updating card: ", prevCard.labels);
         }
       }
       return { prevBoard, prevCard };
@@ -72,8 +69,6 @@ export function useCreateLabel(boardId: string, cardId?: string) {
         qClient.setQueryData(["board", boardId], context.prevBoard);
       }
       if (context?.prevCard) {
-        console.log("error with card, reverting");
-
         qClient.setQueryData(["card", cardId], context.prevCard);
       }
     },

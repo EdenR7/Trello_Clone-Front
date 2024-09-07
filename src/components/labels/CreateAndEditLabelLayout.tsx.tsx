@@ -81,8 +81,7 @@ export function CreateAndEditLabelLayout({
       }
       return { prevBoard, prevCard };
     },
-    onError: (err, variables, context) => {
-      console.log(err, variables);
+    onError: (_, __, context) => {
       if (context?.prevBoard) {
         qClient.setQueryData(["board", boardId], context.prevBoard);
       }

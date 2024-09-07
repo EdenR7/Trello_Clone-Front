@@ -68,8 +68,6 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
                 (checklist) => checklist.todos.length > 0
               );
             }
-            console.log("card in archive: ", card.bgCover);
-            console.log("board in archive", board.archivedCards);
 
             if (!card) return <div></div>;
             return card?.bgCover.isCover ? (

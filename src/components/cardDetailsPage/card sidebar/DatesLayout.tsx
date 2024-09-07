@@ -11,7 +11,6 @@ interface DatesLayoutProps {
 
 function DatesLayout(props: DatesLayoutProps) {
   const { card } = props;
-  console.log("dates card: ", card);
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   return (

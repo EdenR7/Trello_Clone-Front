@@ -201,7 +201,6 @@ function CardDatesPopup(props: CardDatesPopupProps) {
       formattedDates.dueDate = dueDate.toISOString();
     }
 
-    console.log("formattedDates: ", formattedDates);
     addCardDates({ cardId: card._id!, formattedDate: formattedDates });
     setInternalOpen(false);
   }

@@ -13,8 +13,6 @@ function ListsRender({ setHoveredItem }: ListRenderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-  // console.log(isPending);
-
   if (isPending) return <div>Loading lists...</div>;
   if (isError) return <div>Error: {error.message}</div>;
   const NewLists = [...lists!];

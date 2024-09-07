@@ -7,7 +7,7 @@ export async function editDescriptionApi(boardId: string, description: string) {
     const res = await api.patch(`/board/${boardId}/description`, {
       description,
     });
-    console.log(res.data);
+
     return res.data;
   } catch (error) {
     console.log(error);
@@ -37,9 +37,7 @@ export function useUpdateDescription({ boardId }: { boardId: string }) {
       });
       return { prevBoard };
     },
-    onError(error, variables, context) {
-      console.log(error, variables);
-
+    onError(_, __, context) {
       if (context?.prevBoard) {
         qClient.setQueryData(["board", boardId], context?.prevBoard);
       }

@@ -11,7 +11,6 @@ const EditCardModalDates = React.memo(function EditCardModalDates({
   card: ICard;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  console.log("card");
 
   return (
     <DatePopoverLayout

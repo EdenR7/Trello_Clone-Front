@@ -20,11 +20,9 @@ function ChecklistLayout(props: ChecklistLayoutProps) {
   const { mutate: createChecklist } = useCreateChecklist(boardId!);
 
   useEffect(() => {
-    console.log(isPopoverOpen);
     if (isPopoverOpen) {
       setTimeout(() => {
         if (inputRef.current) {
-          console.log("working");
           inputRef.current.focus();
           inputRef.current.select();
         }

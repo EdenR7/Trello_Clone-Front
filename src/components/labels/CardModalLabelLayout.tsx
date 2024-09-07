@@ -56,7 +56,6 @@ function CardModalLabels({
   );
 
   function handleEditLabel(label: ILabel) {
-    console.log("labelId in labelLayout: ", label);
     if (setLabelToEdit && setIsEditLabel && setIsEditMode) {
       setLabelToEdit(label);
       setIsEditMode(true);

@@ -46,7 +46,6 @@ function CreateBoardPopover({
 
   function handleCreateBoard() {
     if (!selectedWorkspace) {
-      console.log("no workspace id");
       return;
     }
     createBoard(

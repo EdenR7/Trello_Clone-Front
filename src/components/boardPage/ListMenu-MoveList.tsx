@@ -51,7 +51,6 @@ function ListMenuMoveList({
         }
       }
     }
-    console.log("Board not found");
   }
 
   function handleMoveList() {

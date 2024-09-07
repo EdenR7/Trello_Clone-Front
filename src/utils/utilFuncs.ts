@@ -18,8 +18,6 @@ export function reOrderCardPositions(
   lists: IList[],
   destinationListId: string
 ) {
-  console.log(lists, destinationListId);
-
   const destinationList = lists.find((list) => list._id === destinationListId);
   if (!destinationList) return lists;
 

@@ -31,7 +31,6 @@ function CardDescriptionComponent(props: cardDescriptionProps) {
     setIsEditing(false);
     if (textareaRef.current) {
       const newDesc = textareaRef.current.value;
-      console.log(newDesc);
 
       if (newDesc !== card.description) {
         updateCardDescription({ cardId: card._id, newDesc });

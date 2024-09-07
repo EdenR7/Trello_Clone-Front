@@ -54,7 +54,6 @@ function MoveCardPopoverLayout({
         if (list) {
           const cardPosition =
             list.cards.findIndex((crd) => crd._id === card._id) + 1;
-          console.log("cardPosition: ", cardPosition);
 
           setSelectedPosition(cardPosition);
         }
@@ -64,14 +63,12 @@ function MoveCardPopoverLayout({
 
   function handleMoveCard() {
     if (selectedListId === card.list._id) {
-      console.log("Moving within the same list");
       const currentPos = selectedPosition - 1;
       const list = lists?.find((lst) => lst._id === card.list._id);
       if (list && list.cards[currentPos]._id !== card._id) {
         const maxPosition = list.cards.length;
 
         if (selectedPosition === 1) {
-          console.log("Moved to the first position in the same list");
           const existingCard = list.cards[currentPos];
           if (existingCard) {
             const newPos = existingCard.position / 2;
@@ -79,20 +76,14 @@ function MoveCardPopoverLayout({
           }
         } else if (selectedPosition === maxPosition) {
           const newPos = list.cards[selectedPosition - 1].position + 1;
-          console.log(
-            "newPos when moving in same list and card is last",
-            newPos
-          );
+
           moveCardToSameList({ cardId: card._id!, newPos });
         } else {
           const newPos =
             (list.cards[currentPos].position +
               list.cards[currentPos + 1].position) /
             2;
-          console.log(
-            "newPos when moving in the same list to the middle: ",
-            newPos
-          );
+
           moveCardToSameList({ cardId: card._id!, newPos });
         }
       } else {
@@ -105,7 +96,6 @@ function MoveCardPopoverLayout({
         const maxPosition = newList.cards.length + 1;
         const currentPos = selectedPosition - 1;
         if (selectedPosition === 1) {
-          console.log("Moved to the first position in the new list");
           const existingCard = newList.cards[currentPos];
           if (existingCard) {
             const newPos = existingCard.position / 2;
@@ -114,10 +104,9 @@ function MoveCardPopoverLayout({
               listId: newList._id!,
               newPos,
             });
-            console.log("newPos when there is card: ", newPos);
           } else {
             const newPos = 1;
-            console.log("newPos when there isnt card: ", newPos);
+
             moveCardToDifferentList({
               cardId: card._id!,
               listId: newList._id!,
@@ -125,12 +114,7 @@ function MoveCardPopoverLayout({
             });
           }
         } else if (selectedPosition === maxPosition) {
-          console.log("Moved to the last position in the new list");
-
-          console.log(selectedPosition - 2);
-
           const lastCard = newList.cards[selectedPosition - 2];
-          console.log(lastCard);
 
           const newPos = lastCard.position + 1;
           moveCardToDifferentList({
@@ -139,8 +123,6 @@ function MoveCardPopoverLayout({
             newPos,
           });
         } else {
-          console.log("Moved to the middle position in the new list");
-
           const newPos =
             (newList.cards[currentPos - 1].position +
               newList.cards[currentPos].position) /

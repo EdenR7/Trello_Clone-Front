@@ -62,8 +62,6 @@ export function useCreateCard(boardId: string) {
       qClient.setQueryData(["lists", boardId], context?.prevLists);
     },
     onSettled: () => {
-      console.log("settled");
-
       qClient.invalidateQueries(["lists", boardId] as any);
     },
   });

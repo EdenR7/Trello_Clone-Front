@@ -19,32 +19,6 @@ import getHoverColor, {
   rgbToHsl,
 } from "@/utils/ColorConversionUtils";
 
-// const getAverageGradientColor = (gradient: string): string => {
-//   // Extract hex color codes from gradient string
-//   const hexColors = gradient.match(/#[0-9a-fA-F]{6}/g) || [];
-//   console.log("gradient: ", gradient);
-
-//   if (hexColors.length === 0) return "#FFFFFF"; // Default to white if no colors found
-
-//   // Convert hex to HSL
-//   const hslColors = hexColors.map((hex) => rgbToHsl(...hexToRgb(hex)));
-
-//   // Average the HSL values
-//   const avgHSL = hslColors
-//     .reduce((acc, [h, s, l]) => [acc[0] + h, acc[1] + s, acc[2] + l], [0, 0, 0])
-//     .map((v, i) =>
-//       i === 0 ? (v / hslColors.length) % 360 : v / hslColors.length
-//     ); // Keep hue within 0-360
-
-//   const [avgH, avgS, avgL] = avgHSL;
-
-//   // Convert the averaged HSL back to RGB
-//   const [r, g, b] = hslToRgb(avgH, avgS, avgL);
-
-//   // Convert back to hex and return
-//   return rgbToHex(r, g, b);
-// };
-
 const getAverageGradientColor = (gradient: string): string => {
   const gradientColors = gradient.match(/#[0-9a-fA-F]{6}/g) || [];
   let totalR = 0,
@@ -101,7 +75,6 @@ export function MainNav() {
       }
 
       const { bgType, background } = board.bg;
-      // console.log("background: ", background);
 
       let newBgColor = "#FFFFFF";
       setHoverColor(getHoverColor(newBgColor));
@@ -128,7 +101,6 @@ export function MainNav() {
         default:
           newBgColor = "#FFFFFF";
       }
-      // console.log("new bgColor at the end: ", newBgColor);
 
       setBoardBg(newBgColor);
       setHoverColor(getHoverColor(newBgColor));
@@ -138,8 +110,6 @@ export function MainNav() {
 
     applyBackgroundColor();
   }, [boardId, board?.bg]);
-
-  // console.log("boardBg: ", boardBg);
 
   const navigate = useNavigate();
 
