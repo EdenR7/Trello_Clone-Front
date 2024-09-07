@@ -138,10 +138,12 @@ function Modal({ cardId, position, onClose }: ModalProps) {
             position: "absolute",
             top: `${top}px`,
             left:
-              menuPosition === "right" ? `${left + 260}px` : `${left - 160}px`, // Position based on menuPosition
+              menuPosition === "right" ? `${left + 265}px` : `${left - 160}px`, // Position based on menuPosition
             zIndex: 1001, // Above the modal for layering
           }}
-          className=" flex flex-col items-start"
+          className={`flex flex-col items-start ${
+            menuPosition === "left" && "items-end"
+          } ${window.innerWidth < 450 && "hidden"}`}
         >
           {!card.bgCover.isCover && (
             <EditCardModalSideButton

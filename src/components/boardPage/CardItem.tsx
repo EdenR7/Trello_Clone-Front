@@ -54,7 +54,7 @@ function CardItem(props: CardItemProps) {
       const windowWidth = window.innerWidth;
 
       const menuPosition =
-        cardRect.right + 256 > windowWidth ? "left" : "right"; // Assuming modal width is 300px
+        cardRect.right + 170 > windowWidth ? "left" : "right"; //
 
       const modalTop = Math.max(
         0,
