@@ -23,8 +23,6 @@ function CardDetailsPage() {
   const { boardId, cardId } = useParams();
   const { data: card } = usegetCard(cardId!);
 
-  console.log("card: ", card);
-
   return (
     card && (
       <Modal>
