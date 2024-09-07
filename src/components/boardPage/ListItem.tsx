@@ -5,10 +5,12 @@ import { useSearchParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { ICard } from "@/types/card.types";
 import { Button } from "../ui/button";
-import { Ellipsis, Plus } from "lucide-react";
+import { Ellipsis, List, Plus } from "lucide-react";
 import AddCardForm from "./AddCardForm";
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import ListMenu from "./ListMenu";
+import { Textarea } from "../ui/textarea";
+import ListItemTitle from "./ListItemTitle";
 
 interface ListItemProps {
   list: IList;
@@ -202,7 +204,7 @@ function ListItem({
         >
           <div {...provided.dragHandleProps}>
             <header className=" flex justify-between px-2 pt-2 mb-2">
-              <h3 className=" py-[6px] pl-3 pr-2 font-semibold">{list.name}, {list.position}</h3>
+              <ListItemTitle list={list} />
               <DropdownMenu open={openListMenu} onOpenChange={setOpenListMenu}>
                 <DropdownMenuTrigger asChild>
                   <Button
