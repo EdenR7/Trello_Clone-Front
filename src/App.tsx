@@ -54,7 +54,6 @@ function App() {
       <Routes>
         <Route path="/" element={<PlatformLayout />}>
           <Route element={<HomeLayout />}>
-            <Route index element={<div>Home</div>} />
             <Route
               path="u/:username/boards"
               element={
