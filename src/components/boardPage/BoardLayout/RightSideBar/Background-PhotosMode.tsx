@@ -14,7 +14,7 @@ function PhotosMode({ handleBgChange }: BackgroundModeProps) {
           className=" absolute top-1/2 -translate-y-1/2 left-3"
         />
       </div>
-      <div className=" overflow-y-auto max-h-[480px] px-1">
+      <div className=" overflow-y-auto max-h-[calc(100vh-220px)] px-1">
         <ul className=" grid grid-cols-2 gap-2 ">
           {boardBgImageOptions.map((bgUrl, index) => {
             return (

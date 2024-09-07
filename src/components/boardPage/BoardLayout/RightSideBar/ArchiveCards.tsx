@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { useDeleteCard } from "@/hooks/Query hooks/Card hooks/useDeleteCard";
 import { useUnArchiveCard } from "@/hooks/Query hooks/Card hooks/useUnArchiveCard";
 import { IBoard } from "@/types/board.types";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CardItemDates from "@/components/CardItem/CardItemDates";
 import { AlignLeft } from "lucide-react";
@@ -18,6 +18,7 @@ interface ArchiveCardsrops {
 }
 
 function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
+  const [inputFilter, setInputFilter] = useState<string>("");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const cardDeleter = useDeleteCard(board._id);
   const cardUnArchiver = useUnArchiveCard(board._id);
@@ -25,6 +26,10 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
     "trella-labels-open-state",
     false
   );
+
+  const filteredArchivedCards = board.archivedCards.filter((card) => {
+    return card.title.toLowerCase().includes(inputFilter.toLowerCase());
+  });
 
   useEffect(() => {
     if (searchInputRef.current) {
@@ -47,6 +52,8 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
     <>
       <div className=" flex gap-2 items-center">
         <Input
+          value={inputFilter}
+          onChange={(e) => setInputFilter(e.target.value)}
           ref={searchInputRef}
           className=" h-9"
           placeholder="Search archived lists..."
@@ -60,8 +67,8 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
         </Button>
       </div>
       <div className="mt-4 mb-4 ">
-        {board?.archivedCards.length > 0 ? (
-          board.archivedCards.map((card) => {
+        {filteredArchivedCards.length > 0 ? (
+          filteredArchivedCards.map((card) => {
             let hasTodos = false;
             if (card.checklist && card.checklist.length > 0) {
               hasTodos = card.checklist.some(

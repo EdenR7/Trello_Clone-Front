@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { useUnArchiveList } from "@/hooks/Query hooks/List hooks/useUnArchiveList";
 import { IBoard } from "@/types/board.types";
 import { RotateCcw } from "lucide-react";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ArchiveListsrops {
   board: IBoard;
@@ -12,8 +12,13 @@ interface ArchiveListsrops {
 }
 
 function ArchiveLists({ board, setOnArchiveLists }: ArchiveListsrops) {
+  const [inputFilter, setInputFilter] = useState<string>("");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const listsUnArchiver = useUnArchiveList(board._id);
+
+  const filteredArchivedLists = board.archivedLists.filter((list) => {
+    return list.name.toLowerCase().includes(inputFilter.toLowerCase());
+  });
 
   useEffect(() => {
     if (searchInputRef.current) {
@@ -30,6 +35,8 @@ function ArchiveLists({ board, setOnArchiveLists }: ArchiveListsrops) {
       <div className=" flex gap-2 items-center">
         <Input
           ref={searchInputRef}
+          value={inputFilter}
+          onChange={(e) => setInputFilter(e.target.value)}
           className=" h-9"
           placeholder="Search archived lists..."
         />
@@ -42,8 +49,8 @@ function ArchiveLists({ board, setOnArchiveLists }: ArchiveListsrops) {
         </Button>
       </div>
       <div className=" mt-4">
-        {board?.archivedLists.length > 0 ? (
-          board.archivedLists.map((list) => (
+        {filteredArchivedLists.length > 0 ? (
+          filteredArchivedLists.map((list) => (
             <React.Fragment key={list.listId}>
               <div className=" py-[2px] flex justify-between items-center">
                 <span className=" p-2">{list.name}</span>
