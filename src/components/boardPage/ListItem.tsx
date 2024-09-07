@@ -5,11 +5,10 @@ import { useSearchParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { ICard } from "@/types/card.types";
 import { Button } from "../ui/button";
-import { Ellipsis, List, Plus } from "lucide-react";
+import { Ellipsis, Plus } from "lucide-react";
 import AddCardForm from "./AddCardForm";
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import ListMenu from "./ListMenu";
-import { Textarea } from "../ui/textarea";
 import ListItemTitle from "./ListItemTitle";
 
 interface ListItemProps {
