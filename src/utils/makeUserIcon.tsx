@@ -18,7 +18,7 @@ function MakeUserIcon({
   return (
     <Avatar
       className={cn(
-        "bg-[#00A3BF] h-8 w-8 flex items-center justify-center font-bold hover:cursor-pointer ",
+        "bg-[#00A3BF] h-8 w-8 flex items-center justify-center font-bold hover:cursor-pointer text-[#44546f] ",
         className
       )}
     >
