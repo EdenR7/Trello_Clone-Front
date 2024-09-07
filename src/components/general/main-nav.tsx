@@ -149,7 +149,7 @@ export function MainNav() {
             to={loggedInUser ? `/u/${loggedInUser?.firstName}/boards` : "/"}
             className="font-bold text-xl mr-3"
           >
-            Trello
+            Trella
           </Link>
           <nav className="flex items-center gap-1">
             <RecentBoardsPopover
