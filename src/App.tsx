@@ -54,7 +54,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PlatformLayout />}>
-          <Route index element={<HomePage />} />
+          <Route
+            index
+            element={
+              <AuthRoutes>
+                <HomePage />
+              </AuthRoutes>
+            }
+          />
           <Route element={<HomeLayout />}>
             <Route
               path="u/:username/boards"
