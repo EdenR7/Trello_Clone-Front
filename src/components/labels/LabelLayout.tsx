@@ -8,6 +8,8 @@ import PopoverLayout from "../general/PopoverLayout";
 import { Separator } from "../ui/separator";
 import { CreateAndEditLabelLayout } from "./CreateAndEditLabelLayout.tsx";
 import { SideBarModeProps } from "../boardPage/BoardLayout/RightSideBar/BoardSideBar.tsx";
+import { getTextColorForBackground } from "@/utils/getTextColorFromBg.ts";
+import { getHoverColorForBackground } from "@/utils/getHoverColorFromText.ts";
 
 function LabelLayout({ boardId }: SideBarModeProps) {
   const qClient = useQueryClient();
@@ -35,6 +37,11 @@ function LabelLayout({ boardId }: SideBarModeProps) {
       <ul className=" flex flex-col gap-1">
         {labels.map((label, index) => {
           if (index > 7 && !showAllLabels) return;
+          const textColor = getTextColorForBackground(label.color);
+          const hoverColor = getHoverColorForBackground(
+            label.color,
+            textColor === "#FFF"
+          );
           return (
             <li key={label._id}>
               <div className=" flex justify-between items-center gap-1">
@@ -47,7 +54,13 @@ function LabelLayout({ boardId }: SideBarModeProps) {
                     <Button
                       className="w-full h-8 rounded-sm flex justify-start font-medium items-center pl-3 translate-y"
                       variant={"naked"}
-                      style={{ backgroundColor: label.color }}
+                      style={{ backgroundColor: label.color, color: textColor }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.backgroundColor = hoverColor)
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.backgroundColor = label.color)
+                      }
                     >
                       {label.title !== "Default" && label.title}
                     </Button>
