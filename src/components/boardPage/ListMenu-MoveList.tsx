@@ -10,31 +10,14 @@ import { useGetUserWorkspaces } from "@/hooks/Query hooks/Workspace hooks/useGet
 import { useEffect, useState } from "react";
 import { IWorksapceBoard } from "@/types/workspace.types";
 import ListMenuSelectItem from "./ListMenu-SelectItem";
-import api from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../ui/button";
+import { useMoveList } from "@/hooks/Query hooks/List hooks/useMoveList";
 
-export async function MenuMoveListApi(
-  listId: string,
-  sourceId: string,
-  destinationId: string,
-  newPosition: number
-) {
-  // API call to move list
-  try {
-    const res = await api.patch(
-      `/list/${listId}/move/${sourceId}/${destinationId}`,
-      {
-        newIndex: newPosition,
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
+function ListMenuMoveList({
+  list,
+  indexInBoard,
+  setOpenListMenu,
+}: ListMenuModesProps) {
   const { loggedInUser } = useAuth();
   const { data: workspaces } = useGetUserWorkspaces(loggedInUser?._id!);
   const [selectedBoard, setSelectedBoard] = useState<IWorksapceBoard | null>(
@@ -42,26 +25,7 @@ function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
   );
   const [newPosition, setNewPosition] = useState<number>(indexInBoard + 1);
 
-  const qClient = useQueryClient();
-  const listMover = useMutation({
-    mutationFn: ({
-      newPosition,
-      destinationId,
-      sourceId,
-      listId,
-    }: {
-      listId: string;
-      sourceId: string;
-      destinationId: string;
-      newPosition: number;
-    }) => MenuMoveListApi(listId, sourceId, destinationId, newPosition),
-    onSuccess: () => {
-      qClient.invalidateQueries({ queryKey: ["lists", list.board] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const listMover = useMoveList(list.board);
 
   useEffect(() => {
     if (workspaces) {
@@ -105,6 +69,7 @@ function ListMenuMoveList({ list, indexInBoard }: ListMenuModesProps) {
       destinationId: selectedBoard._id,
       newPosition,
     });
+    setOpenListMenu(false);
   }
 
   return (

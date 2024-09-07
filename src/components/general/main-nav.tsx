@@ -182,7 +182,7 @@ export function MainNav() {
           >
             Trello
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="flex items-center gap-1">
             <RecentBoardsPopover
               isPopoverOpen={isRecentPopoverOpen}
               setIsPopoverOpen={setIsRecentPopoverOpen}
