@@ -1,4 +1,3 @@
-import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import { useParams } from "react-router-dom";
 import ListsRender from "./ListsRender";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
@@ -7,55 +6,96 @@ import { IList } from "@/types/list.types";
 import { useListUpdatePosition } from "@/hooks/Query hooks/List hooks/useUpdatePosition";
 import { useMoveCardWithinList } from "@/hooks/Query hooks/Card hooks/useMoveCardWithinList";
 import { useMoveCardToList } from "@/hooks/Query hooks/Card hooks/useMoveCardToList";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import AddListForm from "./AddListForm";
 
 function BoardItems() {
   const { boardId } = useParams();
-  const { data: board, isPending } = useGetBoard(boardId!);
   const [onCreateNewList, setOnCreateNewList] = useState(false);
 
   const qClient = useQueryClient();
   const updateListPosition = useListUpdatePosition(boardId!);
   const moveCardWithinList = useMoveCardWithinList(boardId!);
   const moveCardToList = useMoveCardToList(boardId!);
-  const [_, setHoveredItem] = useState<null | number>(null);
+  // const [_, setHoveredItem] = useState<null | number>(null);
 
-  if (isPending) return <div>Loading...</div>;
-  if (!board) return null;
+  // if (isPending) return <div>Loading...</div>;
+  // if (!board) return null;
 
-  function handleListDrag(destination: any, source: any, draggableId: string) {
-    if (destination.index === source.index) return;
+  // function handleListDrag(destination: any, source: any, draggableId: string) {
+  //   if (destination.index === source.index) return;
 
-    const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
-    if (!data) return;
-    const initialData = [...data];
+  //   const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
+  //   if (!data) return;
+  //   const initialData = [...data];
 
-    let newPos = 0;
-    if (destination.index === 0) {
-      newPos = initialData[0].position / 2;
-    } else if (destination.index === initialData.length - 1) {
-      newPos = Math.floor(initialData[initialData.length - 1].position + 1);
-    } else {
-      const secPositionToCalc = destination.index > source.index ? 1 : -1;
-      newPos =
-        (initialData[destination.index].position +
-          initialData[destination.index + secPositionToCalc].position) /
-        2;
-    }
+  //   let newPos = 0;
+  //   if (destination.index === 0) {
+  //     newPos = initialData[0].position / 2;
+  //   } else if (destination.index === initialData.length - 1) {
+  //     newPos = Math.floor(initialData[initialData.length - 1].position + 1);
+  //   } else {
+  //     const secPositionToCalc = destination.index > source.index ? 1 : -1;
+  //     newPos =
+  //       (initialData[destination.index].position +
+  //         initialData[destination.index + secPositionToCalc].position) /
+  //       2;
+  //   }
 
-    const draggedList = initialData.find((list) => list._id === draggableId);
-    if (draggedList) {
-      updateListPosition.mutate({
-        listId: draggableId,
-        newPos,
-        draggedList,
-        newLoc: destination.index,
-      });
-    }
-  }
+  //   const draggedList = initialData.find((list) => list._id === draggableId);
+  //   if (draggedList) {
+  //     updateListPosition.mutate({
+  //       listId: draggableId,
+  //       newPos,
+  //       draggedList,
+  //       newLoc: destination.index,
+  //     });
+  //   }
+  // }
+
+  const handleListDrag = useCallback(
+    (destination: any, source: any, draggableId: string) => {
+      if (destination.index === source.index) return;
+
+      const data: IList[] | undefined = qClient.getQueryData([
+        "lists",
+        boardId,
+      ]);
+      if (!data) return;
+      const initialData = [...data];
+
+      let newPos = 0;
+      if (destination.index === 0) {
+        newPos = initialData[0].position / 2;
+      } else if (destination.index === initialData.length - 1) {
+        newPos = Math.floor(initialData[initialData.length - 1].position + 1);
+      } else {
+        const secPositionToCalc = destination.index > source.index ? 1 : -1;
+        newPos =
+          (initialData[destination.index].position +
+            initialData[destination.index + secPositionToCalc].position) /
+          2;
+      }
+
+      console.log("newPos", newPos);
+      console.log("destination.index", destination.index);
+
+      const draggedList = initialData.find((list) => list._id === draggableId);
+      console.log("draggedList", draggedList);
+
+      if (draggedList) {
+        updateListPosition.mutate({
+          listId: draggableId,
+          newPos,
+          draggedList,
+          newLoc: destination.index,
+        });
+      }
+    },
+    [boardId, qClient, updateListPosition]
+  );
 
   function handleCardDrag(destination: any, source: any, draggableId: string) {
     const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
@@ -118,8 +158,8 @@ function BoardItems() {
           cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
         );
       } else {
-        let secPositionToCalc: number;
-        destination.index > source.index && (secPositionToCalc = 1);
+        // let secPositionToCalc: number;
+        // destination.index > source.index && (secPositionToCalc = 1);
         cardNewPos =
           (cardFinalList.cards[destination.index].position +
             cardFinalList.cards[destination.index - 1].position) /
@@ -141,6 +181,8 @@ function BoardItems() {
   }
 
   function onDragEnd(result: any) {
+    console.log("onDragEnd");
+
     const { destination, source, draggableId, type } = result;
     if (!destination) return;
 
@@ -159,10 +201,10 @@ function BoardItems() {
             <ol
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className=" list-none flex gap-3 pr-20"
+              className=" list-none flex gap-3 pr-20 justify-start"
             >
-              <ListsRender setHoveredItem={setHoveredItem} />
-
+              <ListsRender />
+              {/* <ListsRender setHoveredItem={setHoveredItem} /> */}
               {/* <div
                 style={{
                   backgroundColor:
@@ -172,9 +214,24 @@ function BoardItems() {
                   transition: "background-color 0.2s ease",
                 }}
               ></div> */}
-              {provided.placeholder}
-              {/* <div className="min-w-44 w-64"></div> Large enough width to allow dragging */}
+              {/* {provided.placeholder && (
+                <div
+                  style={{
+                    width: "272px",
 
+                    backgroundColor: "black", // For debugging
+                    margin: 0, // Ensure no margin
+                    padding: 0, // Ensure no padding
+                    // display: "inline-block", // Ensure it's inline if needed
+                  }}
+                >
+                </div>
+              )} */}
+              {/* <div className="min-w-[272px] max-w-[272px] h-full">
+              </div> */}
+              {provided.placeholder}
+              {/* {provided.placeholder} */}
+              {/* <div className="min-w-44 w-64"></div> Large enough width to allow dragging */}
               {onCreateNewList ? (
                 <AddListForm
                   setOnCreateNewList={setOnCreateNewList}

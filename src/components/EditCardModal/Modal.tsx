@@ -42,7 +42,7 @@ function Modal({ cardId, position, onClose }: ModalProps) {
         titleRef.current.focus();
         titleRef.current.select();
       }
-    }, 0);
+    }, 50);
   }, [cardId]);
 
   if (!card) return;

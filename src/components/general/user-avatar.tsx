@@ -1,5 +1,5 @@
 import { useAuth } from "@/providers/auth-provider";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { User } from "lucide-react";
 
 function UserAvatar() {

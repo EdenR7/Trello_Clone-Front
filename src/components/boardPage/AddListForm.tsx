@@ -3,8 +3,6 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import useClickOutside from "@/hooks/CustomHooks/useClickOutside";
-import api from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCreateList } from "@/hooks/Query hooks/List hooks/useCreateList";
 
 interface AddListFormProps {

@@ -1,4 +1,4 @@
-import { cloneElement, ReactElement, useState } from "react";
+import { cloneElement, ReactElement } from "react";
 import {
   Popover,
   PopoverContent,
@@ -33,7 +33,7 @@ function DatePopoverLayout({
   triggerText,
   triggerVariant = "default",
   trigger,
-  side,
+  // side,
   popoverClassName,
   internalOpen,
   setInternalOpen,
@@ -60,7 +60,7 @@ function DatePopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={""}
+        side={"" as "top" | "right" | "bottom" | "left"}
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">

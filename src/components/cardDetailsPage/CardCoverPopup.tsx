@@ -21,7 +21,7 @@ function CardCoverPopup(props: CardCoverPopupProps) {
     "Header" | "Cover" | null
   >(
     `trella-background-active-state-${card._id}`,
-    card.bgCover.isCover ? "Cover" : "Header"
+    card.bgCover.bg === "" ? null : card.bgCover.isCover ? "Cover" : "Header"
   );
 
   const [activeColor, setActiveColor] = useLocalStorage<string | null>(

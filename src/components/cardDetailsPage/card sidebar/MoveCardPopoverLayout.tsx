@@ -21,7 +21,7 @@ function MoveCardPopoverLayout({
 }: {
   card: ICard;
   setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onClose: () => void;
+  onClose?: () => void;
 }) {
   const { boardId } = useParams();
   const { data: lists } = useGetLists(boardId!);
@@ -136,7 +136,7 @@ function MoveCardPopoverLayout({
         }
       }
     }
-    onClose();
+    if (onClose) onClose();
     setIsPopoverOpen(false);
   }
 
