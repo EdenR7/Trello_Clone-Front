@@ -2,7 +2,8 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    process.env.NODE_ENV === "production" ? "/api" : "//localhost:3000/api",
+    process.env.NODE_ENV === "production" ? "/api" : "http://3.64.123.41:3000/api",
+    // process.env.NODE_ENV === "production" ? "/api" : "//localhost:3000/api",
 });
 
 api.interceptors.request.use(
