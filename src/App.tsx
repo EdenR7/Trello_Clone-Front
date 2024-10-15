@@ -110,3 +110,9 @@ export default App;
 
 // Fix in the back the function of create label in both card and board
 // popovers controll of labels
+
+// Add toast for errors
+// Add loaders
+// Add guest mode
+// Add option to create the card in the first place of the list
+// Check the recently boards and its order, it seems to work only after create the board
