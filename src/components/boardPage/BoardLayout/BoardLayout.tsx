@@ -2,14 +2,21 @@ import { Outlet, useParams } from "react-router-dom";
 import { useGetBoard } from "@/hooks/Query hooks/Board hooks/useGetBoard";
 import BoardItems from "../BoardItems";
 import BoardSideBar from "./RightSideBar/BoardSideBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getBoardBgStyle } from "@/utils/utilFuncs";
 import BoardNavbar from "./BoardNavBar/BoardNavbar";
+import { useAuth } from "@/providers/auth-provider";
 
 function BoardLayout() {
   const { boardId } = useParams();
   const { data: board, isPending, isError, error } = useGetBoard(boardId!);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const { updateUserRecentBoards } = useAuth();
+  useEffect(() => {
+    if (board) {
+      updateUserRecentBoards(board);
+    }
+  }, [board]);
 
   if (!board) return null;
   const boardStyle = getBoardBgStyle(board.bg);

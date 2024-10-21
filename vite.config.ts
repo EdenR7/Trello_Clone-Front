@@ -10,7 +10,11 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "../Trello_Clone-Backend/public",
+    outDir: "dist",  // This will create a 'dist/' folder inside your frontend project
     emptyOutDir: true,
   },
+  // build: {
+  //   outDir: "../Trello_Clone-Backend/public",
+  //   emptyOutDir: true,
+  // },
 });

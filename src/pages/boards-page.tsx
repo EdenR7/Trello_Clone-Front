@@ -17,7 +17,7 @@ function BoardPage() {
   const sttaredBoards = loggedInUser.sttaredBoards;
   const recentBoards = loggedInUser.recentBoards.filter(
     (board) => !sttaredBoards.some((b) => b._id === board._id)
-  );
+  );  
   const { data: workspaces } = useGetUserWorkspaces(loggedInUser._id);
 
   function handleNavigation(boardId: string) {

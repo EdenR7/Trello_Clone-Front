@@ -34,6 +34,7 @@ interface AuthContextType {
   setLoggedInUser: React.Dispatch<
     React.SetStateAction<LoggedInUser | null | undefined>
   >;
+  updateUserRecentBoards: (board: IBoardOnUser) => void;
 }
 
 type RegisterCredentials = Omit<RegisterFormValues, "confirmPassword">;
@@ -98,9 +99,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  function updateUserRecentBoards(board: IBoardOnUser) {
+    const newRecentBoard: IBoardOnUser = {
+      bg: board.bg,
+      name: board.name,
+      _id: board._id,
+    };
+  
+    const updatedRecentBoards = [...(loggedInUser?.recentBoards || [])];
+    
+    const boardIndex = updatedRecentBoards.findIndex((b) => b._id === board._id);
+  
+    if (boardIndex !== -1) {
+      updatedRecentBoards.splice(boardIndex, 1);
+    }
+    updatedRecentBoards.unshift(newRecentBoard);
+      
+    setLoggedInUser((prevUser) => {
+      if (!prevUser) return prevUser; // Handle cases where prevUser might be null or undefined
+      return {
+        ...prevUser,
+        recentBoards: updatedRecentBoards,
+      };
+    });
+  
+  }
+  
+
   return (
     <AuthContext.Provider
-      value={{ loggedInUser, login, register, logout, setLoggedInUser }}
+      value={{
+        loggedInUser,
+        login,
+        register,
+        logout,
+        setLoggedInUser,
+        updateUserRecentBoards,
+      }}
     >
       {children}
     </AuthContext.Provider>

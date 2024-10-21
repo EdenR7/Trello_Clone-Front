@@ -108,9 +108,8 @@ function App() {
 
 export default App;
 
-// Fix in the back the function of create label in both card and board
-// popovers controll of labels
 
+// save the bg img of the home page
 // Add toast for errors
 // Add loaders
 // Add guest mode
