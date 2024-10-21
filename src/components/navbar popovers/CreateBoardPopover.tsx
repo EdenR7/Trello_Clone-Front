@@ -103,6 +103,7 @@ function CreateBoardPopover({
       internalOpen={isCreateOpen}
       setInternalOpen={setIsCreateOpen}
       title="Create board"
+      popoverSide="bottom"
       trigger={trigger}
     >
       <div className=" flex justify-center pb-2">

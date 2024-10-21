@@ -22,7 +22,8 @@ interface PopoverLayoutProps {
     | "naked";
   trigger?: React.ReactNode;
   popoverClassName?: string;
-  side?: "top" | "right" | "bottom" | "left" | "";
+  popoverSide?: "top" | "right" | "bottom" | "left" | "";
+  // side?: "top" | "right" | "bottom" | "left" | "";
   internalOpen: boolean;
   setInternalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -33,7 +34,7 @@ function DatePopoverLayout({
   triggerText,
   triggerVariant = "default",
   trigger,
-  // side,
+  popoverSide = ("" as "top" | "right" | "bottom" | "left"),
   popoverClassName,
   internalOpen,
   setInternalOpen,
@@ -60,7 +61,8 @@ function DatePopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={"" as "top" | "right" | "bottom" | "left"}
+        side = {popoverSide as "top" | "right" | "bottom" | "left"} 
+        // side={"" as "top" | "right" | "bottom" | "left"}
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">
