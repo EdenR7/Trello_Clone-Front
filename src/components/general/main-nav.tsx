@@ -167,6 +167,7 @@ export function MainNav() {
             />
             {loggedInUser && (
               <CreateBoardPopover
+                side="bottom"
                 trigger={
                   <button className="hover:bg-[var(--hover-color-for-button)] bg-[var(--hover-color)]  px-1 py-0 w-8 h-8 rounded-sm text-sm">
                     <Plus size={22} />

@@ -17,7 +17,7 @@ function BoardPage() {
   const sttaredBoards = loggedInUser.sttaredBoards;
   const recentBoards = loggedInUser.recentBoards.filter(
     (board) => !sttaredBoards.some((b) => b._id === board._id)
-  );  
+  );
   const { data: workspaces } = useGetUserWorkspaces(loggedInUser._id);
 
   function handleNavigation(boardId: string) {
@@ -188,6 +188,7 @@ function BoardPage() {
                 })}
 
                 <CreateBoardPopover
+                  side=""
                   trigger={
                     <div className=" mr-[2%] mb-[2%] overflow-hidden h-24  w-[calc(50%-4px)] md:w-[32%] break-950px:w-[23%] bg-btn_bg_primary items-center justify-center flex align-middle transition-colors duration-75 rounded-sm p-2 relative hover:bg-gray-200 cursor-pointer">
                       <p className=" text-[#172b4d]">Create new board</p>
