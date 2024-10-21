@@ -13,6 +13,7 @@ import {
   LockKeyhole,
   Mail,
   User,
+  Users,
 } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
@@ -44,6 +45,8 @@ const formSchema = z
       message: PASSWORD_MESSAGE,
     }),
     confirmPassword: z.string().min(8),
+    firstName: z.string().min(2).max(50),
+    lastName: z.string().min(2).max(50),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -69,6 +72,8 @@ function RegisterPage() {
       email: "",
       password: "",
       confirmPassword: "",
+      firstName: "",
+      lastName: "",
     },
   });
 
@@ -148,6 +153,40 @@ function RegisterPage() {
                           Icon={Mail}
                           type="email"
                           placeholder="Email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <IconInput
+                          Icon={Users}
+                          placeholder="First Name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <IconInput
+                          Icon={Users}
+                          placeholder="Last Name"
                           {...field}
                         />
                       </FormControl>

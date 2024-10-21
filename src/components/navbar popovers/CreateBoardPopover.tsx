@@ -24,12 +24,14 @@ interface CreateBoardPopoverProps {
   isCreateOpen: boolean;
   setIsCreateOpen: React.Dispatch<React.SetStateAction<boolean>>;
   trigger: ReactElement<HTMLButtonElement>;
+  side: "top" | "right" | "bottom" | "left" | "";
 }
 
 function CreateBoardPopover({
   isCreateOpen,
   setIsCreateOpen,
   trigger,
+  side,
 }: CreateBoardPopoverProps) {
   const [tempBg, setTempBg] = useState<IBoardBackground>({
     background:
@@ -43,6 +45,8 @@ function CreateBoardPopover({
   const { mutate: createBoard } = useCreateBoard();
   const navigate = useNavigate();
   const titleRef = useRef<HTMLInputElement>(null);
+
+  console.log(loggedInUser?.workspaces);
 
   function handleCreateBoard() {
     if (!selectedWorkspace) {
@@ -103,7 +107,7 @@ function CreateBoardPopover({
       internalOpen={isCreateOpen}
       setInternalOpen={setIsCreateOpen}
       title="Create board"
-      popoverSide="bottom"
+      popoverSide={side as "top" | "right" | "bottom" | "left"}
       trigger={trigger}
     >
       <div className=" flex justify-center pb-2">

@@ -114,4 +114,3 @@ export default App;
 // Add loaders
 // Add guest mode
 // Add option to create the card in the first place of the list
-// Check the recently boards and its order, it seems to work only after create the board
