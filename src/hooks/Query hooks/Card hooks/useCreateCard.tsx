@@ -3,21 +3,25 @@ import { ICard } from "@/types/card.types";
 import { IList } from "@/types/list.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export async function createCardApi(listId: string, title: string) {
+export async function createCardApi(
+  listId: string,
+  title: string,
+  place: string
+) {
   try {
-    const res = await api.post(`list/${listId}/card/add`, { title });
+    const res = await api.post(`list/${listId}/card/add`, { title, place });
     return res.data;
   } catch (error) {
     console.log(error);
   }
 }
 
-export function useCreateCard(boardId: string) {
+export function useCreateCard(boardId: string, place: "top" | "bottom") {
   const qClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ listId, title }: { listId: string; title: string }) =>
-      createCardApi(listId, title),
+      createCardApi(listId, title, place),
     onMutate: ({ title, listId }) => {
       qClient.cancelQueries({ queryKey: ["lists", boardId] });
 
@@ -32,10 +36,22 @@ export function useCreateCard(boardId: string) {
 
       const cardList = prevLists[listIndex];
 
-      const position =
-        cardList.cards.length > 0
-          ? cardList.cards[cardList.cards.length - 1].position + 1
-          : 1;
+      let position;
+
+      if (place === "top") {
+        if (cardList.cards.length > 0) {
+          // need to be tested
+          position = (cardList.cards[0] as any).position / 2;
+        } else {
+          position = 1;
+        }
+        console.log(position);
+      } else {
+        position =
+          cardList.cards.length > 0
+            ? cardList.cards[cardList.cards.length - 1].position + 1
+            : 1;
+      }
 
       const newCard: ICard = {
         _id: "temp",

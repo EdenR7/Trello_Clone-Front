@@ -203,6 +203,7 @@ function CardItem(props: CardItemProps) {
                   </div>
                   <p className=" mb-1 block overflow-hidden break-words whitespace-normal">
                     {card.title}
+                    {card.position}
                   </p>
                   <div className=" flex flex-wrap max-w-full gap-1">
                     {(card.dueDate || card.startDate) && (

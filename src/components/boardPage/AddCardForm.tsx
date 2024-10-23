@@ -10,9 +10,10 @@ import { useCreateCard } from "@/hooks/Query hooks/Card hooks/useCreateCard";
 interface AddCardFormProps {
   setAddACardFormOpen: React.Dispatch<React.SetStateAction<IAddACardFormOpen>>;
   listId: string;
+  place: "top" | "bottom";
 }
 
-function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
+function AddCardForm({ setAddACardFormOpen, listId, place }: AddCardFormProps) {
   const { boardId } = useParams();
   const [newCardTitle, setNewCardTitle] = useState("");
   const [newFormsCounter, sewFormsCounter] = useState(0);
@@ -23,7 +24,7 @@ function AddCardForm({ setAddACardFormOpen, listId }: AddCardFormProps) {
     setAddACardFormOpen((prev) => ({ ...prev, open: false }));
   });
 
-  const cardCreator = useCreateCard(boardId!);
+  const cardCreator = useCreateCard(boardId!, place);
 
   function handleInput() {
     const textarea = textareaRef.current;
