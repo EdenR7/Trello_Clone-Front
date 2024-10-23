@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import useCreateBoard from "@/hooks/Query hooks/Board hooks/useCreateBoard";
 import { useNavigate } from "react-router-dom";
 import DatePopoverLayout from "../general/DatePopoverLayout";
+import { useToast } from "../ui/use-toast";
 
 interface CreateBoardPopoverProps {
   isCreateOpen: boolean;
@@ -40,6 +41,7 @@ function CreateBoardPopover({
   });
   const [boardTitle, setBoardTitle] = useState("");
   const { loggedInUser, setLoggedInUser } = useAuth();
+  const { toast } = useToast();
 
   const [selectedWorkspace, setSelectedWorkspace] = useState("");
   const { mutate: createBoard } = useCreateBoard();
@@ -80,6 +82,14 @@ function CreateBoardPopover({
                 ...prev.recentBoards,
               ], // Keep only the 4 most recent boards
             };
+          });
+        },
+        onError: () => {
+          toast({
+            title: "An error occurred while creating the board",
+            description: "Please try again later.",
+            variant: "destructive",
+            
           });
         },
       }
