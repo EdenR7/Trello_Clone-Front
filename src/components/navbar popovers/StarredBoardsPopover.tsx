@@ -33,29 +33,37 @@ function StarredBoardsPopover(props: StarredBoardsPopoverProps) {
         </button>
       </PopoverTrigger>
       <PopoverContent className="bg-white text-black max-h-[831px] p-3 overflow-x-hidden overflow-y-auto w-[304px] rounded-lg">
-        {loggedInUser.sttaredBoards.map((starredBoard) => {
-          return (
-            <div
-              key={starredBoard._id}
-              className=" group flex items-center px-1 py-1 hover:bg-gray-100 cursor-pointer rounded-lg"
-              onClick={(ev) => {
-                ev.stopPropagation();
-                ev.preventDefault();
-                handleBoardClick(starredBoard._id, ev);
-              }}
-            >
-              <div
-                className=" w-10 h-8 rounded-md inline-block "
-                style={getBoardBgStyle(starredBoard.bg)}
-              ></div>
-              <span className=" flex-1 w-full pl-2">{starredBoard.name}</span>
-              <Star
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  ev.preventDefault();
-                  handleChangeStarredStatus(starredBoard._id);
-                }}
-                className={`
+        {loggedInUser.sttaredBoards.length === 0 ? (
+          <div className=" px-1 py-1 rounded-lg">
+            No sttared boards 
+          </div>
+        ) : (
+          <>
+            {loggedInUser.sttaredBoards.map((starredBoard) => {
+              return (
+                <div
+                  key={starredBoard._id}
+                  className=" group flex items-center px-1 py-1 hover:bg-gray-100 cursor-pointer rounded-lg"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    handleBoardClick(starredBoard._id, ev);
+                  }}
+                >
+                  <div
+                    className=" w-10 h-8 rounded-md inline-block "
+                    style={getBoardBgStyle(starredBoard.bg)}
+                  ></div>
+                  <span className=" flex-1 w-full pl-2">
+                    {starredBoard.name}
+                  </span>
+                  <Star
+                    onClick={(ev) => {
+                      ev.stopPropagation();
+                      ev.preventDefault();
+                      handleChangeStarredStatus(starredBoard._id);
+                    }}
+                    className={`
                   ${
                     loggedInUser.sttaredBoards.some(
                       (starBoard) => starBoard._id === starredBoard._id
@@ -65,12 +73,14 @@ function StarredBoardsPopover(props: StarredBoardsPopoverProps) {
                   }
                    hover:scale-110 transition-all
                 `}
-                size={18}
-                strokeWidth={1.75}
-              />
-            </div>
-          );
-        })}
+                    size={18}
+                    strokeWidth={1.75}
+                  />
+                </div>
+              );
+            })}
+          </>
+        )}
       </PopoverContent>
     </Popover>
   );

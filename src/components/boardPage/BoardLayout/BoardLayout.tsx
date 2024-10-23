@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getBoardBgStyle } from "@/utils/utilFuncs";
 import BoardNavbar from "./BoardNavBar/BoardNavbar";
 import { useAuth } from "@/providers/auth-provider";
+import { SkeletonList } from "@/components/ui/SkeletonList";
 
 function BoardLayout() {
   const { boardId } = useParams();
@@ -21,7 +22,7 @@ function BoardLayout() {
   if (!board) return null;
   const boardStyle = getBoardBgStyle(board.bg);
 
-  if (isPending) return <div>Loadinggg....</div>;
+  if (isPending) return <SkeletonList />;
   if (isError) return <div>Error: {error.message}</div>;
   return (
     <>

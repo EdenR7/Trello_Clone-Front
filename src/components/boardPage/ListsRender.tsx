@@ -2,6 +2,7 @@ import { useGetLists } from "@/hooks/Query hooks/List hooks/useGetList";
 import { useParams } from "react-router-dom";
 import ListItem from "./ListItem";
 import React, { useState } from "react";
+import { SkeletonList } from "../ui/SkeletonList";
 
 // interface ListRenderProps {
 // setHoveredItem: (index: number | null) => void;
@@ -51,7 +52,7 @@ const ListsRender = React.memo(
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
-    if (isPending) return <div>Loading lists...</div>;
+    if (isPending) return <SkeletonList />;
     if (isError) return <div>Error: {error.message}</div>;
 
     return lists?.map((list, index) => {
