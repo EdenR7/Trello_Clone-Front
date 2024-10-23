@@ -255,6 +255,7 @@ const ListItem = React.memo(
                           addACardFormOpen.position === "top" && (
                             <div className=" mx-1 px-1 py-[2px] mb-1">
                               <AddCardForm
+                                place="top"
                                 listId={list._id}
                                 setAddACardFormOpen={setAddACardFormOpen}
                               />
@@ -278,6 +279,7 @@ const ListItem = React.memo(
                           addACardFormOpen.position === "bottom" && (
                             <div className=" px-2 pt-2">
                               <AddCardForm
+                                place="bottom"
                                 listId={list._id}
                                 setAddACardFormOpen={setAddACardFormOpen}
                               />
