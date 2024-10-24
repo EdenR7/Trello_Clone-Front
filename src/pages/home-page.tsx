@@ -1,8 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/providers/auth-provider";
 import { Play } from "lucide-react";
+import { useState } from "react";
 
 const HomePage: React.FC = () => {
+  const [isPending, setIsPending] = useState(false);
+  const { loginAsGuest } = useAuth();
+  const { toast } = useToast();
+
+  async function loginAsNewGuest() {
+    try {
+      setIsPending(true);
+      const guestUsername = await loginAsGuest();
+      toast({
+        title: `Logged in as a ${guestUsername}`,
+        description: `You can now explore Trella as ${guestUsername}!`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Sorry an unexpected error occurred",
+        description: "Please try again later...",
+        variant: "destructive",
+      });
+    } finally {
+      setIsPending(false);
+    }
+  }
+
   return (
     <div
       className="min-h-[94vh] flex text-white"
@@ -42,9 +68,17 @@ const HomePage: React.FC = () => {
                 size="lg"
                 className="bg-blue-600 hover:bg-blue-700 whitespace-nowrap"
                 style={{ width: "30%" }}
+                onClick={loginAsNewGuest}
+              >
+                Explore Trella as a guest
+              </Button>
+              {/* <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 whitespace-nowrap"
+                style={{ width: "30%" }}
               >
                 Sign up - it's free!
-              </Button>
+              </Button> */}
             </div>
 
             {/* Watch video link with play icon */}

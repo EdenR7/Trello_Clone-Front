@@ -24,6 +24,7 @@ export interface LoggedInUser {
   recentBoards: IBoardOnUser[];
   sttaredBoards: IBoardOnUser[];
   workspaces: IWorkspaceOnUser[];
+  isGuest: boolean;
 }
 
 interface AuthContextType {
@@ -35,6 +36,7 @@ interface AuthContextType {
     React.SetStateAction<LoggedInUser | null | undefined>
   >;
   updateUserRecentBoards: (board: IBoardOnUser) => void;
+  loginAsGuest: () => Promise<string>;
 }
 
 type RegisterCredentials = Omit<RegisterFormValues, "confirmPassword">;
@@ -90,6 +92,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  async function loginAsGuest() {
+    try {
+      const response = await api.post("/auth/guest");
+      const { token, username } = response.data;
+      setToken(token);
+      return username as string;
+    } catch (error) {
+      console.error("Error logging in as guest:", error);
+      throw error;
+    }
+  }
+
   async function register(cred: RegisterCredentials) {
     try {
       await api.post("/auth/register", cred);
@@ -105,16 +119,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       name: board.name,
       _id: board._id,
     };
-  
+
     const updatedRecentBoards = [...(loggedInUser?.recentBoards || [])];
-    
-    const boardIndex = updatedRecentBoards.findIndex((b) => b._id === board._id);
-  
+
+    const boardIndex = updatedRecentBoards.findIndex(
+      (b) => b._id === board._id
+    );
+
     if (boardIndex !== -1) {
       updatedRecentBoards.splice(boardIndex, 1);
     }
     updatedRecentBoards.unshift(newRecentBoard);
-      
+
     setLoggedInUser((prevUser) => {
       if (!prevUser) return prevUser; // Handle cases where prevUser might be null or undefined
       return {
@@ -122,9 +138,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         recentBoards: updatedRecentBoards,
       };
     });
-  
   }
-  
 
   return (
     <AuthContext.Provider
@@ -135,6 +149,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logout,
         setLoggedInUser,
         updateUserRecentBoards,
+        loginAsGuest,
       }}
     >
       {children}

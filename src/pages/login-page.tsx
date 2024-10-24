@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 
 import { useAuth } from "@/providers/auth-provider";
-import { PASSWORD_MESSAGE, REGEX_PASSWORD } from "@/constants/auth.constant";
+// import { PASSWORD_MESSAGE, REGEX_PASSWORD } from "@/constants/auth.constant";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 
 // Infer the type of the form values from the schema. we are using it also on AuthProvider.
@@ -30,9 +30,10 @@ export type LoginFormValues = z.infer<typeof formSchema>;
 // Define your form schema.
 const formSchema = z.object({
   username: z.string(),
-  password: z.string().min(8).regex(REGEX_PASSWORD, {
-    message: PASSWORD_MESSAGE,
-  }),
+  password: z.string().min(2),
+  // password: z.string().min(2).regex(REGEX_PASSWORD, {
+  //   message: PASSWORD_MESSAGE,
+  // }),
 });
 
 function LoginPage() {
