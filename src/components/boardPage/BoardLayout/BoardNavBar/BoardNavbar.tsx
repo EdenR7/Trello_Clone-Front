@@ -1,23 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
 import { IBoard } from "@/types/board.types";
-import { CircleAlert, Ellipsis, ListFilter, UserSearch, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { CircleAlert, Ellipsis, ListFilter, X } from "lucide-react";
+import { useState } from "react";
 import FiltersLayout from "./Filters/FiltersLayout";
 import BoardsFilters from "./Filters/BoardsFilters";
 import BoardTitle from "./BoardTitle";
 import BoardStarring from "./BoardStarring";
 import { useSearchParams } from "react-router-dom";
 import MakeUserIcon from "@/utils/makeUserIcon";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import useAddMember from "@/hooks/Query hooks/Board hooks/useAddMember";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+// import { Input } from "@/components/ui/input";
+// import useAddMember from "@/hooks/Query hooks/Board hooks/useAddMember";
 import AddMembers from "./AddMembers";
 
 export interface BoardNavbarProps {
@@ -37,10 +37,10 @@ function BoardNavbar({
   const [onNewTitleInput, setOnNewTitleInput] = useState(false);
   const [openFilters, setOpenFilters] = useState(false);
   const hasFilters = searchParams.size > 0;
-  const { mutate: addMember } = useAddMember();
+  // const { mutate: addMember } = useAddMember();
   const [isOpen, setIsOpen] = useState(false);
-  const memberNameRef = useRef<HTMLInputElement | null>(null);
-  const [targetUsername, setTargetUsername] = useState<string>("");
+  // const memberNameRef = useRef<HTMLInputElement | null>(null);
+  // const [targetUsername, setTargetUsername] = useState<string>("");
 
   function clearAllFilters() {
     setSearchParams({});

@@ -108,9 +108,8 @@ function App() {
 
 export default App;
 
-
 // save the bg img of the home page
 // Add toast for errors
 // Add loaders
-// Add guest mode
-// Add option to create the card in the first place of the list
+// Add guest mode : add members
+// remove logs

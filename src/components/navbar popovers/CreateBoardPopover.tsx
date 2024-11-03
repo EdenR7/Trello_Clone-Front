@@ -20,6 +20,7 @@ import useCreateBoard from "@/hooks/Query hooks/Board hooks/useCreateBoard";
 import { useNavigate } from "react-router-dom";
 import DatePopoverLayout from "../general/DatePopoverLayout";
 import { useToast } from "../ui/use-toast";
+import { AxiosError } from "axios";
 
 interface CreateBoardPopoverProps {
   isCreateOpen: boolean;
@@ -84,12 +85,17 @@ function CreateBoardPopover({
             };
           });
         },
-        onError: () => {
+        onError: (error) => {
+          let toastDescription = "Please try again later.";
+          if (error instanceof AxiosError) {
+            if (error.response?.data.message === "Board name already exists")
+              toastDescription = "Sorry, This board name already exists";
+          }
+
           toast({
             title: "An error occurred while creating the board",
-            description: "Please try again later.",
+            description: toastDescription,
             variant: "destructive",
-            
           });
         },
       }

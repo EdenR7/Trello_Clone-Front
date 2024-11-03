@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -43,8 +42,8 @@ function AddMembers({ isOpen, setIsOpen, boardId }: AddMembersProps) {
   const {
     data: usersResults,
     isPending,
-    isError,
-    error,
+    // isError,
+    // error,
   } = useQuery({
     queryKey: ["targetUsers", debouncedValue],
     queryFn: () => getAllMembers(debouncedValue),
