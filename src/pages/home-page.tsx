@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ClearModal } from "@/components/ui/modal";
+import { LoaderModal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/providers/auth-provider";
 import { Play } from "lucide-react";
@@ -115,7 +115,8 @@ const HomePage: React.FC = () => {
           />
         </div>
       </div>
-      <ClearModal display={isPending} />
+
+      <LoaderModal display={isPending} />
     </>
   );
 };

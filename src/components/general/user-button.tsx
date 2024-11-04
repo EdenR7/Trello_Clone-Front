@@ -42,13 +42,13 @@ export function UserButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Profile Menu</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuItem asChild>
           <Link to="#">Profile</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        </DropdownMenuItem> */}
+        {/* <DropdownMenuItem asChild>
           <Link to="#">Setting</Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleLogout}
