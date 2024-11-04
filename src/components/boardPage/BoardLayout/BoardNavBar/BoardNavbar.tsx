@@ -9,15 +9,7 @@ import BoardTitle from "./BoardTitle";
 import BoardStarring from "./BoardStarring";
 import { useSearchParams } from "react-router-dom";
 import MakeUserIcon from "@/utils/makeUserIcon";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
-// import { Input } from "@/components/ui/input";
-// import useAddMember from "@/hooks/Query hooks/Board hooks/useAddMember";
+
 import AddMembers from "./AddMembers";
 
 export interface BoardNavbarProps {
@@ -37,10 +29,7 @@ function BoardNavbar({
   const [onNewTitleInput, setOnNewTitleInput] = useState(false);
   const [openFilters, setOpenFilters] = useState(false);
   const hasFilters = searchParams.size > 0;
-  // const { mutate: addMember } = useAddMember();
   const [isOpen, setIsOpen] = useState(false);
-  // const memberNameRef = useRef<HTMLInputElement | null>(null);
-  // const [targetUsername, setTargetUsername] = useState<string>("");
 
   function clearAllFilters() {
     setSearchParams({});
@@ -139,52 +128,7 @@ function BoardNavbar({
             isOpen={isOpen}
             setIsOpen={setIsOpen}
           />
-          {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger
-              className={` max-w-[400px] h-8 mr-1 mt-1 mb-0 pl-2 overflow-hidden bg-gray-200 hover:bg-white text-[#172B4D] bg-btn_bg_primary  py-[6px] px-3  inline-flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2  disabled:opacity-50  `}
-            >
-              <UserSearch size={16} className=" mr-1" />
-              Share
-            </DialogTrigger>
-            <DialogContent
-              aria-describedby={undefined}
-              className=" min-h-[200px] pt-5 pl-6 pr-0 pb-0"
-            >
-              <DialogHeader>
-                <DialogTitle className=" min-h-8 mr-6  mt-0 ml-0 text-2xl font-normal ">
-                  Share board
-                </DialogTitle>
-              </DialogHeader>
-              <div className=" mr-6 mb-5">
-                <div>
-                  <div className=" flex items-start">
-                    <div className=" flex-grow">
-                      <Input
-                        ref={memberNameRef}
-                        onChange={(e) => setTargetUsername(e.target.value)}
-                        value={targetUsername}
-                        className=" max-w-[380px] w-full py-1.5 pr-1 pl-3 rounded-sm min-h-8 border-gray-600"
-                        placeholder="Email address or name"
-                      />
-                    </div>
-                    <Button
-                      onClick={() => {
-                        if (!memberNameRef.current) return;
-                        addMember({
-                          boardId: board._id!,
-                          memberName: memberNameRef.current?.value,
-                        });
-                        setIsOpen(false);
-                      }}
-                      className=" h-10 m-0 "
-                    >
-                      Share
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog> */}
+
           <div>
             <Button
               className=" py-[6px] px-2 hover:bg-white hover:bg-opacity-10"

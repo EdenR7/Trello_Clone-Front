@@ -57,5 +57,3 @@ function PhotosMode({ handleBgChange }: BackgroundModeProps) {
 }
 
 export default PhotosMode;
-
-//rgba(9, 30, 66, 0.14)  scroll bar

@@ -49,8 +49,6 @@ function CreateBoardPopover({
   const navigate = useNavigate();
   const titleRef = useRef<HTMLInputElement>(null);
 
-  console.log(loggedInUser?.workspaces);
-
   function handleCreateBoard() {
     if (!selectedWorkspace) {
       return;

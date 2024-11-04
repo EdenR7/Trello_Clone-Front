@@ -64,7 +64,6 @@ function LabelsLayout(props: LabelsLayoutProps) {
         />
       )}
     </LabelPopoverLayout>
-    // <CardSidebarButton icon={<Tag size={20} />} text="Labels" />
   );
 }
 

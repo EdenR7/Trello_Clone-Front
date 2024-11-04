@@ -31,10 +31,7 @@ export function UserButton() {
         >
           <div className="w-6 h-6">
             <Avatar className="w-full h-full">
-              <AvatarImage
-                // src={loggedInUser?.imageUrl || ""}
-                alt={loggedInUser?.username}
-              />
+              <AvatarImage alt={loggedInUser?.username} />
               <AvatarFallback className="bg-[#00A3BF] text-white ">
                 {/* Same color as words */}
                 <span> {loggedInUser?.username[0].toUpperCase()}</span>

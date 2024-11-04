@@ -1,14 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-// import { useState } from "react";
-// import unsplashApi from "@/lib/unsplashApi";
-// import { IUnsplashImage } from "@/types/unsplash.types";
 
 function AboutPage() {
-  // const [photo, setPhoto] = useState<IUnsplashImage | null>(null);
-
-  // const imageSizes = ["full", "raw", "regular", "small", "small_s3", "thumb"];
-
   return (
     <main>
       <div className="flex flex-col items-center">

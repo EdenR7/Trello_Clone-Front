@@ -34,7 +34,6 @@ export function useArchiveAllListsCards(boardId: string) {
         }
         return list;
       });
-      console.log(updatedLists);
 
       if (previousLists) {
         qClient.setQueryData(["lists", boardId], updatedLists);

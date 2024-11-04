@@ -45,7 +45,6 @@ export function useCreateCard(boardId: string, place: "top" | "bottom") {
         } else {
           position = 1;
         }
-        console.log(position);
       } else {
         position =
           cardList.cards.length > 0

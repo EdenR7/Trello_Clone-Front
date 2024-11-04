@@ -17,8 +17,6 @@ function LabelLayout({ boardId }: SideBarModeProps) {
   const [showAllLabels, setShowAllLabels] = useState(false);
   const [filteredLabelsInput, setFilteredLabelsInput] = useState("");
 
-  // const [isLabelPopoverOpen, setIsLabelPopoverOpen] = useState(false);
-
   if (!board) return;
 
   const labels = [...board.labels];

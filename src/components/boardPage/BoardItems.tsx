@@ -19,41 +19,6 @@ function BoardItems() {
   const updateListPosition = useListUpdatePosition(boardId!);
   const moveCardWithinList = useMoveCardWithinList(boardId!);
   const moveCardToList = useMoveCardToList(boardId!);
-  // const [_, setHoveredItem] = useState<null | number>(null);
-
-  // if (isPending) return <div>Loading...</div>;
-  // if (!board) return null;
-
-  // function handleListDrag(destination: any, source: any, draggableId: string) {
-  //   if (destination.index === source.index) return;
-
-  //   const data: IList[] | undefined = qClient.getQueryData(["lists", boardId]);
-  //   if (!data) return;
-  //   const initialData = [...data];
-
-  //   let newPos = 0;
-  //   if (destination.index === 0) {
-  //     newPos = initialData[0].position / 2;
-  //   } else if (destination.index === initialData.length - 1) {
-  //     newPos = Math.floor(initialData[initialData.length - 1].position + 1);
-  //   } else {
-  //     const secPositionToCalc = destination.index > source.index ? 1 : -1;
-  //     newPos =
-  //       (initialData[destination.index].position +
-  //         initialData[destination.index + secPositionToCalc].position) /
-  //       2;
-  //   }
-
-  //   const draggedList = initialData.find((list) => list._id === draggableId);
-  //   if (draggedList) {
-  //     updateListPosition.mutate({
-  //       listId: draggableId,
-  //       newPos,
-  //       draggedList,
-  //       newLoc: destination.index,
-  //     });
-  //   }
-  // }
 
   const handleListDrag = useCallback(
     (destination: any, source: any, draggableId: string) => {
@@ -79,11 +44,7 @@ function BoardItems() {
           2;
       }
 
-      console.log("newPos", newPos);
-      console.log("destination.index", destination.index);
-
       const draggedList = initialData.find((list) => list._id === draggableId);
-      console.log("draggedList", draggedList);
 
       if (draggedList) {
         updateListPosition.mutate({
@@ -158,8 +119,6 @@ function BoardItems() {
           cardFinalList.cards[cardFinalList.cards.length - 1].position + 1
         );
       } else {
-        // let secPositionToCalc: number;
-        // destination.index > source.index && (secPositionToCalc = 1);
         cardNewPos =
           (cardFinalList.cards[destination.index].position +
             cardFinalList.cards[destination.index - 1].position) /
@@ -181,8 +140,6 @@ function BoardItems() {
   }
 
   function onDragEnd(result: any) {
-    console.log("onDragEnd");
-
     const { destination, source, draggableId, type } = result;
     if (!destination) return;
 
@@ -204,34 +161,9 @@ function BoardItems() {
               className=" list-none flex gap-3 pr-20 justify-start"
             >
               <ListsRender />
-              {/* <ListsRender setHoveredItem={setHoveredItem} /> */}
-              {/* <div
-                style={{
-                  backgroundColor:
-                    hoveredItem !== null ? "black" : "transparent",
-                  // minHeight: "100px", // Adjust height based on your needs
-                  // minWidth: "100px", // Adjust width based on your needs
-                  transition: "background-color 0.2s ease",
-                }}
-              ></div> */}
-              {/* {provided.placeholder && (
-                <div
-                  style={{
-                    width: "272px",
 
-                    backgroundColor: "black", // For debugging
-                    margin: 0, // Ensure no margin
-                    padding: 0, // Ensure no padding
-                    // display: "inline-block", // Ensure it's inline if needed
-                  }}
-                >
-                </div>
-              )} */}
-              {/* <div className="min-w-[272px] max-w-[272px] h-full">
-              </div> */}
               {provided.placeholder}
-              {/* {provided.placeholder} */}
-              {/* <div className="min-w-44 w-64"></div> Large enough width to allow dragging */}
+
               {onCreateNewList ? (
                 <AddListForm
                   setOnCreateNewList={setOnCreateNewList}
@@ -251,8 +183,6 @@ function BoardItems() {
           )}
         </Droppable>
       </DragDropContext>
-
-      {/* <Outlet /> */}
     </>
   );
 }

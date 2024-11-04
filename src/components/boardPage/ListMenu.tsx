@@ -69,7 +69,6 @@ function ListMenu({
       <CurrentSidebarMode
         indexInBoard={indexInBoard}
         setSideBarMode={setSideBarMode}
-        // boardId={boardId}
         list={list}
         setAddACardFormOpen={setAddACardFormOpen}
         setOpenListMenu={setOpenListMenu}

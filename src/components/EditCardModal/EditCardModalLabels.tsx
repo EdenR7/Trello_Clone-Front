@@ -61,7 +61,6 @@ const EditCardModalLabels = memo(function EditCardModalLabels(
         />
       )}
     </LabelPopoverLayout>
-    // <CardSidebarButton icon={<Tag size={20} />} text="Labels" />
   );
 });
 

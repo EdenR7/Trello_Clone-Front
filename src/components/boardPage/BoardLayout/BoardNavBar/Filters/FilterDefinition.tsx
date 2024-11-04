@@ -10,7 +10,6 @@ import { ChevronDown } from "lucide-react";
 import { SetURLSearchParams } from "react-router-dom";
 
 interface FilterDefinitionProps {
-  // board: IBoard;
   searchParams: URLSearchParams;
   setSearchParams: SetURLSearchParams;
 }

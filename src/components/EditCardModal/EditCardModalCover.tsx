@@ -10,7 +10,6 @@ const EditCardModalCover = React.memo(function EditCardModalCover({
 }: {
   card: ICard;
 }) {
-  // console.log("card: ", card);
 
   return (
     <PopoverLayout

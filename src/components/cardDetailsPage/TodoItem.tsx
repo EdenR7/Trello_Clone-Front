@@ -54,14 +54,11 @@ export default function TodoItem({
   }
 
   function handleUpdateTodoTitle(
-    // ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     cardId: string,
     checklistId: string,
     todoId: string,
     newTodoTitle: string
   ) {
-    // ev.preventDefault();
-    // ev.stopPropagation();
     setActiveTodoTitleId(null);
     updateTodoTitle({ cardId, checklistId, todoId, newTodoTitle });
   }

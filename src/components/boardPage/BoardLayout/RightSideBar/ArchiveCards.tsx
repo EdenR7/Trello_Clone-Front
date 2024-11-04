@@ -69,7 +69,6 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
       <div className="mt-4 mb-4 ">
         {filteredArchivedCards.length > 0 ? (
           filteredArchivedCards.map((card, index) => {
-
             let hasTodos = false;
             if (card.checklist && card.checklist.length > 0) {
               hasTodos = card.checklist.some(
@@ -82,11 +81,7 @@ function ArchiveCards({ board, setOnArchiveLists }: ArchiveCardsrops) {
               <div key={card._id}>
                 {card?.bgCover.isCover ? (
                   <div className="  h-14 cursor-pointer shadow rounded-lg relative w-[260px] mx-auto">
-                    <Link
-                      className=""
-                      // key={card._id}
-                      to={`/b/${board._id}/c/${card._id}`}
-                    >
+                    <Link className="" to={`/b/${board._id}/c/${card._id}`}>
                       <div
                         className=" hover:outline hover:outline-2 hover:outline-primary flex rounded-lg max-w-[260px] min-h-full py-2 pr-2 pl-3 relative group "
                         style={{ backgroundColor: card.bgCover.bg }}

@@ -15,7 +15,6 @@ interface ExpandedMembersProps {
   labels: ILabel[];
   toggleLabelSelection: (value: string) => void;
   selectedLabelsFilters: string[];
-  //   loggedInUser: LoggedInUser;
 }
 
 function ExpandLabels({

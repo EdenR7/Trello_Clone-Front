@@ -44,7 +44,6 @@ function CardItem(props: CardItemProps) {
     left: 0,
     menuPosition: "right",
   });
-  //hello
 
   const cardRef = useRef<HTMLDivElement | null>(null);
 
@@ -84,29 +83,6 @@ function CardItem(props: CardItemProps) {
       };
     }
   }, [isModalOpen, updateModalPosition]);
-
-  // const handleOpenModal = (e: React.MouseEvent) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-
-  //   if (cardRef.current) {
-  //     const cardRect = cardRef.current.getBoundingClientRect();
-  //     const windowWidth = window.innerWidth;
-
-  //     // Calculate menu placement
-  //     const menuPosition =
-  //       cardRect.right + 300 > windowWidth ? "left" : "right"; // Assuming modal width is 300px
-
-  //     // Set modal position near the card
-  //     setModalPosition({
-  //       top: cardRect.top,
-  //       left: cardRect.left,
-  //       menuPosition,
-  //     });
-  //     setActiveCardId(card._id);
-  //     setIsModalOpen(true);
-  //   }
-  // };
 
   const handleOpenModal = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -169,7 +145,6 @@ function CardItem(props: CardItemProps) {
           <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            // ref={provided.innerRef}
             ref={(el) => {
               provided.innerRef(el);
               cardRef.current = el;

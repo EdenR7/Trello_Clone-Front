@@ -4,13 +4,11 @@ import { User } from "lucide-react";
 import ExpandedMembers from "./ExpandMembers";
 import { LoggedInUser } from "@/providers/auth-provider";
 import { IBoard } from "@/types/board.types";
-// import { SetURLSearchParams } from "react-router-dom";
 
 interface MembersFilterProps {
   board: IBoard;
   loggedInUser: LoggedInUser;
   searchParams: URLSearchParams;
-  //   setSearchParams: SetURLSearchParams;
   updateUrlParams: (key: string, values: string[]) => void;
 }
 
