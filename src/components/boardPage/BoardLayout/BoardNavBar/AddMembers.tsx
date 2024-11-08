@@ -8,6 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useAddMember from "@/hooks/Query hooks/Board hooks/useAddMember";
 import api from "@/lib/api";
+import MakeUserIcon from "@/utils/makeUserIcon";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import { UserSearch } from "lucide-react";
@@ -89,21 +90,20 @@ function AddMembers({ isOpen, setIsOpen, boardId }: AddMembersProps) {
               </div>
             </div>
           </div>
-          <div>
+          <div className=" mt-2 p-1 ">
             {debouncedValue && isPending && <div>Loading...</div>}
             {usersResults?.map((user: any) => {
               return (
-                <div key={user._id}>
+                <div className=" mt-1.5 " key={user._id}>
                   <div>
-                    <div className=" flex items-center">
-                      <div
-                        onClick={() => {
-                          handleAddMember(user.username);
-                        }}
-                        className=" w-full h-8 m-0 cursor-pointer hover:bg-gray-100 "
-                      >
-                        {user.username}
-                      </div>
+                    <div
+                      onClick={() => {
+                        handleAddMember(user.username);
+                      }}
+                      className=" max-w-[380px] hover:bg-gray-200 py-2 px-1 flex gap-4 cursor-pointer "
+                    >
+                      <MakeUserIcon user={user} />
+                      <div className=" w-full h-8 m-0   ">{user.username}</div>
                     </div>
                   </div>
                 </div>
