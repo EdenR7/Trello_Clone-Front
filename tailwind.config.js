@@ -98,6 +98,7 @@ module.exports = {
         "break-850px": "850px",
         "break-950px": "950px",
         "break-1000px": "1000px",
+        "break-1200px": "1200px",
         "2col": "750px",
         "3col": "1100px",
       },
