@@ -90,25 +90,28 @@ function AddMembers({ isOpen, setIsOpen, boardId }: AddMembersProps) {
               </div>
             </div>
           </div>
-          <div className=" mt-2 p-1 ">
+          <div className="mt-2 p-1">
             {debouncedValue && isPending && <div>Loading...</div>}
-            {usersResults?.map((user: any) => {
-              return (
-                <div className=" mt-1.5 " key={user._id}>
-                  <div>
-                    <div
-                      onClick={() => {
-                        handleAddMember(user.username);
-                      }}
-                      className=" max-w-[380px] hover:bg-gray-200 py-2 px-1 flex gap-4 cursor-pointer "
-                    >
-                      <MakeUserIcon user={user} />
-                      <div className=" w-full h-8 m-0   ">{user.username}</div>
-                    </div>
+            {usersResults?.length === 0 ? (
+              <div className="text-gray-500">
+                Looks like that person isn't a Trello member yet. Add their
+                email address to invite them.
+              </div>
+            ) : (
+              usersResults?.map((user: any) => (
+                <div className="mt-1.5" key={user._id}>
+                  <div
+                    onClick={() => {
+                      handleAddMember(user.username);
+                    }}
+                    className="max-w-[380px] hover:bg-gray-200 py-2 px-1 flex gap-4 cursor-pointer"
+                  >
+                    <MakeUserIcon user={user} />
+                    <div className="w-full h-8 m-0">{user.username}</div>
                   </div>
                 </div>
-              );
-            })}
+              ))
+            )}
           </div>
         </div>
       </DialogContent>
