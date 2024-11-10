@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {

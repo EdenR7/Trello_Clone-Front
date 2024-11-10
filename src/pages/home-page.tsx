@@ -101,7 +101,7 @@ const HomePage: React.FC = () => {
 
         <div className=" px-4 break-800px:px-0 break-600px:max-w-[540px] break-800px:max-w-[720px]  break-1000px:max-w-[960px] break-1200px:max-w-[1140px] mx-auto p4 ">
           <div className="-ml-4">
-            <div className="w-full break-800px:w-[58.333%]">
+            <div className="w-full break-800px:w-[58.333%] px-2">
               <div>
                 <p className="mb-2 font-semibold leading-5 text-lg">
                   Trello 101
