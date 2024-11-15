@@ -55,7 +55,6 @@ function LabelPopoverLayout({
   function toggleOpen() {
     handleOpenChange(!internalOpen);
   }
-
   return (
     <Popover open={internalOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
@@ -70,7 +69,7 @@ function LabelPopoverLayout({
         )}
       </PopoverTrigger>
       <PopoverContent
-        side={"" as "top" | "right" | "bottom" | "left"}
+        side={undefined as unknown as "top" | "right" | "bottom" | "left"}
         className={cn("w-[304px] rounded-lg", popoverClassName)}
       >
         <div className="">
